@@ -1,0 +1,11 @@
+{
+    "name": "shed-compiler",
+    "version": "0.1.0",
+    "dependencies": {
+        "async": "latest",
+        "underscore": "latest"
+    },
+    "devDependencies": {
+        "nodeunit": "latest"
+    }
+}
