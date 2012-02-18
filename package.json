@@ -3,7 +3,8 @@
     "version": "0.1.0",
     "dependencies": {
         "async": "latest",
-        "underscore": "latest"
+        "underscore": "latest",
+        "lop": "git://github.com/mwilliamson/lop.git"
     },
     "devDependencies": {
         "nodeunit": "latest"
