@@ -1,6 +1,6 @@
 var Parser = require("../lib/parser").Parser;
 var errors = require("lop").errors;
-var options = require("../lib/options");
+var options = require("options");
 var some = options.some;
 var nodes = require("../lib/nodes");
 var parsingTesting = require("lop").testing;

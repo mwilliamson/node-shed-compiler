@@ -4,7 +4,8 @@
     "dependencies": {
         "async": "latest",
         "underscore": "latest",
-        "lop": "git://github.com/mwilliamson/lop.git"
+        "lop": "git://github.com/mwilliamson/lop.git",
+        "options": "git://github.com/mwilliamson/node-options.git"
     },
     "devDependencies": {
         "nodeunit": "latest"
