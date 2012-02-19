@@ -46,6 +46,16 @@ exports.canParseShortLambdaExpressionWithExplicitReturnType = function(test) {
     test.done();
 };
 
+exports.canParseShortLambdaExpressionWithFormalArguments = function(test) {
+    var result = parser.parseExpression("(name: String, age: Age) => true");
+    var expected = nodes.shortLambda([
+        nodes.formalArgument("name", nodes.ref("String")),
+        nodes.formalArgument("age", nodes.ref("Age"))
+    ], options.none, nodes.boolean(true));
+    assertIsSuccessWithValue(test, result, expected);
+    test.done();
+};
+
 exports.lambdaIsRightAssociative = function(test) {
     var result = parser.parseExpression("()=>()=>true");
     var expected = nodes.shortLambda([], options.none,
