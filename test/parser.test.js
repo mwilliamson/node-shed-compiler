@@ -32,5 +32,13 @@ exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
     test.done();
 };
 
-//~ exports.lambdaIsRightAssociative = function(test) {
-//~ };
+exports.lambdaIsRightAssociative = function(test) {
+    var result = parser.parseExpression("()=>()=>true");
+    var expected = nodes.shortLambda([], options.none,
+        nodes.shortLambda([], options.none,
+            nodes.boolean(true)
+        )
+    );
+    assertIsSuccessWithValue(test, result, expected);
+    test.done();
+};
