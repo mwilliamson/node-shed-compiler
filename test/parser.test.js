@@ -1,4 +1,5 @@
 var Parser = require("../lib/parser").Parser;
+var options = require("../lib/options");
 var nodes = require("../lib/nodes");
 var parsingTesting = require("lop").testing;
 var assertIsSuccessWithValue = parsingTesting.assertIsSuccessWithValue;
@@ -23,3 +24,13 @@ exports.canParseUnitLiteral = function(test) {
     assertIsSuccessWithValue(test, result, nodes.unit());
     test.done();
 };
+
+exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
+    var result = parser.parseExpression("()=>true");
+    var expected = nodes.shortLambda([], options.none, nodes.boolean(true));
+    assertIsSuccessWithValue(test, result, expected);
+    test.done();
+};
+
+//~ exports.lambdaIsRightAssociative = function(test) {
+//~ };
