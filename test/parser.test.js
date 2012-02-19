@@ -1,5 +1,6 @@
 var Parser = require("../lib/parser").Parser;
 var options = require("../lib/options");
+var some = options.some;
 var nodes = require("../lib/nodes");
 var parsingTesting = require("lop").testing;
 var assertIsSuccessWithValue = parsingTesting.assertIsSuccessWithValue;
@@ -34,6 +35,13 @@ exports.canParseVariableReference = function(test) {
 exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
     var result = parser.parseExpression("()=>true");
     var expected = nodes.shortLambda([], options.none, nodes.boolean(true));
+    assertIsSuccessWithValue(test, result, expected);
+    test.done();
+};
+
+exports.canParseShortLambdaExpressionWithExplicitReturnType = function(test) {
+    var result = parser.parseExpression("() : Boolean => true");
+    var expected = nodes.shortLambda([], some(nodes.ref("Boolean")), nodes.boolean(true));
     assertIsSuccessWithValue(test, result, expected);
     test.done();
 };
