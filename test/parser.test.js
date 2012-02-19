@@ -1,10 +1,12 @@
 var Parser = require("../lib/parser").Parser;
+var errors = require("lop").errors;
 var options = require("../lib/options");
 var some = options.some;
 var nodes = require("../lib/nodes");
 var parsingTesting = require("lop").testing;
 var assertIsSuccessWithValue = parsingTesting.assertIsSuccessWithValue;
-var assertIsFailureWithRemaining = parsingTesting.assertIsFailureWithRemaining;
+var assertIsFailure = parsingTesting.assertIsFailure;
+var assertIsError = parsingTesting.assertIsError;
 
 var parser = new Parser();
 
@@ -53,6 +55,17 @@ exports.canParseShortLambdaExpressionWithFormalArguments = function(test) {
         nodes.formalArgument("age", nodes.ref("Age"))
     ], options.none, nodes.boolean(true));
     assertIsSuccessWithValue(test, result, expected);
+    test.done();
+};
+
+exports.missingShortLambdaBodyIsReportedRatherThanGenericFailureToParseAnExpression = function(test) {
+    var result = parser.parseExpression("() => ");
+    assertIsError(test, result, {
+        errors: [errors.error({
+            expected: "expression",
+            actual: "end"
+        })]
+    });
     test.done();
 };
 
