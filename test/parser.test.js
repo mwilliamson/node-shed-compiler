@@ -25,6 +25,12 @@ exports.canParseUnitLiteral = function(test) {
     test.done();
 };
 
+exports.canParseVariableReference = function(test) {
+    var result = parser.parseExpression("blah");
+    assertIsSuccessWithValue(test, result, nodes.variableReference("blah"));
+    test.done();
+};
+
 exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
     var result = parser.parseExpression("()=>true");
     var expected = nodes.shortLambda([], options.none, nodes.boolean(true));
@@ -39,6 +45,13 @@ exports.lambdaIsRightAssociative = function(test) {
             nodes.boolean(true)
         )
     );
+    assertIsSuccessWithValue(test, result, expected);
+    test.done();
+};
+
+exports.whitespaceIsIgnored = function(test) {
+    var result = parser.parseExpression("() =>\n\ttrue");
+    var expected = nodes.shortLambda([], options.none, nodes.boolean(true));
     assertIsSuccessWithValue(test, result, expected);
     test.done();
 };
