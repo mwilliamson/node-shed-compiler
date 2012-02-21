@@ -17,3 +17,12 @@ exports.canParseReturnStatement = function(test) {
     assertIsSuccessWithValue(test, result, nodes.return(nodes.boolean(true)));
     test.done();
 };
+
+exports.canParseExpressionStatement = function(test) {
+    var result = parser.parse(parsing.statement, "blah = true;");
+    assertIsSuccessWithValue(
+        test, result,
+        nodes.expressionStatement(nodes.assign(nodes.ref("blah"), nodes.boolean(true)))
+    );
+    test.done();
+};
