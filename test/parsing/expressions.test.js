@@ -38,21 +38,21 @@ exports.canParseVariableReference = function(test) {
 
 exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
     var result = parser.parse(parsing.expression, "()=>true");
-    var expected = nodes.shortLambda([], options.none, nodes.boolean(true));
+    var expected = nodes.lambda([], options.none, nodes.boolean(true));
     assertIsSuccessWithValue(test, result, expected);
     test.done();
 };
 
 exports.canParseShortLambdaExpressionWithExplicitReturnType = function(test) {
     var result = parser.parse(parsing.expression, "() : Boolean => true");
-    var expected = nodes.shortLambda([], some(nodes.ref("Boolean")), nodes.boolean(true));
+    var expected = nodes.lambda([], some(nodes.ref("Boolean")), nodes.boolean(true));
     assertIsSuccessWithValue(test, result, expected);
     test.done();
 };
 
 exports.canParseShortLambdaExpressionWithFormalArguments = function(test) {
     var result = parser.parse(parsing.expression, "(name: String, age: Age) => true");
-    var expected = nodes.shortLambda([
+    var expected = nodes.lambda([
         nodes.formalArgument("name", nodes.ref("String")),
         nodes.formalArgument("age", nodes.ref("Age"))
     ], options.none, nodes.boolean(true));
@@ -64,8 +64,11 @@ exports.missingShortLambdaBodyIsReportedRatherThanGenericFailureToParseAnExpress
     var result = parser.parse(parsing.expression, "() => ");
     assertIsError(test, result, {
         errors: [errors.error({
-            expected: "expression",
-            actual: "end"
+            expected: "lambda body",
+            actual: "end",
+            // TODO: we should trust the parsing library to get the location
+            // correct, and use rich matching to ignore the value of location
+            location: {string: '() => ', startIndex: 6, endIndex: 6}
         })]
     });
     test.done();
@@ -73,11 +76,20 @@ exports.missingShortLambdaBodyIsReportedRatherThanGenericFailureToParseAnExpress
 
 exports.lambdaIsRightAssociative = function(test) {
     var result = parser.parse(parsing.expression, "()=>()=>true");
-    var expected = nodes.shortLambda([], options.none,
-        nodes.shortLambda([], options.none,
+    var expected = nodes.lambda([], options.none,
+        nodes.lambda([], options.none,
             nodes.boolean(true)
         )
     );
+    assertIsSuccessWithValue(test, result, expected);
+    test.done();
+};
+
+exports.canParseLongLambdaExpression = function(test) {
+    var result = parser.parse(parsing.expression, "() => { return true; }");
+    var expected = nodes.lambda([], options.none, nodes.block([
+        nodes.return(nodes.boolean(true))
+    ]));
     assertIsSuccessWithValue(test, result, expected);
     test.done();
 };
@@ -101,7 +113,7 @@ exports.assignmentIsRightAssociative = function(test) {
 
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "() =>\n\ttrue");
-    var expected = nodes.shortLambda([], options.none, nodes.boolean(true));
+    var expected = nodes.lambda([], options.none, nodes.boolean(true));
     assertIsSuccessWithValue(test, result, expected);
     test.done();
 };
