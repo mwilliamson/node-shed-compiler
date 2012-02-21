@@ -82,6 +82,23 @@ exports.lambdaIsRightAssociative = function(test) {
     test.done();
 };
 
+exports.canAssignToVariableReference = function(test) {
+    var result = parser.parse(parsing.expression, "blah = true");
+    var expected = nodes.assign(nodes.ref("blah"), nodes.boolean(true));
+    assertIsSuccessWithValue(test, result, expected);
+    test.done();
+};
+
+exports.assignmentIsRightAssociative = function(test) {
+    var result = parser.parse(parsing.expression, "blah = hooray = true");
+    var expected = nodes.assign(
+        nodes.ref("blah"),
+        nodes.assign(nodes.ref("hooray"), nodes.boolean(true))
+    );
+    assertIsSuccessWithValue(test, result, expected);
+    test.done();
+};
+
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "() =>\n\ttrue");
     var expected = nodes.shortLambda([], options.none, nodes.boolean(true));
