@@ -7,8 +7,8 @@ var assertIsSuccessWithValue = parsingTesting.assertIsSuccessWithValue;
 var assertIsFailure = parsingTesting.assertIsFailure;
 var assertIsError = parsingTesting.assertIsError;
 
-var nodes = require("../lib/nodes");
-var parsing = require("../lib/parsing");
+var nodes = require("../../lib/nodes");
+var parsing = require("../../lib/parsing");
 
 var parser = new parsing.Parser();
 
