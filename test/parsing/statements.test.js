@@ -13,9 +13,11 @@ var statements = require("../../lib/parsing/statements");
 
 var parser = new parsing.Parser();
 
+var ignoringSources = require("./util").ignoringSources;
+
 exports.canParseReturnStatement = function(test) {
     var result = parser.parse(parsing.statement, "return true;");
-    assertIsSuccessWithValue(test, result, nodes.return(nodes.boolean(true)));
+    assertIsSuccessWithValue(test, result, ignoringSources(nodes.return(nodes.boolean(true))));
     test.done();
 };
 
@@ -23,7 +25,7 @@ exports.canParseExpressionStatement = function(test) {
     var result = parser.parse(statements.statement, "blah = true;");
     assertIsSuccessWithValue(
         test, result,
-        nodes.expressionStatement(nodes.assign(nodes.ref("blah"), nodes.boolean(true)))
+        ignoringSources(nodes.expressionStatement(nodes.assign(nodes.ref("blah"), nodes.boolean(true))))
     );
     test.done();
 };
@@ -32,10 +34,10 @@ exports.canParseBlockOfStatements = function(test) {
     var result = parser.parse(statements.block, "{blah = true; return blah;}");
     assertIsSuccessWithValue(
         test, result,
-        nodes.block([
+        ignoringSources(nodes.block([
             nodes.expressionStatement(nodes.assign(nodes.ref("blah"), nodes.boolean(true))),
             nodes.return(nodes.ref("blah"))
-        ])
+        ]))
     );
     test.done();
 };
