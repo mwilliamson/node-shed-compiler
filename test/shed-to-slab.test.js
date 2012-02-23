@@ -132,3 +132,14 @@ exports.shedShortLambdaIsConvertedToSlabLambda = function(test) {
     );
     test.done();
 };
+
+exports.shedAssignmentIsConvertedToSlabAssignment = function(test) {
+    var value = shed.boolean(true);
+    var reference = shed.ref("blah");
+    var original = shed.assign(reference, value);
+    test.deepEqual(
+        slab.assign(slab.ref("blah", reference), slab.boolean(true, value), original),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
