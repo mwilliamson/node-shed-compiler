@@ -188,3 +188,12 @@ exports.shedPublicDeclarationIsConvertedToSlabPublicDeclaration = function(test)
     );
     test.done();
 };
+
+exports.shedImportIsConvertedToSlabValDeclarationAndFunctionCall = function(test) {
+    var original = shed.import(["shed", "example"]);
+    test.deepEqual(
+        slab.call(slab.ref("$import", original), [slab.string("shed.example", original)], original),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
