@@ -5,6 +5,9 @@ var options = require("options");
 var nodes = require("../../lib/nodes");
 
 var ignoringSources = exports.ignoringSources = function(node) {
+    if (_.isString(node) || _.isNumber(node) || _.isBoolean(node)) {
+        return node;
+    }
     var matchingNode = _.clone(node);
     matchingNode.source = duck.any;
     for (key in matchingNode) {
