@@ -1,13 +1,20 @@
+var options = require("options");
+
 var shed = require("../lib/nodes");
 var slab = require("../lib/slab-nodes");
 var shedToSlab = require("../lib/shed-to-slab");
 
+var shedBooleanValue = shed.boolean(true);
+var slabBooleanValue = slab.boolean(true, shedBooleanValue);
+
+var shedValue = shedBooleanValue;
+var slabValue = slabBooleanValue;
+
+var shedTypeReference = shed.ref("String");
+var slabTypeReference = slab.ref("String", shedTypeReference);
+
 exports.shedBooleansAreConvertedToSlabBooleans = function(test) {
-    var original = shed.boolean(true);
-    test.deepEqual(
-        slab.boolean(true, original),
-        shedToSlab.translate(original)
-    );
+    test.deepEqual(slabValue, shedToSlab.translate(shedValue));
     test.done();
 };
 
@@ -149,6 +156,15 @@ exports.shedExpressionStatementIsConvertedToSlabExpressionStatement = function(t
     var original = shed.expressionStatement(reference);
     test.deepEqual(
         slab.expressionStatement(slab.ref("blah", reference), original),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
+
+exports.shedValIsConvertedToSlabVal = function(test) {
+    var original = shed.val("blah", options.some(shedTypeReference), shedValue);
+    test.deepEqual(
+        slab.val("blah", options.some(slabTypeReference), slabValue, original),
         shedToSlab.translate(original)
     );
     test.done();
