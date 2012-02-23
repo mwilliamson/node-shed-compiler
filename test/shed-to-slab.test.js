@@ -178,3 +178,13 @@ exports.shedVarIsConvertedToSlabVar = function(test) {
     );
     test.done();
 };
+
+exports.shedPublicDeclarationIsConvertedToSlabPublicDeclaration = function(test) {
+    var declaration = shed.val("blah", options.none, shedValue);
+    var original = shed.public(declaration);
+    test.deepEqual(
+        slab.public(slab.val("blah", options.none, slabValue, declaration), original),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
