@@ -17,6 +17,17 @@ var ignoringSources = require("./util").ignoringSources;
 
 var parser = new parsing.Parser();
 
+exports.moduleContainsPackageDeclarationFollowedByBody = function(test) {
+    var result = parser.parse(modulesParsing.module, "package shed.example; true;false;");
+    assertIsSuccessWithValue(test, result, ignoringSources(
+        nodes.module(
+            nodes.packageDeclaration(["shed", "example"]),
+            [nodes.expressionStatement(nodes.boolean(true)), nodes.expressionStatement(nodes.boolean(false))]
+        )
+    ));
+    test.done();
+};
+
 exports.packageDeclarationIsPackageKeywordFollowedByListOfIdentifiers = function(test) {
     var result = parser.parse(modulesParsing.packageDeclaration, "package shed.example;");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.packageDeclaration(["shed", "example"])));
