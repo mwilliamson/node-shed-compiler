@@ -22,11 +22,25 @@ exports.moduleContainsPackageDeclarationFollowedByBody = function(test) {
     assertIsSuccessWithValue(test, result, ignoringSources(
         nodes.module(
             nodes.packageDeclaration(["shed", "example"]),
+            [],
             [nodes.expressionStatement(nodes.boolean(true)), nodes.expressionStatement(nodes.boolean(false))]
         )
     ));
     test.done();
 };
+
+exports.moduleContainsPackageDeclarationFollowedByImportsThenBody = function(test) {
+    var result = parser.parse(modulesParsing.module, "package shed.example; import shed.options; import shed.time; true;");
+    assertIsSuccessWithValue(test, result, ignoringSources(
+        nodes.module(
+            nodes.packageDeclaration(["shed", "example"]),
+            [nodes.import(["shed", "options"]), nodes.import(["shed", "time"])],
+            [nodes.expressionStatement(nodes.boolean(true))]
+        )
+    ));
+    test.done();
+};
+
 
 exports.packageDeclarationIsPackageKeywordFollowedByListOfIdentifiers = function(test) {
     var result = parser.parse(modulesParsing.packageDeclaration, "package shed.example;");
