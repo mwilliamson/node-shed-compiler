@@ -41,3 +41,21 @@ exports.canParseBlockOfStatements = function(test) {
     );
     test.done();
 };
+
+exports.canParseValStatement = function(test) {
+    var result = parser.parse(statements.statement, "val blah = true;");
+    assertIsSuccessWithValue(
+        test, result,
+        ignoringSources(nodes.val("blah", options.none, nodes.boolean(true)))
+    );
+    test.done();
+};
+
+exports.canParseValStatementWithExplicitType = function(test) {
+    var result = parser.parse(statements.statement, "val blah : Boolean = true;");
+    assertIsSuccessWithValue(
+        test, result,
+        ignoringSources(nodes.val("blah", some(nodes.ref("Boolean")), nodes.boolean(true)))
+    );
+    test.done();
+};
