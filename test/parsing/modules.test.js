@@ -33,3 +33,9 @@ exports.packageDeclarationIsPackageKeywordFollowedByListOfIdentifiers = function
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.packageDeclaration(["shed", "example"])));
     test.done();
 };
+
+exports.importIsImportKeywordFollowedByListOfIdentifiers = function(test) {
+    var result = parser.parse(modulesParsing.import, "import shed.example;");
+    assertIsSuccessWithValue(test, result, ignoringSources(nodes.import(["shed", "example"])));
+    test.done();
+};
