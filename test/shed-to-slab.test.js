@@ -169,3 +169,12 @@ exports.shedValIsConvertedToSlabVal = function(test) {
     );
     test.done();
 };
+
+exports.shedVarIsConvertedToSlabVar = function(test) {
+    var original = shed.var("blah", options.some(shedTypeReference), shedValue);
+    test.deepEqual(
+        slab.var("blah", options.some(slabTypeReference), slabValue, original),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
