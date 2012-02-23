@@ -143,3 +143,13 @@ exports.shedAssignmentIsConvertedToSlabAssignment = function(test) {
     );
     test.done();
 };
+
+exports.shedExpressionStatementIsConvertedToSlabExpressionStatement = function(test) {
+    var reference = shed.ref("blah");
+    var original = shed.expressionStatement(reference);
+    test.deepEqual(
+        slab.expressionStatement(slab.ref("blah", reference), original),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
