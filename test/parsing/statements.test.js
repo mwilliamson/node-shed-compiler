@@ -59,3 +59,12 @@ exports.canParseValStatementWithExplicitType = function(test) {
     );
     test.done();
 };
+
+exports.canParseVarStatement = function(test) {
+    var result = parser.parse(statements.statement, "var blah = true;");
+    assertIsSuccessWithValue(
+        test, result,
+        ignoringSources(nodes.var("blah", options.none, nodes.boolean(true)))
+    );
+    test.done();
+};
