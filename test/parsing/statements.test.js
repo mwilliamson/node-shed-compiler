@@ -68,3 +68,12 @@ exports.canParseVarStatement = function(test) {
     );
     test.done();
 };
+
+exports.canParsePublicDeclarations = function(test) {
+    var result = parser.parse(statements.statement, "public val blah = true;");
+    assertIsSuccessWithValue(
+        test, result,
+        ignoringSources(nodes.public(nodes.val("blah", options.none, nodes.boolean(true))))
+    );
+    test.done();
+};
