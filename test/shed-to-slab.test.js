@@ -10,8 +10,17 @@ var slabBooleanValue = slab.boolean(true, shedBooleanValue);
 var shedValue = shedBooleanValue;
 var slabValue = slabBooleanValue;
 
+var shedReference = shed.ref("blah");
+var slabReference = slab.ref("blah", shedReference);
+
 var shedTypeReference = shed.ref("String");
 var slabTypeReference = slab.ref("String", shedTypeReference);
+
+var shedReturn = shed.return(shedReference);
+var slabReturn = slab.return(slabReference, shedReturn);
+
+var shedImport = shed.import(["shed", "example"]);
+var slabImport = slab.call(slab.ref("$import", shedImport), [slab.string("shed.example", shedImport)], shedImport);
 
 exports.shedBooleansAreConvertedToSlabBooleans = function(test) {
     test.deepEqual(slabValue, shedToSlab.translate(shedValue));
@@ -190,9 +199,24 @@ exports.shedPublicDeclarationIsConvertedToSlabPublicDeclaration = function(test)
 };
 
 exports.shedImportIsConvertedToSlabValDeclarationAndFunctionCall = function(test) {
-    var original = shed.import(["shed", "example"]);
     test.deepEqual(
-        slab.call(slab.ref("$import", original), [slab.string("shed.example", original)], original),
+        slabImport,
+        shedToSlab.translate(shedImport)
+    );
+    test.done();
+};
+
+exports.shedModuleIsConvertedToSlabModule = function(test) {
+    var original = shed.module(
+            shed.packageDeclaration(["shed", "example"]),
+            [shedImport],
+            [shedReturn]
+        )
+    test.deepEqual(
+        slab.module(
+            [slabImport, slabReturn],
+            original
+        ),
         shedToSlab.translate(original)
     );
     test.done();
