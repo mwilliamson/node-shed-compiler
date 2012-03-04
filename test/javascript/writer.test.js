@@ -25,6 +25,17 @@ exports.writesExpressionStatements = function(test) {
     );
 };
 
+exports.writesExpressionStatementsWithIndentationLevel = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.expressionStatement(js.func(["a", "b"], [js.expressionStatement(js.ref("print"))])),
+        '        function(a, b) {\n' +
+        '            print;\n' +
+        '        };',
+        2
+    );
+};
+
 exports.writesAnonymousFunctions = function(test) {
     assertJavaScriptWriter(
         test,
@@ -35,7 +46,18 @@ exports.writesAnonymousFunctions = function(test) {
     );
 };
 
-var assertJavaScriptWriter = function(test, javaScriptNode, expectedString) {
-    test.deepEqual(writer.write(javaScriptNode), expectedString);
+exports.writesAnonymousFunctionsWithIndentationLevel = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.func(["a", "b"], [js.expressionStatement(js.ref("print"))]),
+        'function(a, b) {\n' +
+        '            print;\n' +
+        '        }',
+        2
+    );
+};
+
+var assertJavaScriptWriter = function(test, javaScriptNode, expectedString, indentationLevel) {
+    test.deepEqual(writer.write(javaScriptNode, indentationLevel), expectedString);
     test.done();
 };
