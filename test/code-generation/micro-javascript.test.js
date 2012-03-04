@@ -1,5 +1,5 @@
 var slab = require("../../lib/slab-nodes");
-var js = require("../../lib/code-generation/javascript-nodes");
+var js = require("../../lib/javascript/nodes");
 
 var codeGenerator = require("../../lib/code-generation/micro-javascript");
 
