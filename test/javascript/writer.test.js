@@ -17,6 +17,14 @@ exports.writesFunctionCallWithArguments = function(test) {
     );
 };
 
+exports.writesExpressionStatements = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.expressionStatement(js.ref("print")),
+        'print;'
+    );
+};
+
 var assertJavaScriptWriter = function(test, javaScriptNode, expectedString) {
     test.deepEqual(writer.write(javaScriptNode), expectedString);
     test.done();
