@@ -1,0 +1,7 @@
+{
+    main: "shedTests/helloWorld.shed,
+    expected: {
+        exitCode: 0,
+        stdout: "Hello world"
+    }
+}

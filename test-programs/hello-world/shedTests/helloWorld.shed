@@ -1,0 +1,3 @@
+package shedTests;
+
+print("Hello world");
