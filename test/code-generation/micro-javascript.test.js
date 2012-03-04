@@ -31,6 +31,11 @@ exports.slabExpressionStatementIsConvertedToJavaScriptExpressionStatement = func
     assertTranslation(test, slabExpressionStatement, jsExpressionStatement);
 };
 
+exports.slabModuleIsConvertedToJavaScriptFunctionThatsImmediatelyCalled = function(test) {
+    var slabModule = slab.module([slabExpressionStatement]);
+    assertTranslation(test, slabModule, js.call(js.func([], [jsExpressionStatement], slabModule), [], slabModule));
+};
+
 var assertTranslation = function(test, slab, expectedJavaScript) {
     var generatedJavaScript = codeGenerator.translate(slab);
     test.deepEqual(generatedJavaScript, expectedJavaScript);
