@@ -25,6 +25,16 @@ exports.writesExpressionStatements = function(test) {
     );
 };
 
+exports.writesAnonymousFunctions = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.func(["a", "b"], [js.expressionStatement(js.ref("print"))]),
+        'function(a, b) {\n' +
+        '    print;\n' +
+        '}'
+    );
+};
+
 var assertJavaScriptWriter = function(test, javaScriptNode, expectedString) {
     test.deepEqual(writer.write(javaScriptNode), expectedString);
     test.done();
