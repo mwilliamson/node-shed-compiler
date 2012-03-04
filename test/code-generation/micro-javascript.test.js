@@ -32,7 +32,7 @@ exports.slabExpressionStatementIsConvertedToJavaScriptExpressionStatement = func
 };
 
 var assertTranslation = function(test, slab, expectedJavaScript) {
-    var generatedJavaScript = codeGenerator.generate(slab);
+    var generatedJavaScript = codeGenerator.translate(slab);
     test.deepEqual(generatedJavaScript, expectedJavaScript);
     test.done();
 };
