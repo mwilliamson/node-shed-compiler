@@ -123,6 +123,16 @@ exports.assignmentIsRightAssociative = function(test) {
     test.done();
 };
 
+exports.canCallFunctionWithNoArguments = function(test) {
+    var result = parser.parse(parsing.expression, "max()");
+    var expected = nodes.call(
+        nodes.ref("max"),
+        []
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "() =>\n\ttrue");
     var expected = nodes.lambda(
