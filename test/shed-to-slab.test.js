@@ -33,6 +33,12 @@ exports.shedUnitIsConvertedToSlabUnit = function(test) {
     test.done();
 };
 
+exports.shedStringIsConvertedToSlabString = function(test) {
+    var original = shed.string("blah");
+    test.deepEqual(slab.string("blah", original), shedToSlab.translate(original));
+    test.done();
+};
+
 exports.shedVariableReferenceIsConvertedToSlabVariableReference = function(test) {
     var original = shed.ref("blah");
     test.deepEqual(slab.ref("blah", original), shedToSlab.translate(original));
