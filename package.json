@@ -9,7 +9,8 @@
     },
     "devDependencies": {
         "nodeunit": "latest",
-        "duck": "git://github.com/mwilliamson/duck.js.git"
+        "duck": "git://github.com/mwilliamson/duck.js.git",
+        "temp": "latest"
     },
     "scripts": {
         "test": "nodeunit `find test -name \\*.test.js -type f`"
