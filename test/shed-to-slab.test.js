@@ -39,6 +39,15 @@ exports.shedVariableReferenceIsConvertedToSlabVariableReference = function(test)
     test.done();
 };
 
+exports.shedFunctionCallIsConvertedToSlabFunctionCall = function(test) {
+    var original = shed.call(
+        shedReference,
+        [shedValue]
+    );
+    test.deepEqual(slab.call(slabReference, [slabValue], original), shedToSlab.translate(original));
+    test.done();
+};
+
 exports.shedFormalArgumentIsConvertedToSlabFormalArgument = function(test) {
     var reference = shed.ref("String");
     var original = shed.formalArgument("name", reference);
