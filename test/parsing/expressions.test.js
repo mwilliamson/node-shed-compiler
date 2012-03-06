@@ -34,6 +34,12 @@ exports.canParseUnitLiteral = function(test) {
     test.done();
 };
 
+exports.canParseStringLiteral = function(test) {
+    var result = parser.parse(parsing.expression, "\"blah\"");
+    assertIsSuccessWithValue(test, result, ignoringSources(nodes.string("blah")));
+    test.done();
+};
+
 exports.canParseVariableReference = function(test) {
     var result = parser.parse(parsing.expression, "blah");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.variableReference("blah")));
