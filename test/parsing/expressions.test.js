@@ -143,6 +143,22 @@ exports.canCallFunctionWithMultipleArguments = function(test) {
     test.done();
 };
 
+//~ exports.functionCallsAreLeftAssociative = function(test) {
+    //~ var result = parser.parse(parsing.expression, "go()()()");
+    //~ var expected = nodes.call(
+        //~ nodes.call(
+            //~ nodes.call(
+                //~ nodes.ref("go"),
+                //~ []
+            //~ ),
+            //~ []
+        //~ ),
+        //~ []
+    //~ );
+    //~ assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    //~ test.done();
+//~ };
+
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "() =>\n\ttrue");
     var expected = nodes.lambda(
