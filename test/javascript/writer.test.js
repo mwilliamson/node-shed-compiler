@@ -13,7 +13,7 @@ exports.writesFunctionCallWithArguments = function(test) {
     assertJavaScriptWriter(
         test,
         js.call(js.ref("print"), [js.ref("a"), js.ref("b")]),
-        'print(a, b)'
+        '(print)(a, b)'
     );
 };
 
