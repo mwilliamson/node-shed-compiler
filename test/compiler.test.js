@@ -24,8 +24,6 @@ fs.readdirSync(testRoot).forEach(function(testPath) {
                     string: mainShedString
                 });
                 
-                console.log("!!" + compiledJavaScript + "!!");
-                
                 temp.open(null, function(err, tempFile) {
                     test.ifError(err);
                     fs.writeFile(tempFile.path, compiledJavaScript, function(err) {
