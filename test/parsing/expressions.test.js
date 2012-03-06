@@ -133,6 +133,16 @@ exports.canCallFunctionWithNoArguments = function(test) {
     test.done();
 };
 
+exports.canCallFunctionWithMultipleArguments = function(test) {
+    var result = parser.parse(parsing.expression, "max(a, b)");
+    var expected = nodes.call(
+        nodes.ref("max"),
+        [nodes.ref("a"), nodes.ref("b")]
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "() =>\n\ttrue");
     var expected = nodes.lambda(
