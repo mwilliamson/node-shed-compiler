@@ -171,6 +171,16 @@ exports.functionCallsAreLeftAssociative = function(test) {
     test.done();
 };
 
+exports.canAccessMemberOfValue = function(test) {
+    var result = parser.parse(parsing.expression, "song.title");
+    var expected = nodes.memberAccess(
+        nodes.ref("song"),
+        "title"
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "() =>\n\ttrue");
     var expected = nodes.lambda(
