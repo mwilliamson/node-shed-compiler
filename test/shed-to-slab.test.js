@@ -39,6 +39,12 @@ exports.shedStringIsConvertedToSlabString = function(test) {
     test.done();
 };
 
+exports.shedNumberIsConvertedToSlabNumber = function(test) {
+    var original = shed.number("42");
+    test.deepEqual(slab.number("42", original), shedToSlab.translate(original));
+    test.done();
+};
+
 exports.shedVariableReferenceIsConvertedToSlabVariableReference = function(test) {
     var original = shed.ref("blah");
     test.deepEqual(slab.ref("blah", original), shedToSlab.translate(original));
