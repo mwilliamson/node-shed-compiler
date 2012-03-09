@@ -6,6 +6,9 @@ var codeGenerator = require("../../lib/code-generation/micro-javascript");
 var slabString = slab.string("Blah");
 var jsString = js.string("Blah", slabString);
 
+var slabNumber = slab.number("42");
+var jsNumber = js.number("42", slabNumber);
+
 var slabReference = slab.ref("print");
 var jsReference = js.ref("print", slabReference);
 
@@ -17,6 +20,10 @@ var jsExpressionStatement = js.expressionStatement(jsFunctionCall, slabExpressio
 
 exports.slabStringLiteralIsConvertedToJavaScriptStringLiteral = function(test) {
     assertTranslation(test, slabString, jsString);
+};
+
+exports.slabNumberLiteralIsConvertedToJavaScriptNumberLiteral = function(test) {
+    assertTranslation(test, slabNumber, jsNumber);
 };
 
 exports.slabReferenceIsConvertedToJavaScriptReference = function(test) {
