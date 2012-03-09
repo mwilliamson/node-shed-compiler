@@ -5,6 +5,10 @@ exports.writesString = function(test) {
     assertJavaScriptWriter(test, js.string("Blah"), '"Blah"');
 };
 
+exports.writesNumber = function(test) {
+    assertJavaScriptWriter(test, js.number("42"), "42");
+};
+
 exports.writesVariableReference = function(test) {
     assertJavaScriptWriter(test, js.ref("print"), 'print');
 };
