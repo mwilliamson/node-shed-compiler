@@ -181,6 +181,22 @@ exports.canAccessMemberOfValue = function(test) {
     test.done();
 };
 
+exports.memberAccessAndFunctionCallHaveSamePrecendence = function(test) {
+    var result = parser.parse(parsing.expression, "songs.head().title");
+    var expected = nodes.memberAccess(
+        nodes.call(
+            nodes.memberAccess(
+                nodes.ref("songs"),
+                "head"
+            ),
+            []
+        ),
+        "title"
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "() =>\n\ttrue");
     var expected = nodes.lambda(
