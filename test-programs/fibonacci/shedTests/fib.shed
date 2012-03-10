@@ -1,6 +1,6 @@
 package shedTests;
 
-fun fib(n: Double) {
+fun fib(n: Double) : Double {
     if n.equals(0) {
         return 0;
     } else if n.equals(1) {
