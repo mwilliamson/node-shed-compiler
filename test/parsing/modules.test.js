@@ -6,6 +6,7 @@ var hasProperties = duck.hasProperties;
 
 var errors = require("lop").errors;
 var parsingTesting = require("lop").testing;
+var assertIsSuccess = parsingTesting.assertIsSuccess;
 var assertIsSuccessWithValue = parsingTesting.assertIsSuccessWithValue;
 var assertIsFailure = parsingTesting.assertIsFailure;
 var assertIsError = parsingTesting.assertIsError;
@@ -19,25 +20,31 @@ var parser = new parsing.Parser();
 
 exports.moduleContainsPackageDeclarationFollowedByBody = function(test) {
     var result = parser.parse(modulesParsing.module, "package shed.example; true;false;");
-    assertIsSuccessWithValue(test, result, ignoringSources(
-        nodes.module(
-            nodes.packageDeclaration(["shed", "example"]),
-            [],
-            [nodes.expressionStatement(nodes.boolean(true)), nodes.expressionStatement(nodes.boolean(false))]
-        )
-    ));
+    assertIsSuccess(test, result, {
+        value: ignoringSources(
+            nodes.module(
+                nodes.packageDeclaration(["shed", "example"]),
+                [],
+                [nodes.expressionStatement(nodes.boolean(true)), nodes.expressionStatement(nodes.boolean(false))]
+            )
+        ),
+        remaining: []
+    });
     test.done();
 };
 
 exports.moduleContainsPackageDeclarationFollowedByImportsThenBody = function(test) {
     var result = parser.parse(modulesParsing.module, "package shed.example; import shed.options; import shed.time; true;");
-    assertIsSuccessWithValue(test, result, ignoringSources(
-        nodes.module(
-            nodes.packageDeclaration(["shed", "example"]),
-            [nodes.import(["shed", "options"]), nodes.import(["shed", "time"])],
-            [nodes.expressionStatement(nodes.boolean(true))]
-        )
-    ));
+    assertIsSuccess(test, result, {
+        value: ignoringSources(
+            nodes.module(
+                nodes.packageDeclaration(["shed", "example"]),
+                [nodes.import(["shed", "options"]), nodes.import(["shed", "time"])],
+                [nodes.expressionStatement(nodes.boolean(true))]
+            )
+        ),
+        remaining: []
+    });
     test.done();
 };
 
