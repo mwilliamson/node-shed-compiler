@@ -4,6 +4,7 @@ var some = options.some;
 var errors = require("lop").errors;
 var parsingTesting = require("lop").testing;
 var assertIsSuccessWithValue = parsingTesting.assertIsSuccessWithValue;
+var assertIsSuccess = parsingTesting.assertIsSuccess;
 var assertIsFailure = parsingTesting.assertIsFailure;
 var assertIsError = parsingTesting.assertIsError;
 
@@ -66,6 +67,19 @@ exports.canParseVarStatement = function(test) {
         test, result,
         ignoringSources(nodes.var("blah", options.none, nodes.boolean(true)))
     );
+    test.done();
+};
+
+exports.canParseFunctionDeclarationWithEmptyBody = function(test) {
+    var result = parser.parse(statements.statement, "fun nop() : Unit { }");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.func(
+            "nop",
+            nodes.formalArguments([]),
+            nodes.ref("Unit"),
+            nodes.block([])
+        ))
+    });
     test.done();
 };
 
