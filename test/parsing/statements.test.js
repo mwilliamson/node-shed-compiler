@@ -91,3 +91,14 @@ exports.canParsePublicDeclarations = function(test) {
     );
     test.done();
 };
+
+exports.canParseEmptyIfStatement = function(test) {
+    var result = parser.parse(statements.statement, "if (true) { }");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.if(
+            nodes.boolean(true),
+            nodes.block([])
+        ))
+    });
+    test.done();
+};
