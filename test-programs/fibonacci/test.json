@@ -1,0 +1,7 @@
+{
+    "main": "shedTests/fib.shed",
+    "expected": {
+        "exitCode": 0,
+        "stdout": "21"
+    }
+}
