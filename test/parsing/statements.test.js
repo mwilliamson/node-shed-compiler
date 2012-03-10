@@ -97,7 +97,32 @@ exports.canParseEmptyIfStatement = function(test) {
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if(
             nodes.boolean(true),
-            nodes.block([])
+            nodes.block([]),
+            options.none
+        ))
+    });
+    test.done();
+};
+
+exports.canParseIfStatement = function(test) {
+    var result = parser.parse(statements.statement, "if (true) { return 1; }");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.if(
+            nodes.boolean(true),
+            nodes.block([nodes.return(nodes.number("1"))]),
+            options.none
+        ))
+    });
+    test.done();
+};
+
+exports.canParseIfElseStatement = function(test) {
+    var result = parser.parse(statements.statement, "if (true) { return 1; } else { return 2; }");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.if(
+            nodes.boolean(true),
+            nodes.block([nodes.return(nodes.number("1"))]),
+            some(nodes.block([nodes.return(nodes.number("2"))]))
         ))
     });
     test.done();
