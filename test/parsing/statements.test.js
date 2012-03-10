@@ -96,9 +96,7 @@ exports.canParseEmptyIfStatement = function(test) {
     var result = parser.parse(statements.statement, "if (true) { }");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if(
-            nodes.boolean(true),
-            nodes.block([]),
-            options.none
+            [{condition: nodes.boolean(true), body: nodes.block([])}]
         ))
     });
     test.done();
@@ -107,11 +105,12 @@ exports.canParseEmptyIfStatement = function(test) {
 exports.canParseIfStatement = function(test) {
     var result = parser.parse(statements.statement, "if (true) { return 1; }");
     assertIsSuccess(test, result, {
-        value: ignoringSources(nodes.if(
-            nodes.boolean(true),
-            nodes.block([nodes.return(nodes.number("1"))]),
-            options.none
-        ))
+        value: ignoringSources(nodes.if([
+            {
+                condition: nodes.boolean(true),
+                body: nodes.block([nodes.return(nodes.number("1"))])
+            }
+        ]))
     });
     test.done();
 };
@@ -119,11 +118,36 @@ exports.canParseIfStatement = function(test) {
 exports.canParseIfElseStatement = function(test) {
     var result = parser.parse(statements.statement, "if (true) { return 1; } else { return 2; }");
     assertIsSuccess(test, result, {
-        value: ignoringSources(nodes.if(
-            nodes.boolean(true),
-            nodes.block([nodes.return(nodes.number("1"))]),
-            some(nodes.block([nodes.return(nodes.number("2"))]))
-        ))
+        value: ignoringSources(nodes.if([
+            {
+                condition: nodes.boolean(true),
+                body: nodes.block([nodes.return(nodes.number("1"))])
+            },
+            {
+                body: nodes.block([nodes.return(nodes.number("2"))])
+            }
+        ]))
+    });
+    test.done();
+};
+
+exports.canParseIfElseIfElseStatement = function(test) {
+    var source = "if (true) { return 1; } else if (false) { return 2; } else { return 3; }";
+    var result = parser.parse(statements.statement, source);
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.if([
+            {
+                condition: nodes.boolean(true),
+                body: nodes.block([nodes.return(nodes.number("1"))])
+            },
+            {
+                condition: nodes.boolean(false),
+                body: nodes.block([nodes.return(nodes.number("2"))])
+            },
+            {
+                body: nodes.block([nodes.return(nodes.number("3"))])
+            }
+        ]))
     });
     test.done();
 };

@@ -9,7 +9,9 @@ var ignoringSources = exports.ignoringSources = function(node) {
         return node;
     }
     var matchingNode = _.clone(node);
-    matchingNode.source = duck.any;
+    if (nodes.isShedNode(matchingNode)) {
+        matchingNode.source = duck.any;
+    }
     for (key in matchingNode) {
         if (nodes.isShedNode(matchingNode[key])) {
             matchingNode[key] = ignoringSources(matchingNode[key]);
