@@ -53,6 +53,17 @@ var shedSecondCondition = shed.boolean(false);
 var slabFirstCondition = slab.boolean(true, shedFirstCondition);
 var slabSecondCondition = slab.boolean(false, shedSecondCondition);
 
+var shedBlock = shed.block([shedReturn]);
+var slabBlock = slab.block([slabReturn], shedBlock);
+
+var shedLongLambda = shed.lambda(shedFormalArguments, shedBooleanTypeReference, shedBlock);
+var slabLongLambda = slab.lambda(
+    slabFormalArguments,
+    slabBooleanTypeReference,
+    slabBlock,
+    shedLongLambda
+);
+
 exports.shedBooleansAreConvertedToSlabBooleans = function(test) {
     test.deepEqual(slabValue, shedToSlab.translate(shedValue));
     test.done();
@@ -136,17 +147,9 @@ exports.shedBlockIsConvertedToSlabBlock = function(test) {
 };
 
 exports.shedLongLambdaIsConvertedToSlabLambda = function(test) {
-    var block = shed.block([shedReturn]);
-    var original = shed.lambda(shedFormalArguments, shedBooleanTypeReference, block);
-    
     test.deepEqual(
-        slab.lambda(
-            slabFormalArguments,
-            slabBooleanTypeReference,
-            slab.block([slabReturn], block),
-            original
-        ),
-        shedToSlab.translate(original)
+        slabLongLambda,
+        shedToSlab.translate(shedLongLambda)
     );
     test.done();
 };
@@ -194,6 +197,16 @@ exports.shedFunctionDeclarationIsConvertedToSlabLambda = function(test) {
             original
         ),
         shedToSlab.translate(original)
+    );
+    test.done();
+};
+
+exports.shedDefinitionDeclarationIsConvertedToSlabDefinitionDeclaration = function(test) {
+    var shedDef = shed.def("go", shedLongLambda);
+    var slabDef = slab.def("go", slabLongLambda, shedDef);
+    test.deepEqual(
+        slabDef,
+        shedToSlab.translate(shedDef)
     );
     test.done();
 };
