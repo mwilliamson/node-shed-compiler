@@ -12,7 +12,7 @@ var slabString = slab.string("Blah");
 var jsString = js.string("Blah", slabString);
 
 var slabNumber = slab.number("42");
-var jsNumber = js.number("42", slabNumber);
+var jsNumber = js.call(js.ref("$number", slabNumber), [js.number("42", slabNumber)], slabNumber);
 
 var slabReference = slab.ref("print");
 var jsReference = js.ref("print", slabReference);
@@ -37,7 +37,7 @@ exports.slabStringLiteralIsConvertedToJavaScriptStringLiteral = function(test) {
     assertTranslation(test, slabString, jsString);
 };
 
-exports.slabNumberLiteralIsConvertedToJavaScriptNumberLiteral = function(test) {
+exports.slabNumberLiteralIsConvertedToBoxedJavaScriptNumberLiteral = function(test) {
     assertTranslation(test, slabNumber, jsNumber);
 };
 
