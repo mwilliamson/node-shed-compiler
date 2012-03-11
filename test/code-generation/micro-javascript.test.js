@@ -54,6 +54,10 @@ exports.slabFunctionCallIsConvertedToJavaScriptFunctionCall = function(test) {
     assertTranslation(test, slabFunctionCall, jsFunctionCall);
 };
 
+exports.slabReturnIsConvertedToJavaScriptReturn = function(test) {
+    assertTranslation(test, slabReturn, jsReturn);
+};
+
 exports.slabExpressionStatementIsConvertedToJavaScriptExpressionStatement = function(test) {
     assertTranslation(test, slabExpressionStatement, jsExpressionStatement);
 };
