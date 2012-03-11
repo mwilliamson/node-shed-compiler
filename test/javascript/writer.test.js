@@ -1,6 +1,10 @@
 var js = require("../../lib/javascript/nodes");
 var writer = require("../../lib/javascript/writer");
 
+exports.writesBoolean = function(test) {
+    assertJavaScriptWriter(test, js.boolean(true), 'true');
+};
+
 exports.writesString = function(test) {
     assertJavaScriptWriter(test, js.string("Blah"), '"Blah"');
 };
