@@ -70,14 +70,16 @@ exports.canParseVarStatement = function(test) {
     test.done();
 };
 
-exports.canParseFunctionDeclarationWithEmptyBody = function(test) {
-    var result = parser.parse(statements.statement, "fun nop() : Unit { }");
+exports.canParseDefinition = function(test) {
+    var result = parser.parse(statements.statement, "def nop() : Unit => { }");
     assertIsSuccess(test, result, {
-        value: ignoringSources(nodes.func(
+        value: ignoringSources(nodes.def(
             "nop",
-            nodes.formalArguments([]),
-            nodes.ref("Unit"),
-            nodes.block([])
+            nodes.lambda(
+                nodes.formalArguments([]),
+                some(nodes.ref("Unit")),
+                nodes.block([])
+            )
         ))
     });
     test.done();

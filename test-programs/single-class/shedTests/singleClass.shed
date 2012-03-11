@@ -1,13 +1,9 @@
 package shedTests;
 
-class Person(name: String) {
-    public {
-        name = getName
-    }
-
-    fun getName() : String {
+def Person class(name: String) {
+    public toString() : String {
         return name;
     }
 }
 
-print(Person("Bob").name());
+print(Person("Bob").toString());
