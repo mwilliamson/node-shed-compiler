@@ -7,6 +7,9 @@ var shedToSlab = require("../lib/shed-to-slab");
 var shedBooleanValue = shed.boolean(true);
 var slabBooleanValue = slab.boolean(true, shedBooleanValue);
 
+var shedNumber = shed.number("42");
+var slabNumber = slab.number("42", shedNumber);
+
 var shedValue = shedBooleanValue;
 var slabValue = slabBooleanValue;
 
@@ -35,8 +38,20 @@ var slabFormalArguments = slab.formalArguments([slabFormalArgument], shedFormalA
 var shedReturn = shed.return(shedReference);
 var slabReturn = slab.return(slabReference, shedReturn);
 
+var shedReturnNumber = shed.return(shedNumber);
+var slabReturnNumber = slab.return(slabNumber, shedReturnNumber);
+
+var shedReturnBoolean = shed.return(shedBooleanValue);
+var slabReturnBoolean = slab.return(slabBooleanValue, shedReturnBoolean);
+
 var shedImport = shed.import(["shed", "example"]);
 var slabImport = slab.call(slab.ref("$import", shedImport), [slab.string("shed.example", shedImport)], shedImport);
+
+var shedFirstCondition = shed.boolean(true);
+var shedSecondCondition = shed.boolean(false);
+
+var slabFirstCondition = slab.boolean(true, shedFirstCondition);
+var slabSecondCondition = slab.boolean(false, shedSecondCondition);
 
 exports.shedBooleansAreConvertedToSlabBooleans = function(test) {
     test.deepEqual(slabValue, shedToSlab.translate(shedValue));
@@ -56,8 +71,7 @@ exports.shedStringIsConvertedToSlabString = function(test) {
 };
 
 exports.shedNumberIsConvertedToSlabNumber = function(test) {
-    var original = shed.number("42");
-    test.deepEqual(slab.number("42", original), shedToSlab.translate(original));
+    test.deepEqual(slabNumber, shedToSlab.translate(shedNumber));
     test.done();
 };
 
@@ -211,6 +225,31 @@ exports.shedVarIsConvertedToSlabVar = function(test) {
     var original = shed.var("blah", options.some(shedTypeReference), shedValue);
     test.deepEqual(
         slab.var("blah", options.some(slabTypeReference), slabValue, original),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
+
+exports.shedIfStatementIsConvertedToSlabIfStatement = function(test) {
+    var shedFirstBlock = shed.block([shedReturn]);
+    var shedSecondBlock = shed.block([shedReturnNumber]);
+    var shedThirdBlock = shed.block([shedReturnBoolean]);
+    
+    var slabFirstBlock = slab.block([slabReturn], shedFirstBlock);
+    var slabSecondBlock = slab.block([slabReturnNumber], shedSecondBlock);
+    var slabThirdBlock = slab.block([slabReturnBoolean], shedThirdBlock);
+    
+    var original = shed.if([
+        {condition: shedFirstCondition, body: shedFirstBlock},
+        {condition: shedSecondCondition, body: shedSecondBlock},
+        {body: shedThirdBlock}
+    ]);
+    test.deepEqual(
+        slab.if([
+            {condition: slabFirstCondition, body: slabFirstBlock},
+            {condition: slabSecondCondition, body: slabSecondBlock},
+            {body: slabThirdBlock}
+        ], original),
         shedToSlab.translate(original)
     );
     test.done();
