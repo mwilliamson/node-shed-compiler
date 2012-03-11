@@ -181,26 +181,6 @@ exports.shedShortLambdaIsConvertedToSlabLambda = function(test) {
     test.done();
 };
 
-exports.shedFunctionDeclarationIsConvertedToSlabLambda = function(test) {
-    var block = shed.block([shedReturn]);
-    var original = shed.func("go", shedFormalArguments, shedBooleanTypeReference, block);
-    
-    test.deepEqual(
-        slab.val("go", 
-            options.none,
-            slab.lambda(
-                slabFormalArguments,
-                slabBooleanTypeReference,
-                slab.block([slabReturn], block),
-                original
-            ),
-            original
-        ),
-        shedToSlab.translate(original)
-    );
-    test.done();
-};
-
 exports.shedDefinitionDeclarationIsConvertedToSlabDefinitionDeclaration = function(test) {
     var shedDef = shed.def("go", shedLongLambda);
     var slabDef = slab.def("go", slabLongLambda, shedDef);
