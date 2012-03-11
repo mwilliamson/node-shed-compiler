@@ -1,3 +1,5 @@
+var options = require("options");
+
 var slab = require("../../lib/slab-nodes");
 var js = require("../../lib/javascript/nodes");
 
@@ -36,6 +38,11 @@ exports.slabFunctionCallIsConvertedToJavaScriptFunctionCall = function(test) {
 
 exports.slabExpressionStatementIsConvertedToJavaScriptExpressionStatement = function(test) {
     assertTranslation(test, slabExpressionStatement, jsExpressionStatement);
+};
+
+exports.slabValIsConvertedToJavaScriptVar = function(test) {
+    var slabVal = slab.val("coins", options.none, slabNumber);
+    assertTranslation(test, slabVal, js.var("coins", jsNumber, slabVal));
 };
 
 exports.slabModuleIsConvertedToJavaScriptFunctionThatsImmediatelyCalled = function(test) {
