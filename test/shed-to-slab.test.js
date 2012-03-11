@@ -190,6 +190,7 @@ exports.shedFunctionDeclarationIsConvertedToSlabLambda = function(test) {
                 slab.block([slabReturn], block),
                 original
             ),
+            options.none,
             original
         ),
         shedToSlab.translate(original)
