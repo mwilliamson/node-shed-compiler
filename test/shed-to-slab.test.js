@@ -90,6 +90,12 @@ exports.shedFunctionCallIsConvertedToSlabFunctionCall = function(test) {
     test.done();
 };
 
+exports.shedMemberAccessIsConvertedToSlabMemberAccess = function(test) {
+    var original = shed.memberAccess(shedReference, "title");
+    test.deepEqual(slab.memberAccess(slabReference, "title", original), shedToSlab.translate(original));
+    test.done();
+};
+
 exports.shedFormalArgumentIsConvertedToSlabFormalArgument = function(test) {
     test.deepEqual(
         slabFormalArgument,
