@@ -32,22 +32,28 @@ fs.readdirSync(testRoot).forEach(function(testPath) {
 
 var executeFile = function(filePath, callback) {
     fs.readFile(filePath, "utf8", ifSuccess(callback, function(mainShedString) {
-        var compiledJavaScript = compiler.compileToString({
-            string: mainShedString
-        });
-        
-        temp.open(null, ifSuccess(callback, function(tempFile) {
-            fs.writeFile(tempFile.path, compiledJavaScript, ifSuccess(callback, function() {
-                var command = util.format("node %s", path.resolve(tempFile.path));
-                child_process.exec(command, function(err, stdout, stderr) {
-                    callback(err, {
-                        stderr: stderr,
-                        stdout: stdout
+        compile(mainShedString, ifSuccess(callback, function(compiledJavaScript) {
+            temp.open(null, ifSuccess(callback, function(tempFile) {
+                fs.writeFile(tempFile.path, compiledJavaScript, ifSuccess(callback, function() {
+                    var command = util.format("node %s", path.resolve(tempFile.path));
+                    child_process.exec(command, function(err, stdout, stderr) {
+                        callback(err, {
+                            stderr: stderr,
+                            stdout: stdout
+                        });
                     });
-                });
+                }));
             }));
         }));
     }));
+};
+
+var compile = function(string, callback) {
+    try {
+        callback(null, compiler.compileToString({string: string}));
+    } catch (e) {
+        callback(e);
+    }
 };
 
 var ifSuccess = function(callback, func) {
