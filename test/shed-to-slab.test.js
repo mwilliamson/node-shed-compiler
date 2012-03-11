@@ -158,6 +158,25 @@ exports.shedShortLambdaIsConvertedToSlabLambda = function(test) {
     test.done();
 };
 
+exports.shedFunctionDeclarationIsConvertedToSlabLambda = function(test) {
+    var block = shed.block([shedReturn]);
+    var original = shed.func("go", shedFormalArguments, shedBooleanTypeReference, block);
+    
+    test.deepEqual(
+        slab.val("go", 
+            slab.lambda(
+                slabFormalArguments,
+                slabBooleanTypeReference,
+                slab.block([slabReturn], block),
+                original
+            ),
+            original
+        ),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
+
 exports.shedAssignmentIsConvertedToSlabAssignment = function(test) {
     var value = shed.boolean(true);
     var reference = shed.ref("blah");
