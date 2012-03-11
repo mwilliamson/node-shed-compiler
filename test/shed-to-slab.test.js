@@ -56,10 +56,10 @@ var slabSecondCondition = slab.boolean(false, shedSecondCondition);
 var shedBlock = shed.block([shedReturn]);
 var slabBlock = slab.block([slabReturn], shedBlock);
 
-var shedLongLambda = shed.lambda(shedFormalArguments, shedBooleanTypeReference, shedBlock);
+var shedLongLambda = shed.lambda(shedFormalArguments, options.some(shedBooleanTypeReference), shedBlock);
 var slabLongLambda = slab.lambda(
     slabFormalArguments,
-    slabBooleanTypeReference,
+    options.some(slabBooleanTypeReference),
     slabBlock,
     shedLongLambda
 );
@@ -160,7 +160,7 @@ exports.shedShortLambdaIsConvertedToSlabLambda = function(test) {
     var formalArguments = shed.formalArguments([formalArgument]);
     var booleanReference = shed.ref("Boolean");
     var reference = shed.ref("blah");
-    var original = shed.lambda(formalArguments, booleanReference, reference);
+    var original = shed.lambda(formalArguments, options.some(booleanReference), reference);
     test.deepEqual(
         slab.lambda(
             slab.formalArguments([
@@ -170,7 +170,7 @@ exports.shedShortLambdaIsConvertedToSlabLambda = function(test) {
                     formalArgument
                 )
             ], formalArguments),
-            slab.ref("Boolean", booleanReference),
+            options.some(slab.ref("Boolean", booleanReference)),
             slab.block([
                 slab.return(slab.ref("blah", reference), reference)
             ], reference),
