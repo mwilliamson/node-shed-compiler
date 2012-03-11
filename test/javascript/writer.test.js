@@ -25,6 +25,14 @@ exports.writesFunctionCallWithArguments = function(test) {
     );
 };
 
+exports.writeReturns = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.return(js.ref("print")),
+        'return print;'
+    );
+};
+
 exports.writesExpressionStatements = function(test) {
     assertJavaScriptWriter(
         test,
@@ -49,6 +57,24 @@ exports.writesVars = function(test) {
         test,
         js.var("go", js.ref("next")),
         'var go = next;'
+    );
+};
+
+exports.writesIfStatements = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.if([
+            {condition: js.boolean(true), body: [js.return(js.number("1"))]},
+            {condition: js.boolean(false), body: [js.return(js.number("2"))]},
+            {body: [js.return(js.number("3"))]}
+        ]),
+        'if (true) {\n' +
+        '    return 1;\n' +
+        '} else if (false) {\n' +
+        '    return 2;\n' +
+        '} else {\n' +
+        '    return 3;\n' +
+        '}'
     );
 };
 
