@@ -29,6 +29,16 @@ var jsExpressionStatement = js.expressionStatement(jsFunctionCall, slabExpressio
 var slabReturn = slab.return(slabNumber);
 var jsReturn = js.return(jsNumber, slabReturn);
 
+var slabBlock = slab.block([slabReturn]);
+var jsBlock = [jsReturn];
+
+var slabLambda = slab.lambda(
+    slab.formalArguments([slab.formalArgument("name", slab.ref("String"))]),
+    slab.ref("Boolean"),
+    slabBlock
+);
+var jsFunction = js.func(["name"], jsBlock, slabLambda);
+
 exports.slabBooleanLiteralIsConvertedToJavaScriptBooleanLiteral = function(test) {
     assertTranslation(test, slabBoolean, jsBoolean);
 };
@@ -46,17 +56,6 @@ exports.slabReferenceIsConvertedToJavaScriptReference = function(test) {
 };
 
 exports.slabLambdaIsConvertedToJavaScriptAnonymousFunction = function(test) {
-    var slabBlock = slab.block([slabReturn]);
-    var slabLambda = slab.lambda(
-        slab.formalArguments([slab.formalArgument("name", slab.ref("String"))]),
-        slab.ref("Boolean"),
-        slabBlock
-    );
-    var jsFunction = js.func(
-        ["name"],
-        [jsReturn],
-        slabLambda
-    );
     assertTranslation(test, slabLambda, jsFunction);
 };
 
@@ -79,6 +78,12 @@ exports.slabExpressionStatementIsConvertedToJavaScriptExpressionStatement = func
 exports.slabValIsConvertedToJavaScriptVar = function(test) {
     var slabVal = slab.val("coins", options.none, slabNumber);
     assertTranslation(test, slabVal, js.var("coins", jsNumber, slabVal));
+};
+
+exports.slabDefinitionDeclarationIsConvertedToJavaScriptVariable = function(test) {
+    var slabDef = slab.def("go", slabLambda);
+    var expectedJs = js.var("go", jsFunction, slabDef)
+    assertTranslation(test, slabDef, expectedJs);
 };
 
 exports.slabIfStatementIsConvertedToJavaScriptIfStatement = function(test) {
