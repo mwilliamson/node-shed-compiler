@@ -40,6 +40,14 @@ exports.writesExpressionStatementsWithIndentationLevel = function(test) {
     );
 };
 
+exports.writesVars = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.var("go", js.ref("next")),
+        'var go = next;'
+    );
+};
+
 exports.writesAnonymousFunctions = function(test) {
     assertJavaScriptWriter(
         test,
