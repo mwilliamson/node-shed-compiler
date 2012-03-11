@@ -25,6 +25,14 @@ exports.writesFunctionCallWithArguments = function(test) {
     );
 };
 
+exports.writesMemberAccess = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.memberAccess(js.ref("user"), "name"),
+        '(user).name'
+    );
+};
+
 exports.writeReturns = function(test) {
     assertJavaScriptWriter(
         test,
