@@ -20,6 +20,9 @@ var jsReference = js.ref("print", slabReference);
 var slabFunctionCall = slab.call(slabReference, [slabString]);
 var jsFunctionCall = js.call(jsReference, [jsString], slabFunctionCall);
 
+var slabMemberAccess = slab.memberAccess(slabReference, "title");
+var jsMemberAccess = js.memberAccess(jsReference, "title", slabMemberAccess);
+
 var slabExpressionStatement = slab.expressionStatement(slabFunctionCall);
 var jsExpressionStatement = js.expressionStatement(jsFunctionCall, slabExpressionStatement);
 
@@ -59,6 +62,10 @@ exports.slabLambdaIsConvertedToJavaScriptAnonymousFunction = function(test) {
 
 exports.slabFunctionCallIsConvertedToJavaScriptFunctionCall = function(test) {
     assertTranslation(test, slabFunctionCall, jsFunctionCall);
+};
+
+exports.slabMemberAccessIsConvertedToJavaScriptMemberAccess = function(test) {
+    assertTranslation(test, slabMemberAccess, jsMemberAccess);
 };
 
 exports.slabReturnIsConvertedToJavaScriptReturn = function(test) {
