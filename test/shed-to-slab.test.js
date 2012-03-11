@@ -184,13 +184,13 @@ exports.shedFunctionDeclarationIsConvertedToSlabLambda = function(test) {
     
     test.deepEqual(
         slab.val("go", 
+            options.none,
             slab.lambda(
                 slabFormalArguments,
                 slabBooleanTypeReference,
                 slab.block([slabReturn], block),
                 original
             ),
-            options.none,
             original
         ),
         shedToSlab.translate(original)
