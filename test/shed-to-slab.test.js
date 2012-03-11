@@ -13,8 +13,24 @@ var slabValue = slabBooleanValue;
 var shedReference = shed.ref("blah");
 var slabReference = slab.ref("blah", shedReference);
 
-var shedTypeReference = shed.ref("String");
-var slabTypeReference = slab.ref("String", shedTypeReference);
+var shedStringTypeReference = shed.ref("String");
+var slabStringTypeReference = slab.ref("String", shedStringTypeReference);
+
+var shedBooleanTypeReference = shed.ref("Boolean");
+var slabBooleanTypeReference = slab.ref("Boolean", shedBooleanTypeReference);
+
+var shedTypeReference = shedStringTypeReference;
+var slabTypeReference = slabStringTypeReference;
+
+var shedFormalArgument = shed.formalArgument("name", shedTypeReference);
+var slabFormalArgument = slab.formalArgument(
+    "name",
+    slabTypeReference,
+    shedFormalArgument
+);
+
+var shedFormalArguments = shed.formalArguments([shedFormalArgument]);
+var slabFormalArguments = slab.formalArguments([slabFormalArgument], shedFormalArguments);
 
 var shedReturn = shed.return(shedReference);
 var slabReturn = slab.return(slabReference, shedReturn);
@@ -61,31 +77,17 @@ exports.shedFunctionCallIsConvertedToSlabFunctionCall = function(test) {
 };
 
 exports.shedFormalArgumentIsConvertedToSlabFormalArgument = function(test) {
-    var reference = shed.ref("String");
-    var original = shed.formalArgument("name", reference);
     test.deepEqual(
-        slab.formalArgument("name", slab.ref("String", reference), original),
-        shedToSlab.translate(original)
+        slabFormalArgument,
+        shedToSlab.translate(shedFormalArgument)
     );
     test.done();
 };
 
 exports.shedFormalArgumentsIsConvertedToSlabFormalArguments = function(test) {
-    var reference = shed.ref("String");
-    var formalArgument = shed.formalArgument("name", reference);
-    var original = shed.formalArguments([formalArgument]);
     test.deepEqual(
-        slab.formalArguments(
-            [
-                slab.formalArgument(
-                    "name",
-                    slab.ref("String", reference),
-                    formalArgument
-                )
-            ],
-            original
-        ),
-        shedToSlab.translate(original)
+        slabFormalArguments,
+        shedToSlab.translate(shedFormalArguments)
     );
     test.done();
 };
@@ -114,28 +116,14 @@ exports.shedBlockIsConvertedToSlabBlock = function(test) {
 };
 
 exports.shedLongLambdaIsConvertedToSlabLambda = function(test) {
-    var stringReference = shed.ref("String");
-    var formalArgument = shed.formalArgument("name", stringReference);
-    var formalArguments = shed.formalArguments([formalArgument]);
-    var booleanReference = shed.ref("Boolean");
-    var reference = shed.ref("blah");
-    var returnStatement = shed.return(reference);
-    var block = shed.block([returnStatement]);
-    var original = shed.lambda(formalArguments, booleanReference, block);
+    var block = shed.block([shedReturn]);
+    var original = shed.lambda(shedFormalArguments, shedBooleanTypeReference, block);
     
     test.deepEqual(
         slab.lambda(
-            slab.formalArguments([
-                slab.formalArgument(
-                    "name",
-                    slab.ref("String", stringReference),
-                    formalArgument
-                )
-            ], formalArguments),
-            slab.ref("Boolean", booleanReference),
-            slab.block([
-                slab.return(slab.ref("blah", reference), returnStatement)
-            ], block),
+            slabFormalArguments,
+            slabBooleanTypeReference,
+            slab.block([slabReturn], block),
             original
         ),
         shedToSlab.translate(original)
