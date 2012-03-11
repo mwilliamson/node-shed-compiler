@@ -1,9 +1,7 @@
 package shedTests;
 
 def Person class(name: String) {
-    public toString() : String {
-        return name;
-    }
+    public toString() : String => name;
 }
 
 print(Person("Bob").toString());
