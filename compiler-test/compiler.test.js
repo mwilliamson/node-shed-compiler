@@ -17,7 +17,7 @@ fs.readdirSync(testRoot).forEach(function(testPath) {
         fs.readFile(path.join(testDirectory, "test.json"), function(err, testJson) {
             test.ifError(err);
             var testDescription = JSON.parse(testJson);
-            var mainTestFilePath = path.join(testDirectory, testDescription.main);
+            var mainTestFilePath = path.join(testDirectory, testDescription.file);
             fs.readFile(mainTestFilePath, "utf8", function(err, mainShedString) {
                 test.ifError(err);
                 var compiledJavaScript = compiler.compileToString({
