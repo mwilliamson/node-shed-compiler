@@ -1,0 +1,7 @@
+{
+    "file": "shedTests/singleClass.shed",
+    "expected": {
+        "exitCode": 0,
+        "stdout": "Bob"
+    }
+}

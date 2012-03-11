@@ -1,0 +1,13 @@
+package shedTests;
+
+class Person(name: String) {
+    public {
+        name = getName
+    }
+
+    fun getName() : String {
+        return name;
+    }
+}
+
+print(Person("Bob").name());

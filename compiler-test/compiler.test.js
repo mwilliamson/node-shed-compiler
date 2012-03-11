@@ -20,8 +20,10 @@ fs.readdirSync(testRoot).forEach(function(testPath) {
             var mainTestFilePath = path.join(testDirectory, testDescription.file);
             executeFile(mainTestFilePath, function(err, result) {
                 test.ifError(err);
-                test.equal("", result.stderr);
-                test.equal(testDescription.expected.stdout, result.stdout);
+                if (!err) {
+                    test.equal("", result.stderr);
+                    test.equal(testDescription.expected.stdout, result.stdout);
+                }
                 test.done(); 
             });
         });
