@@ -92,6 +92,19 @@ exports.slabDefinitionDeclarationIsConvertedToJavaScriptVariable = function(test
     assertTranslation(test, slabDef, expectedJs);
 };
 
+exports.slabIfExpressionIsConvertedToJavaScriptConditionOperatorWithOption = function(test) {
+    var slabIf = slab.if([
+        {condition: slabBoolean, body: slabString}
+    ]);
+    var expectedJavaScript = js.conditionalOperator(
+        jsBoolean,
+        js.call(js.ref("$some", slabIf), [jsString], slabIf),
+        js.ref("$none", slabIf),
+        slabIf
+    );
+    assertTranslation(test, slabIf, expectedJavaScript);
+};
+
 exports.slabIfElseExpressionIsConvertedToJavaScriptConditionOperator = function(test) {
     var slabIf = slab.if([
         {condition: slabBoolean, body: slabString},
