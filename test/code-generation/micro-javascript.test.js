@@ -5,8 +5,14 @@ var js = require("../../lib/javascript/nodes");
 
 var codeGenerator = require("../../lib/code-generation/micro-javascript");
 
-var slabBoolean = slab.boolean(true);
-var jsBoolean = js.boolean(true, slabBoolean);
+var slabTrue = slab.boolean(true);
+var jsTrue = js.boolean(true, slabTrue);
+
+var slabFalse = slab.boolean(false);
+var jsFalse = js.boolean(false, slabFalse);
+
+var slabBoolean = slabTrue;
+var jsBoolean = jsTrue;
 
 var slabString = slab.string("Blah");
 var jsString = js.string("Blah", slabString);
@@ -86,19 +92,35 @@ exports.slabDefinitionDeclarationIsConvertedToJavaScriptVariable = function(test
     assertTranslation(test, slabDef, expectedJs);
 };
 
-exports.slabIfStatementIsConvertedToJavaScriptIfStatement = function(test) {
+exports.slabIfElseExpressionIsConvertedToJavaScriptConditionOperator = function(test) {
     var slabIf = slab.if([
-        {condition: slabBoolean, body: slab.block([slabReturn])},
-        {body: slab.block([slabExpressionStatement])}
+        {condition: slabBoolean, body: slabString},
+        {body: slabNumber}
     ]);
-    var jsIf = js.if(
-        [
-            {condition: jsBoolean, body: [jsReturn]},
-            {body: [jsExpressionStatement]}
-        ],
+    var expectedJavaScript = js.conditionalOperator(
+        jsBoolean, jsString, jsNumber, slabIf
+    );
+    assertTranslation(test, slabIf, expectedJavaScript);
+};
+
+exports.slabIfElseIfElseExpressionIsConvertedToJavaScriptConditionOperator = function(test) {
+    var otherSlabString = slab.string("fire");
+    var otherJsString = js.string("fire", otherSlabString);
+    var slabIf = slab.if([
+        {condition: slabTrue, body: slabString},
+        {condition: slabFalse, body: otherSlabString},
+        {body: slabNumber}
+    ]);
+    var expectedJavaScript = js.conditionalOperator(jsTrue,
+        jsString,
+        js.conditionalOperator(jsFalse,
+            otherJsString,
+            jsNumber,
+            slabIf
+        ),
         slabIf
     );
-    assertTranslation(test, slabIf, jsIf);
+    assertTranslation(test, slabIf, expectedJavaScript);
 };
 
 exports.slabModuleIsConvertedToJavaScriptFunctionThatsImmediatelyCalled = function(test) {

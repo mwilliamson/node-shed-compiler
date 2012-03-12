@@ -33,6 +33,14 @@ exports.writesMemberAccess = function(test) {
     );
 };
 
+exports.writesConditionalOperator = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.conditionalOperator(js.ref("a"), js.ref("b"), js.ref("c")),
+        '(a) ? (b) : (c)'
+    );
+};
+
 exports.writeReturns = function(test) {
     assertJavaScriptWriter(
         test,

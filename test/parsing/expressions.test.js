@@ -7,6 +7,7 @@ var hasProperties = duck.hasProperties;
 var errors = require("lop").errors;
 var parsingTesting = require("lop").testing;
 var assertIsSuccessWithValue = parsingTesting.assertIsSuccessWithValue;
+var assertIsSuccess = parsingTesting.assertIsSuccess;
 var assertIsFailure = parsingTesting.assertIsFailure;
 var assertIsError = parsingTesting.assertIsError;
 
@@ -200,6 +201,78 @@ exports.memberAccessAndFunctionCallHaveSamePrecendence = function(test) {
         "title"
     );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
+exports.canParseEmptyIfExpression = function(test) {
+    var result = parser.parse(parsing.expression, "if (true) { }");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.if(
+            [{condition: nodes.boolean(true), body: nodes.block([])}]
+        ))
+    });
+    test.done();
+};
+
+exports.canParseIfExpression = function(test) {
+    var result = parser.parse(parsing.expression, "if (true) 1");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.if([
+            {
+                condition: nodes.boolean(true),
+                body: nodes.number("1")
+            }
+        ]))
+    });
+    test.done();
+};
+
+exports.canParseIfElseExpression = function(test) {
+    var result = parser.parse(parsing.expression, "if (true) 1 else 2");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.if([
+            {
+                condition: nodes.boolean(true),
+                body: nodes.number("1")
+            },
+            {
+                body: nodes.number("2")
+            }
+        ]))
+    });
+    test.done();
+};
+
+exports.canParseIfElseIfElseExpression = function(test) {
+    var source = "if (true) 1 else if (false) 2 else 3";
+    var result = parser.parse(parsing.expression, source);
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.if([
+            {
+                condition: nodes.boolean(true),
+                body: nodes.number("1")
+            },
+            {
+                condition: nodes.boolean(false),
+                body: nodes.number("2")
+            },
+            {
+                body: nodes.number("3")
+            }
+        ]))
+    });
+    test.done();
+};
+
+exports.canParseBlockExpression = function(test) {
+    var source = "{ go(); return 1;}";
+    var result = parser.parse(parsing.expression, source);
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.block([
+            nodes.expressionStatement(nodes.call(nodes.ref("go"), [])),
+            nodes.return(nodes.number("1"))
+        ]))
+    });
     test.done();
 };
 
