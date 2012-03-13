@@ -68,6 +68,18 @@ exports.slabLambdaIsConvertedToJavaScriptAnonymousFunction = function(test) {
     assertTranslation(test, slabLambda, jsFunction);
 };
 
+exports.slabClassIsConvertedToJavaScriptFunctionReturningObject = function(test) {
+    var slabFormalArguments = slab.formalArguments([
+        slab.formalArgument("name", slab.ref("String"))
+    ]);
+    var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement]); 
+    var jsClass = js.func(["name"], [
+        jsExpressionStatement,
+        js.return(js.object({}, slabClass), slabClass)
+    ], slabClass);
+    assertTranslation(test, slabClass, jsClass);
+};
+
 exports.slabFunctionCallIsConvertedToJavaScriptFunctionCall = function(test) {
     assertTranslation(test, slabFunctionCall, jsFunctionCall);
 };
