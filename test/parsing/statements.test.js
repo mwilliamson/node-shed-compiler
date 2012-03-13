@@ -73,6 +73,21 @@ exports.canParseDefinition = function(test) {
     test.done();
 };
 
+exports.definitionCanHaveTrailingSemiColon = function(test) {
+    var result = parser.parse(statements.statement, "def nop() : Unit => { };");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.def(
+            "nop",
+            nodes.lambda(
+                nodes.formalArguments([]),
+                some(nodes.ref("Unit")),
+                nodes.block([])
+            )
+        ))
+    });
+    test.done();
+};
+
 exports.canParsePublicDeclarations = function(test) {
     var result = parser.parse(statements.statement, "public val blah = true;");
     assertIsSuccessWithValue(
