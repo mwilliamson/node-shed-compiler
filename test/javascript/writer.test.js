@@ -34,6 +34,15 @@ exports.functionInFunctionCallIsWrappedInParenthesesIfOfHigherPrecendence = func
     );
 };
 
+exports.repeatedFunctionCallsArentWrappedInParentheses = function(test) {
+    var conditional = js.conditionalOperator(js.ref("a"), js.ref("b"), js.ref("c"));
+    assertJavaScriptWriter(
+        test,
+        js.call(js.call(js.ref("a"), []), []),
+        'a()()'
+    );
+};
+
 exports.writesMemberAccess = function(test) {
     assertJavaScriptWriter(
         test,
@@ -47,6 +56,26 @@ exports.writesConditionalOperator = function(test) {
         test,
         js.conditionalOperator(js.ref("a"), js.ref("b"), js.ref("c")),
         'a ? b : c'
+    );
+};
+
+exports.writesConditionalOperator = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.conditionalOperator(js.ref("a"), js.ref("b"), js.ref("c")),
+        'a ? b : c'
+    );
+};
+
+exports.writesConditionalOperatorWithCorrectParenthesesForSubConditionalOperatorExpressions = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.conditionalOperator(
+            js.conditionalOperator(js.ref("a1"), js.ref("a2"), js.ref("a3")),
+            js.conditionalOperator(js.ref("b1"), js.ref("b2"), js.ref("b3")),
+            js.conditionalOperator(js.ref("c1"), js.ref("c2"), js.ref("c3"))
+        ),
+        '(a1 ? a2 : a3) ? (b1 ? b2 : b3) : c1 ? c2 : c3'
     );
 };
 
