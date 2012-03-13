@@ -21,7 +21,16 @@ exports.writesFunctionCallWithArguments = function(test) {
     assertJavaScriptWriter(
         test,
         js.call(js.ref("print"), [js.ref("a"), js.ref("b")]),
-        '(print)(a, b)'
+        'print(a, b)'
+    );
+};
+
+exports.functionInFunctionCallIsWrappedInParenthesesIfOfHigherPrecendence = function(test) {
+    var conditional = js.conditionalOperator(js.ref("a"), js.ref("b"), js.ref("c"));
+    assertJavaScriptWriter(
+        test,
+        js.call(conditional, []),
+        '(a ? b : c)()'
     );
 };
 
@@ -29,7 +38,7 @@ exports.writesMemberAccess = function(test) {
     assertJavaScriptWriter(
         test,
         js.memberAccess(js.ref("user"), "name"),
-        '(user).name'
+        'user.name'
     );
 };
 
@@ -37,7 +46,7 @@ exports.writesConditionalOperator = function(test) {
     assertJavaScriptWriter(
         test,
         js.conditionalOperator(js.ref("a"), js.ref("b"), js.ref("c")),
-        '(a) ? (b) : (c)'
+        'a ? b : c'
     );
 };
 
