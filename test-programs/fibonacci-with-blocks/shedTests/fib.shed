@@ -8,7 +8,7 @@ def fib(n: Double) : Double =>
     else {
         val a = fib(n.subtract(1));
         val b = fib(n.subtract(2));
-        return a.add(b)
+        return a.add(b);
     }
 
 print(fib(8).toString());
