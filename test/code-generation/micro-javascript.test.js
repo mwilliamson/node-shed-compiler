@@ -47,6 +47,10 @@ var jsFunction = js.func(
     ["name"],
     [js.return(jsBoolean, slabLambda)],
     slabLambda);
+    
+    
+var slabVal = slab.val("coins", options.none, slabNumber);
+var jsVal = js.var("coins", jsNumber, slabVal);
 
 exports.slabBooleanLiteralIsConvertedToJavaScriptBooleanLiteral = function(test) {
     assertTranslation(test, slabBoolean, jsBoolean);
@@ -68,7 +72,7 @@ exports.slabLambdaIsConvertedToJavaScriptAnonymousFunction = function(test) {
     assertTranslation(test, slabLambda, jsFunction);
 };
 
-exports.slabClassIsConvertedToJavaScriptFunctionReturningObject = function(test) {
+exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmptyObject = function(test) {
     var slabFormalArguments = slab.formalArguments([
         slab.formalArgument("name", slab.ref("String"))
     ]);
@@ -76,6 +80,21 @@ exports.slabClassIsConvertedToJavaScriptFunctionReturningObject = function(test)
     var jsClass = js.func(["name"], [
         jsExpressionStatement,
         js.return(js.object({}, slabClass), slabClass)
+    ], slabClass);
+    assertTranslation(test, slabClass, jsClass);
+};
+
+exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfPublicMembers = function(test) {
+    var slabPublicVal = slab.public(slabVal);
+    var slabFormalArguments = slab.formalArguments([]);
+    var slabClass = slab.class(slabFormalArguments, [slabPublicVal]); 
+    
+    var expectedJsObject = {}
+    expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabPublicVal);
+    
+    var jsClass = js.func([], [
+        jsVal,
+        js.return(js.object(expectedJsObject, slabClass), slabClass)
     ], slabClass);
     assertTranslation(test, slabClass, jsClass);
 };
@@ -101,8 +120,7 @@ exports.slabExpressionStatementIsConvertedToJavaScriptExpressionStatement = func
 };
 
 exports.slabValIsConvertedToJavaScriptVar = function(test) {
-    var slabVal = slab.val("coins", options.none, slabNumber);
-    assertTranslation(test, slabVal, js.var("coins", jsNumber, slabVal));
+    assertTranslation(test, slabVal, jsVal);
 };
 
 exports.slabDefinitionDeclarationIsConvertedToJavaScriptVariable = function(test) {
