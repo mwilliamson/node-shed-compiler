@@ -41,6 +41,17 @@ exports.writesConditionalOperator = function(test) {
     );
 };
 
+exports.writesObject = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.object({
+            first: js.number("1"),
+            second: js.number("2")
+        }),
+        '{\n    "first": 1,\n    "second": 2\n}'
+    );
+};
+
 exports.writeReturns = function(test) {
     assertJavaScriptWriter(
         test,
