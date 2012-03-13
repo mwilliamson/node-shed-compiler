@@ -41,6 +41,10 @@ var slabFormalArguments = slab.formalArguments([slabFormalArgument], shedFormalA
 var shedReturn = shed.return(shedReference);
 var slabReturn = slab.return(slabReference, shedReturn);
 
+var shedExpressionStatement = shed.expressionStatement(shedReference);
+var slabExpressionStatement =
+    slab.expressionStatement(slabReference, shedExpressionStatement);
+
 var shedReturnNumber = shed.return(shedNumber);
 var slabReturnNumber = slab.return(slabNumber, shedReturnNumber);
 
@@ -144,6 +148,13 @@ exports.shedBlockIsConvertedToSlabBlock = function(test) {
 
 exports.shedLambdaIsConvertedToSlabLambda = function(test) {
     test.deepEqual(slabLambda, shedToSlab.translate(shedLambda));
+    test.done();
+};
+
+exports.shedClassIsConvertedToSlabClass = function(test) {
+    var shedClass = shed.class(shedFormalArguments, [shedExpressionStatement]);
+    var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement], shedClass); 
+    test.deepEqual(slabClass, shedToSlab.translate(shedClass));
     test.done();
 };
 
