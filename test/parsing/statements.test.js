@@ -31,18 +31,6 @@ exports.canParseExpressionStatement = function(test) {
     test.done();
 };
 
-exports.canParseBlockOfStatements = function(test) {
-    var result = parser.parse(statements.block, "{blah = true; return blah;}");
-    assertIsSuccessWithValue(
-        test, result,
-        ignoringSources(nodes.block([
-            nodes.expressionStatement(nodes.assign(nodes.ref("blah"), nodes.boolean(true))),
-            nodes.return(nodes.ref("blah"))
-        ]))
-    );
-    test.done();
-};
-
 exports.canParseValStatement = function(test) {
     var result = parser.parse(statements.statement, "val blah = true;");
     assertIsSuccessWithValue(

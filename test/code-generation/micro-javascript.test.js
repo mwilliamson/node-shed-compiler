@@ -36,14 +36,17 @@ var slabReturn = slab.return(slabNumber);
 var jsReturn = js.return(jsNumber, slabReturn);
 
 var slabBlock = slab.block([slabReturn]);
-var jsBlock = [jsReturn];
+var jsBlock = js.call(js.func([], [jsReturn], slabBlock), [], slabBlock);
 
 var slabLambda = slab.lambda(
     slab.formalArguments([slab.formalArgument("name", slab.ref("String"))]),
     slab.ref("Boolean"),
-    slabBlock
+    slabBoolean
 );
-var jsFunction = js.func(["name"], jsBlock, slabLambda);
+var jsFunction = js.func(
+    ["name"],
+    [js.return(jsBoolean, slabLambda)],
+    slabLambda);
 
 exports.slabBooleanLiteralIsConvertedToJavaScriptBooleanLiteral = function(test) {
     assertTranslation(test, slabBoolean, jsBoolean);
@@ -71,6 +74,10 @@ exports.slabFunctionCallIsConvertedToJavaScriptFunctionCall = function(test) {
 
 exports.slabMemberAccessIsConvertedToJavaScriptMemberAccess = function(test) {
     assertTranslation(test, slabMemberAccess, jsMemberAccess);
+};
+
+exports.slabBlockIsConvertedToImmediatelyCalledJavaScriptAnonymousFunction = function(test) {
+    assertTranslation(test, slabBlock, jsBlock);
 };
 
 exports.slabReturnIsConvertedToJavaScriptReturn = function(test) {

@@ -2,3 +2,6 @@
 
 test:
 	node_modules/.bin/nodeunit `find test -name \*.test.js -type f`
+
+test-all:
+	node_modules/.bin/nodeunit `find test compiler-test -name \*.test.js -type f`

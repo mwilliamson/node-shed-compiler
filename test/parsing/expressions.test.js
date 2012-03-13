@@ -91,20 +91,6 @@ exports.canParseShortLambdaExpressionWithFormalArguments = function(test) {
     test.done();
 };
 
-exports.missingShortLambdaBodyIsReportedRatherThanGenericFailureToParseAnExpression = function(test) {
-    var result = parser.parse(parsing.expression, "() => ");
-    assertIsError(test, result, {
-        errors: [errors.error({
-            expected: "lambda body",
-            actual: "end",
-            // TODO: we should trust the parsing library to get the location
-            // correct, and use rich matching to ignore the value of location
-            location: {string: '() => ', startIndex: 6, endIndex: 6}
-        })]
-    });
-    test.done();
-};
-
 exports.lambdaIsRightAssociative = function(test) {
     var result = parser.parse(parsing.expression, "()=>()=>true");
     var expected = nodes.lambda(nodes.formalArguments([]), options.none,

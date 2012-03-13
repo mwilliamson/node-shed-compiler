@@ -53,12 +53,12 @@ var slabImport = slab.call(slab.ref("$import", shedImport), [slab.string("shed.e
 var shedBlock = shed.block([shedReturn]);
 var slabBlock = slab.block([slabReturn], shedBlock);
 
-var shedLongLambda = shed.lambda(shedFormalArguments, options.some(shedBooleanTypeReference), shedBlock);
-var slabLongLambda = slab.lambda(
+var shedLambda = shed.lambda(shedFormalArguments, options.some(shedBooleanTypeReference), shedBooleanValue);
+var slabLambda = slab.lambda(
     slabFormalArguments,
     options.some(slabBooleanTypeReference),
-    slabBlock,
-    shedLongLambda
+    slabBooleanValue,
+    shedLambda
 );
 
 exports.shedBooleansAreConvertedToSlabBooleans = function(test) {
@@ -142,44 +142,14 @@ exports.shedBlockIsConvertedToSlabBlock = function(test) {
     test.done();
 };
 
-exports.shedLongLambdaIsConvertedToSlabLambda = function(test) {
-    test.deepEqual(
-        slabLongLambda,
-        shedToSlab.translate(shedLongLambda)
-    );
-    test.done();
-};
-
-exports.shedShortLambdaIsConvertedToSlabLambda = function(test) {
-    var stringReference = shed.ref("String");
-    var formalArgument = shed.formalArgument("name", stringReference);
-    var formalArguments = shed.formalArguments([formalArgument]);
-    var booleanReference = shed.ref("Boolean");
-    var reference = shed.ref("blah");
-    var original = shed.lambda(formalArguments, options.some(booleanReference), reference);
-    test.deepEqual(
-        slab.lambda(
-            slab.formalArguments([
-                slab.formalArgument(
-                    "name",
-                    slab.ref("String", stringReference),
-                    formalArgument
-                )
-            ], formalArguments),
-            options.some(slab.ref("Boolean", booleanReference)),
-            slab.block([
-                slab.return(slab.ref("blah", reference), reference)
-            ], reference),
-            original
-        ),
-        shedToSlab.translate(original)
-    );
+exports.shedLambdaIsConvertedToSlabLambda = function(test) {
+    test.deepEqual(slabLambda, shedToSlab.translate(shedLambda));
     test.done();
 };
 
 exports.shedDefinitionDeclarationIsConvertedToSlabDefinitionDeclaration = function(test) {
-    var shedDef = shed.def("go", shedLongLambda);
-    var slabDef = slab.def("go", slabLongLambda, shedDef);
+    var shedDef = shed.def("go", shedLambda);
+    var slabDef = slab.def("go", slabLambda, shedDef);
     test.deepEqual(
         slabDef,
         shedToSlab.translate(shedDef)
