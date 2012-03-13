@@ -111,6 +111,36 @@ exports.canParseLongLambdaExpression = function(test) {
     test.done();
 };
 
+exports.canParseEmptyClassDefinition = function(test) {
+    var result = parser.parse(parsing.expression, "class() { }");
+    var expected = nodes.class(
+        nodes.formalArguments([]),
+        []
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
+exports.canParseClassDefinitionWithFormalArguments = function(test) {
+    var result = parser.parse(parsing.expression, "class(a: A) { }");
+    var expected = nodes.class(
+        nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
+        []
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
+exports.canParseClassDefinitionWithBody = function(test) {
+    var result = parser.parse(parsing.expression, "class() { val x = 1; }");
+    var expected = nodes.class(
+        nodes.formalArguments([]),
+        [nodes.val("x", options.none, nodes.number("1"))]
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.canAssignToVariableReference = function(test) {
     var result = parser.parse(parsing.expression, "blah = true");
     var expected = nodes.assign(nodes.ref("blah"), nodes.boolean(true));
