@@ -18,7 +18,7 @@ var slabString = slab.string("Blah");
 var jsString = js.string("Blah", slabString);
 
 var slabNumber = slab.number("42");
-var jsNumber = js.call(js.ref("$number", slabNumber), [js.number("42", slabNumber)], slabNumber);
+var jsNumber = js.call(js.ref("$shed.number", slabNumber), [js.number("42", slabNumber)], slabNumber);
 
 var slabReference = slab.ref("print");
 var jsReference = js.ref("print", slabReference);
@@ -190,7 +190,7 @@ exports.slabModuleWithPublicDeclarationExportsThatPublicValue = function(test) {
         js.call(
             js.func([], [
                 jsVal,
-                js.expressionStatement(js.call(js.ref("$exportModule", slabPublic), [
+                js.expressionStatement(js.call(js.ref("$shed.exportModule", slabPublic), [
                     // TODO: just pass in array directly
                     js.string("shed.example." + slabVal.identifier, slabPublic),
                     js.ref(jsVal.identifier, slabPublic)
