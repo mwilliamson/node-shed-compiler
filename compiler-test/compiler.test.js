@@ -17,8 +17,7 @@ fs.readdirSync(testRoot).forEach(function(testPath) {
         fs.readFile(path.join(testDirectory, "test.json"), function(err, testJson) {
             test.ifError(err);
             var testDescription = JSON.parse(testJson);
-            var mainTestFilePath = path.join(testDirectory, testDescription.file);
-            executeFile(mainTestFilePath, function(err, result) {
+            executeMain(testDirectory, testDescription, function(err, result) {
                 test.ifError(err);
                 if (!err) {
                     test.equal("", result.stderr);
@@ -30,30 +29,51 @@ fs.readdirSync(testRoot).forEach(function(testPath) {
     };
 });
 
-var executeFile = function(filePath, callback) {
+var executeMain = function(testDirectory, testDescription, callback) {
+    var then = ifSuccess.bind(null, callback);
+    if (testDescription.file) {
+        var mainTestFilePath = path.join(testDirectory, testDescription.file);
+        executeShedFile(mainTestFilePath, callback);
+    } else if (testDescription.main) {
+        compileDirectory(testDirectory, testDescription.main, then(function(compiledJavaScript) {
+            executeJsString(compiledJavaScript, callback);
+        }));
+    } else {
+        callback(new Error("Cannot execute test: " + testDescription));
+    }
+};
+
+var executeShedFile = function(filePath, callback) {
     fs.readFile(filePath, "utf8", ifSuccess(callback, function(mainShedString) {
         compile(mainShedString, ifSuccess(callback, function(compiledJavaScript) {
-            temp.open(null, ifSuccess(callback, function(tempFile) {
-                fs.writeFile(tempFile.path, compiledJavaScript, ifSuccess(callback, function() {
-                    var command = util.format("node %s", path.resolve(tempFile.path));
-                    child_process.exec(command, function(err, stdout, stderr) {
-                        callback(err, {
-                            stderr: stderr,
-                            stdout: stdout
-                        });
-                    });
-                }));
-            }));
+            executeJsString(compiledJavaScript, callback);
+        }));
+    }));
+};
+
+var executeJsString = function(jsString, callback) {
+    temp.open(null, ifSuccess(callback, function(tempFile) {
+        fs.writeFile(tempFile.path, jsString, ifSuccess(callback, function() {
+            var command = util.format("node %s", path.resolve(tempFile.path));
+            child_process.exec(command, function(err, stdout, stderr) {
+                callback(err, {
+                    stderr: stderr,
+                    stdout: stdout
+                });
+            });
         }));
     }));
 };
 
 var compile = function(string, callback) {
-    try {
-        callback(null, compiler.compileToString({string: string}));
-    } catch (e) {
-        callback(e);
-    }
+    compiler.compileToString({string: string}, callback);
+};
+
+var compileDirectory = function(directoryPath, main, callback) {
+    var then = ifSuccess.bind(null, callback);
+    compiler.compileToString({directory: directoryPath}, then(function(javaScript) {
+        callback(null, javaScript + "\n\n$shed." + main + "()");
+    }));
 };
 
 var ifSuccess = function(callback, func) {
@@ -65,5 +85,3 @@ var ifSuccess = function(callback, func) {
         }
     };
 };
-
-

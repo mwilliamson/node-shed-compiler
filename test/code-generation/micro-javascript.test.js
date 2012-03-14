@@ -173,9 +173,33 @@ exports.slabIfElseIfElseExpressionIsConvertedToJavaScriptConditionOperator = fun
     assertTranslation(test, slabIf, expectedJavaScript);
 };
 
-exports.slabModuleIsConvertedToJavaScriptFunctionThatsImmediatelyCalled = function(test) {
-    var slabModule = slab.module([slabExpressionStatement]);
+exports.slabModuleWithoutPublicDeclarationIsConvertedToJavaScriptFunctionThatsImmediatelyCalled = function(test) {
+    var slabModule = slab.module([], [slabExpressionStatement]);
     assertTranslation(test, slabModule, js.call(js.func([], [jsExpressionStatement], slabModule), [], slabModule));
+};
+
+exports.slabModuleWithPublicDeclarationExportsThatPublicValue = function(test) {
+    var slabPublic = slab.public(slabVal);
+    var slabModule = slab.module(
+        ["shed", "example"],
+        [slabPublic]
+    );
+    assertTranslation(
+        test,
+        slabModule,
+        js.call(
+            js.func([], [
+                jsVal,
+                js.expressionStatement(js.call(js.ref("$exportModule", slabPublic), [
+                    // TODO: just pass in array directly
+                    js.string("shed.example." + slabVal.identifier, slabPublic),
+                    js.ref(jsVal.identifier, slabPublic)
+                ], slabPublic), slabPublic)
+            ], slabModule),
+            [],
+            slabModule
+        )
+    );
 };
 
 var assertTranslation = function(test, slab, expectedJavaScript) {

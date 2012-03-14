@@ -248,6 +248,24 @@ exports.shedModuleIsConvertedToSlabModule = function(test) {
         )
     test.deepEqual(
         slab.module(
+            ["shed", "example"],
+            [slabImport, slabReturn],
+            original
+        ),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
+
+exports.shedModuleIsConvertedToSlabModule = function(test) {
+    var original = shed.module(
+            shed.packageDeclaration(["shed", "example"]),
+            [shedImport],
+            [shedReturn]
+        )
+    test.deepEqual(
+        slab.module(
+            ["shed", "example"],
             [slabImport, slabReturn],
             original
         ),
