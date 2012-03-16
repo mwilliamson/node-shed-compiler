@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
-var argv = require("optimist").argv;
+var argv = require("optimist")
+    .usage('Usage: $0 <source-directory> [--main=<main-function>]')
+    .demand(1)
+    .argv;;
 
 var Compiler = require("../lib/compiler").Compiler;
 
