@@ -52,7 +52,12 @@ var shedReturnBoolean = shed.return(shedBooleanValue);
 var slabReturnBoolean = slab.return(slabBooleanValue, shedReturnBoolean);
 
 var shedImport = shed.import(["shed", "example"]);
-var slabImport = slab.call(slab.ref("$import", shedImport), [slab.string("shed.example", shedImport)], shedImport);
+var slabImport = slab.val(
+    "example",
+    options.none,
+    slab.call(slab.ref("$import", shedImport), [slab.string("shed.example", shedImport)], shedImport),
+    shedImport
+);
 
 var shedBlock = shed.block([shedReturn]);
 var slabBlock = slab.block([slabReturn], shedBlock);

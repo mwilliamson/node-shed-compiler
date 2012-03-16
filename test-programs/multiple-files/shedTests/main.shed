@@ -1,0 +1,8 @@
+package shedTests;
+
+import shedTests.hello;
+import shedTests.world;
+
+public def main() : Unit => {
+    print(hello.concat(" ").concat(world));
+}

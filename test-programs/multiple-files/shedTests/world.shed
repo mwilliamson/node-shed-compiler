@@ -1,0 +1,3 @@
+package shedTests;
+
+public val world = "world";

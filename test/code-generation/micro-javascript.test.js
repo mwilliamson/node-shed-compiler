@@ -187,18 +187,14 @@ exports.slabModuleWithPublicDeclarationExportsThatPublicValue = function(test) {
     assertTranslation(
         test,
         slabModule,
-        js.call(
+        js.expressionStatement(js.call(js.ref("$shed.exportModule", slabModule), [
+            // TODO: just pass in array directly
+            js.string("shed.example." + slabVal.identifier, slabPublic),
             js.func([], [
                 jsVal,
-                js.expressionStatement(js.call(js.ref("$shed.exportModule", slabPublic), [
-                    // TODO: just pass in array directly
-                    js.string("shed.example." + slabVal.identifier, slabPublic),
-                    js.ref(jsVal.identifier, slabPublic)
-                ], slabPublic), slabPublic)
+                js.return(js.ref(jsVal.identifier, slabPublic), slabPublic)
             ], slabModule),
-            [],
-            slabModule
-        )
+        ], slabModule), slabModule)
     );
 };
 
