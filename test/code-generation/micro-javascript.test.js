@@ -15,7 +15,7 @@ var slabBoolean = slabTrue;
 var jsBoolean = jsTrue;
 
 var slabString = slab.string("Blah");
-var jsString = js.string("Blah", slabString);
+var jsString = js.call(js.ref("$shed.string", slabString), [js.string("Blah", slabString)], slabString);
 
 var slabNumber = slab.number("42");
 var jsNumber = js.call(js.ref("$shed.number", slabNumber), [js.number("42", slabNumber)], slabNumber);
@@ -155,7 +155,7 @@ exports.slabIfElseExpressionIsConvertedToJavaScriptConditionOperator = function(
 
 exports.slabIfElseIfElseExpressionIsConvertedToJavaScriptConditionOperator = function(test) {
     var otherSlabString = slab.string("fire");
-    var otherJsString = js.string("fire", otherSlabString);
+    var otherJsString = codeGenerator.translate(otherSlabString);
     var slabIf = slab.if([
         {condition: slabTrue, body: slabString},
         {condition: slabFalse, body: otherSlabString},
