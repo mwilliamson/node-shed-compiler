@@ -70,11 +70,7 @@ var compile = function(string, callback) {
 };
 
 var compileDirectory = function(directoryPath, main, callback) {
-    var then = ifSuccess.bind(null, callback);
-    compiler.compileToString({directory: directoryPath}, then(function(javaScript) {
-        var result = javaScript + "\n\n$shed.import($shed.string(\"" + main + "\"))();";
-        callback(null, result);
-    }));
+    compiler.compileToString({directory: directoryPath, main: main}, callback);
 };
 
 var ifSuccess = function(callback, func) {
