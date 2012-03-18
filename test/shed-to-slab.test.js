@@ -220,7 +220,7 @@ exports.shedObjectIsConvertedToSlabClassWithImmediateInstance = function(test) {
             slab.class(slab.formalArguments([], shedObject), [slabExpressionStatement], shedObject),
             shedObject
         ),
-        slab.return(slab.call(slab.ref("$classForObject", shedObject), shedObject), shedObject)
+        slab.return(slab.call(slab.ref("$classForObject", shedObject), [], shedObject), shedObject)
     ], shedObject);
     test.deepEqual(slabObject, shedToSlab.translate(shedObject));
     test.done();
