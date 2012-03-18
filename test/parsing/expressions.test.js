@@ -313,6 +313,30 @@ exports.canParseTypeApplication = function(test) {
     test.done();
 };
 
+exports.canParseFunctionTypeUsingArrow = function(test) {
+    var source = "(String) -> Boolean";
+    var result = parser.parse(expressions.typeExpression, source);
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.functionType(
+            [nodes.ref("String")],
+            nodes.ref("Boolean")
+        ))
+    });
+    test.done();
+};
+
+exports.canParseFunctionTypeWithMultipleArgumentTypesUsingArrow = function(test) {
+    var source = "(String, Number) -> Boolean";
+    var result = parser.parse(expressions.typeExpression, source);
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.functionType(
+            [nodes.ref("String"), nodes.ref("Number")],
+            nodes.ref("Boolean")
+        ))
+    });
+    test.done();
+};
+
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "() =>\n\ttrue");
     var expected = nodes.lambda(
