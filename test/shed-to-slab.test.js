@@ -119,6 +119,22 @@ exports.shedFunctionCallIsConvertedToSlabFunctionCall = function(test) {
     test.done();
 };
 
+exports.shedTypeApplicationIsConvertedToSlabTypeApplication = function(test) {
+    var original = shed.typeApplication(
+        shedStringTypeReference,
+        [shedBooleanTypeReference]
+    );
+    test.deepEqual(
+        slab.typeApplication(
+            slabStringTypeReference,
+            [slabBooleanTypeReference],
+            original
+        ),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
+
 exports.shedMemberAccessIsConvertedToSlabMemberAccess = function(test) {
     var original = shed.memberAccess(shedReference, "title");
     test.deepEqual(slab.memberAccess(slabReference, "title", original), shedToSlab.translate(original));
