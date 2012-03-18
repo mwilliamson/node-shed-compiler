@@ -25,6 +25,9 @@ var slabStringTypeReference = slab.ref("String", shedStringTypeReference);
 var shedBooleanTypeReference = shed.ref("Boolean");
 var slabBooleanTypeReference = slab.ref("Boolean", shedBooleanTypeReference);
 
+var shedUnitTypeReference = shed.ref("Unit");
+var slabUnitTypeReference = slab.ref("Unit", shedUnitTypeReference);
+
 var shedTypeReference = shedStringTypeReference;
 var slabTypeReference = slabStringTypeReference;
 
@@ -128,6 +131,22 @@ exports.shedTypeApplicationIsConvertedToSlabTypeApplication = function(test) {
         slab.typeApplication(
             slabStringTypeReference,
             [slabBooleanTypeReference],
+            original
+        ),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
+
+exports.shedFunctionTypeIsConvertedToTypeApplication = function(test) {
+    var original = shed.functionType(
+        [shedStringTypeReference, shedBooleanTypeReference],
+        shedUnitTypeReference
+    );
+    test.deepEqual(
+        slab.typeApplication(
+            slab.ref("$Function", original),
+            [slabStringTypeReference, slabBooleanTypeReference, slabUnitTypeReference],
             original
         ),
         shedToSlab.translate(original)
