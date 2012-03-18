@@ -150,6 +150,20 @@ exports.canParseClassDefinitionWithBody = function(test) {
     test.done();
 };
 
+exports.canParseEmptyObject = function(test) {
+    var result = parser.parse(parsing.expression, "object { }");
+    var expected = nodes.object([]);
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
+exports.canParseObjectWithBody = function(test) {
+    var result = parser.parse(parsing.expression, "object { val x = 1; }");
+    var expected = nodes.object([nodes.val("x", options.none, nodes.number("1"))]);
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.canAssignToVariableReference = function(test) {
     var result = parser.parse(parsing.expression, "blah = true");
     var expected = nodes.assign(nodes.ref("blah"), nodes.boolean(true));
