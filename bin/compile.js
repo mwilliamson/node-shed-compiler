@@ -3,7 +3,7 @@
 var argv = require("optimist")
     .usage('Usage: $0 <source-directory> [--main=<main-function>]')
     .demand(1)
-    .argv;;
+    .argv;
 
 var Compiler = require("../lib/compiler").Compiler;
 
