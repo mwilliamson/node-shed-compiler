@@ -211,6 +211,21 @@ exports.shedClassIsConvertedToSlabClass = function(test) {
     test.done();
 };
 
+exports.shedObjectIsConvertedToSlabClassWithImmediateInstance = function(test) {
+    var shedObject = shed.object([shedExpressionStatement]);
+    var slabObject = slab.block([
+        slab.val(
+            "$classForObject",
+            options.none,
+            slab.class(slab.formalArguments([], shedObject), [slabExpressionStatement], shedObject),
+            shedObject
+        ),
+        slab.return(slab.call(slab.ref("$classForObject", shedObject), shedObject), shedObject)
+    ], shedObject);
+    test.deepEqual(slabObject, shedToSlab.translate(shedObject));
+    test.done();
+};
+
 exports.shedDefinitionDeclarationIsConvertedToSlabDefinitionDeclaration = function(test) {
     var shedDef = shed.def("go", shedLambda);
     var slabDef = slab.def("go", slabLambda, shedDef);
