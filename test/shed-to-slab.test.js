@@ -91,6 +91,19 @@ exports.shedNumberIsConvertedToSlabNumber = function(test) {
     test.done();
 };
 
+exports.shedListLiteralIsConvertedToSlabCallToListBuilder = function(test) {
+    var shedList = shed.list([shedString, shedNumber]);
+    test.deepEqual(
+        slab.call(
+            slab.ref("$lists.create", shedList),
+            [slabString, slabNumber],
+            shedList
+        ),
+        shedToSlab.translate(shedList)
+    );
+    test.done();
+};
+
 exports.shedVariableReferenceIsConvertedToSlabVariableReference = function(test) {
     var original = shed.ref("blah");
     test.deepEqual(slab.ref("blah", original), shedToSlab.translate(original));
