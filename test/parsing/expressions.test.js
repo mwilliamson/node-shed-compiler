@@ -13,6 +13,7 @@ var assertIsError = parsingTesting.assertIsError;
 
 var nodes = require("../../lib/nodes");
 var parsing = require("../../lib/parsing");
+var expressions = require("../../lib/parsing/expressions");
 var ignoringSources = require("./util").ignoringSources;
 
 var parser = new parsing.Parser();
@@ -296,6 +297,18 @@ exports.canParseBlockExpression = function(test) {
             nodes.expressionStatement(nodes.call(nodes.ref("go"), [])),
             nodes.return(nodes.number("1"))
         ]))
+    });
+    test.done();
+};
+
+exports.canParseTypeApplication = function(test) {
+    var source = "Map[String, Boolean]";
+    var result = parser.parse(expressions.typeExpression, source);
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.typeApplication(
+            nodes.ref("Map"),
+            [nodes.ref("String"), nodes.ref("Boolean")]
+        ))
     });
     test.done();
 };
