@@ -1,0 +1,3 @@
+package shedTests;
+
+public def main() => ["Hello", " ", "world"].forEach(print);
