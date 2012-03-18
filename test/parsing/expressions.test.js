@@ -337,6 +337,21 @@ exports.canParseFunctionTypeWithMultipleArgumentTypesUsingArrow = function(test)
     test.done();
 };
 
+exports.functionTypeArrowsAreRightAssociative = function(test) {
+    var source = "(String) -> (Number) -> Boolean";
+    var result = parser.parse(expressions.typeExpression, source);
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.functionType(
+            [nodes.ref("String")],
+            nodes.functionType(
+                [nodes.ref("Number")],
+                nodes.ref("Boolean")
+            )
+        ))
+    });
+    test.done();
+};
+
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "() =>\n\ttrue");
     var expected = nodes.lambda(
