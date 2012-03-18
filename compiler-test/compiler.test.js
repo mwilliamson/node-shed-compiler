@@ -70,7 +70,7 @@ var compile = function(string, callback) {
 };
 
 var compileDirectory = function(directoryPath, main, callback) {
-    compiler.compileToString({directory: directoryPath, main: main}, callback);
+    compiler.compileToString({files: [directoryPath], main: main}, callback);
 };
 
 var ifSuccess = function(callback, func) {

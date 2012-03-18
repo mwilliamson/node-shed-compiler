@@ -10,7 +10,7 @@ var Compiler = require("../lib/compiler").Compiler;
 var compiler = new Compiler();
 
 compiler.compileToString({
-    directory: argv._[0],
+    files: argv._,
     main: argv.main
 }, function(err, javaScript) {
     if (err) {
