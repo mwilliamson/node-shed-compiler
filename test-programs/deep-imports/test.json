@@ -1,0 +1,7 @@
+{
+    "main": "shedTests.deepImports.main",
+    "expected": {
+        "exitCode": 0,
+        "stdout": "Hello world"
+    }
+}
