@@ -23,7 +23,22 @@ exports.moduleContainsPackageDeclarationFollowedByBody = function(test) {
     assertIsSuccess(test, result, {
         value: ignoringSources(
             nodes.module(
-                nodes.packageDeclaration(["shed", "example"]),
+                options.some(nodes.packageDeclaration(["shed", "example"])),
+                [],
+                [nodes.expressionStatement(nodes.boolean(true)), nodes.expressionStatement(nodes.boolean(false))]
+            )
+        ),
+        remaining: []
+    });
+    test.done();
+};
+
+exports.modulePackageDeclarationIsOptional = function(test) {
+    var result = parser.parse(modulesParsing.module, "true;false;");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(
+            nodes.module(
+                options.none,
                 [],
                 [nodes.expressionStatement(nodes.boolean(true)), nodes.expressionStatement(nodes.boolean(false))]
             )
@@ -38,7 +53,7 @@ exports.moduleContainsPackageDeclarationFollowedByImportsThenBody = function(tes
     assertIsSuccess(test, result, {
         value: ignoringSources(
             nodes.module(
-                nodes.packageDeclaration(["shed", "example"]),
+                options.some(nodes.packageDeclaration(["shed", "example"])),
                 [nodes.import(["shed", "options"]), nodes.import(["shed", "time"])],
                 [nodes.expressionStatement(nodes.boolean(true))]
             )

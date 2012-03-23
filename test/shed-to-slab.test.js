@@ -310,7 +310,7 @@ exports.shedImportIsConvertedToSlabValDeclarationAndFunctionCall = function(test
 
 exports.shedModuleIsConvertedToSlabModule = function(test) {
     var original = shed.module(
-            shed.packageDeclaration(["shed", "example"]),
+            options.some(shed.packageDeclaration(["shed", "example"])),
             [shedImport],
             [shedReturn]
         )
@@ -325,15 +325,15 @@ exports.shedModuleIsConvertedToSlabModule = function(test) {
     test.done();
 };
 
-exports.shedModuleIsConvertedToSlabModule = function(test) {
+exports.slabPackageIsEmptyArrayIfPackageDeclarationIsMissingFromShedModule = function(test) {
     var original = shed.module(
-            shed.packageDeclaration(["shed", "example"]),
+            options.none,
             [shedImport],
             [shedReturn]
         )
     test.deepEqual(
         slab.module(
-            ["shed", "example"],
+            [],
             [slabImport, slabReturn],
             original
         ),
