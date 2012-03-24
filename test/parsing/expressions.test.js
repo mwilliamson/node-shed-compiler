@@ -249,6 +249,16 @@ exports.functionCallsAreLeftAssociative = function(test) {
     test.done();
 };
 
+exports.canCallFunctionWithTypeParameters = function(test) {
+    var result = parser.parse(parsing.expression, "Map[A, B]");
+    var expected = nodes.typeApplication(
+        nodes.ref("Map"),
+        [nodes.ref("A"), nodes.ref("B")]
+    );
+    assertIsSuccess(test, result, {value: ignoringSources(expected)});
+    test.done();
+};
+
 exports.canAccessMemberOfValue = function(test) {
     var result = parser.parse(parsing.expression, "song.title");
     var expected = nodes.memberAccess(
