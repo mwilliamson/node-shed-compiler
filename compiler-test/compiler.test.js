@@ -17,14 +17,18 @@ fs.readdirSync(testRoot).forEach(function(testPath) {
         fs.readFile(path.join(testDirectory, "test.json"), function(err, testJson) {
             test.ifError(err);
             var testDescription = JSON.parse(testJson);
-            executeMain(testDirectory, testDescription, function(err, result) {
-                test.ifError(err);
-                if (!err) {
-                    test.equal("", result.stderr);
-                    test.equal(testDescription.expected.stdout, result.stdout);
-                }
-                test.done(); 
-            });
+            if (testDescription.disabled) {
+                test.done();
+            } else {
+                executeMain(testDirectory, testDescription, function(err, result) {
+                    test.ifError(err);
+                    if (!err) {
+                        test.equal("", result.stderr);
+                        test.equal(testDescription.expected.stdout, result.stdout);
+                    }
+                    test.done(); 
+                });
+            }
         });
     };
 });
