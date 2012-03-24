@@ -71,6 +71,7 @@ exports.canParseExpressionInParentheses = function(test) {
 exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
     var result = parser.parse(parsing.expression, "fun()=>true");
     var expected = nodes.lambda(
+        options.none,
         nodes.formalArguments([]),
         options.none,
         nodes.boolean(true)
@@ -82,6 +83,7 @@ exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
 exports.canParseShortLambdaExpressionWithExplicitReturnType = function(test) {
     var result = parser.parse(parsing.expression, "fun() : Boolean => true");
     var expected = nodes.lambda(
+        options.none,
         nodes.formalArguments([]),
         some(nodes.ref("Boolean")),
         nodes.boolean(true)
@@ -92,18 +94,48 @@ exports.canParseShortLambdaExpressionWithExplicitReturnType = function(test) {
 
 exports.canParseShortLambdaExpressionWithFormalArguments = function(test) {
     var result = parser.parse(parsing.expression, "fun(name: String, age: Age) => true");
-    var expected = nodes.lambda(nodes.formalArguments([
-        nodes.formalArgument("name", nodes.ref("String")),
-        nodes.formalArgument("age", nodes.ref("Age"))
-    ]), options.none, nodes.boolean(true));
+    var expected = nodes.lambda(
+        options.none,
+        nodes.formalArguments([
+            nodes.formalArgument("name", nodes.ref("String")),
+            nodes.formalArgument("age", nodes.ref("Age"))
+        ]),
+        options.none,
+        nodes.boolean(true)
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
+exports.canParseFormalTypeParameters = function(test) {
+    var result = parser.parse(expressions.formalTypeParameters, "[T, U] =>");
+    var expected = nodes.formalTypeParameters([
+        nodes.formalTypeParameter("T"),
+        nodes.formalTypeParameter("U")
+    ]);
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
+exports.canParseLambdaExpressionWithFormalTypeParameters = function(test) {
+    var result = parser.parse(parsing.expression, "fun[T, U] => () => true");
+    var expected = nodes.lambda(
+        options.some(nodes.formalTypeParameters([
+            nodes.formalTypeParameter("T"),
+            nodes.formalTypeParameter("U")
+        ])),
+        nodes.formalArguments([]),
+        options.none,
+        nodes.boolean(true)
+    );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.lambdaIsRightAssociative = function(test) {
     var result = parser.parse(parsing.expression, "fun()=>fun()=>true");
-    var expected = nodes.lambda(nodes.formalArguments([]), options.none,
-        nodes.lambda(nodes.formalArguments([]), options.none,
+    var expected = nodes.lambda(options.none, nodes.formalArguments([]), options.none,
+        nodes.lambda(options.none, nodes.formalArguments([]), options.none,
             nodes.boolean(true)
         )
     );
@@ -113,7 +145,7 @@ exports.lambdaIsRightAssociative = function(test) {
 
 exports.canParseLongLambdaExpression = function(test) {
     var result = parser.parse(parsing.expression, "fun() => { return true; }");
-    var expected = nodes.lambda(nodes.formalArguments([]), options.none, nodes.block([
+    var expected = nodes.lambda(options.none, nodes.formalArguments([]), options.none, nodes.block([
         nodes.return(nodes.boolean(true))
     ]));
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
@@ -369,6 +401,7 @@ exports.functionTypeArrowsAreRightAssociative = function(test) {
 exports.whitespaceIsIgnored = function(test) {
     var result = parser.parse(parsing.expression, "fun() =>\n\ttrue");
     var expected = nodes.lambda(
+        options.none,
         nodes.formalArguments([]),
         options.none,
         nodes.boolean(true)

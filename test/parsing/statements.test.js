@@ -64,6 +64,7 @@ exports.canParseDefinition = function(test) {
         value: ignoringSources(nodes.def(
             "nop",
             nodes.lambda(
+                options.none,
                 nodes.formalArguments([]),
                 some(nodes.ref("Unit")),
                 nodes.block([])
@@ -79,6 +80,7 @@ exports.definitionCanHaveTrailingSemiColon = function(test) {
         value: ignoringSources(nodes.def(
             "nop",
             nodes.lambda(
+                options.none,
                 nodes.formalArguments([]),
                 some(nodes.ref("Unit")),
                 nodes.block([])

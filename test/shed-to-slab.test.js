@@ -65,7 +65,7 @@ var slabImport = slab.val(
 var shedBlock = shed.block([shedReturn]);
 var slabBlock = slab.block([slabReturn], shedBlock);
 
-var shedLambda = shed.lambda(shedFormalArguments, options.some(shedBooleanTypeReference), shedBooleanValue);
+var shedLambda = shed.lambda(options.none, shedFormalArguments, options.some(shedBooleanTypeReference), shedBooleanValue);
 var slabLambda = slab.lambda(
     slabFormalArguments,
     options.some(slabBooleanTypeReference),
