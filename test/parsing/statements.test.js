@@ -59,7 +59,7 @@ exports.canParseVarStatement = function(test) {
 };
 
 exports.canParseDefinition = function(test) {
-    var result = parser.parse(statements.statement, "def nop() : Unit => { }");
+    var result = parser.parse(statements.statement, "def nop fun() : Unit => { }");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.def(
             "nop",
@@ -74,7 +74,7 @@ exports.canParseDefinition = function(test) {
 };
 
 exports.definitionCanHaveTrailingSemiColon = function(test) {
-    var result = parser.parse(statements.statement, "def nop() : Unit => { };");
+    var result = parser.parse(statements.statement, "def nop fun() : Unit => { };");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.def(
             "nop",

@@ -1,6 +1,6 @@
 package shedTests;
 
-def fib(n: Double) : Double => 
+def fib fun(n: Double) : Double => 
     if n.equals(0)
         0
     else if n.equals(1)

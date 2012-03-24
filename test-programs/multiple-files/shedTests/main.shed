@@ -3,6 +3,6 @@ package shedTests;
 import shedTests.hello;
 import shedTests.world;
 
-public def main() : Unit => {
+public def main fun() : Unit => {
     print(hello.concat(" ").concat(world));
 }

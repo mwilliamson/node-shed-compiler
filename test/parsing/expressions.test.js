@@ -69,7 +69,7 @@ exports.canParseExpressionInParentheses = function(test) {
 };
 
 exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
-    var result = parser.parse(parsing.expression, "()=>true");
+    var result = parser.parse(parsing.expression, "fun()=>true");
     var expected = nodes.lambda(
         nodes.formalArguments([]),
         options.none,
@@ -80,7 +80,7 @@ exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
 };
 
 exports.canParseShortLambdaExpressionWithExplicitReturnType = function(test) {
-    var result = parser.parse(parsing.expression, "() : Boolean => true");
+    var result = parser.parse(parsing.expression, "fun() : Boolean => true");
     var expected = nodes.lambda(
         nodes.formalArguments([]),
         some(nodes.ref("Boolean")),
@@ -91,7 +91,7 @@ exports.canParseShortLambdaExpressionWithExplicitReturnType = function(test) {
 };
 
 exports.canParseShortLambdaExpressionWithFormalArguments = function(test) {
-    var result = parser.parse(parsing.expression, "(name: String, age: Age) => true");
+    var result = parser.parse(parsing.expression, "fun(name: String, age: Age) => true");
     var expected = nodes.lambda(nodes.formalArguments([
         nodes.formalArgument("name", nodes.ref("String")),
         nodes.formalArgument("age", nodes.ref("Age"))
@@ -101,7 +101,7 @@ exports.canParseShortLambdaExpressionWithFormalArguments = function(test) {
 };
 
 exports.lambdaIsRightAssociative = function(test) {
-    var result = parser.parse(parsing.expression, "()=>()=>true");
+    var result = parser.parse(parsing.expression, "fun()=>fun()=>true");
     var expected = nodes.lambda(nodes.formalArguments([]), options.none,
         nodes.lambda(nodes.formalArguments([]), options.none,
             nodes.boolean(true)
@@ -112,7 +112,7 @@ exports.lambdaIsRightAssociative = function(test) {
 };
 
 exports.canParseLongLambdaExpression = function(test) {
-    var result = parser.parse(parsing.expression, "() => { return true; }");
+    var result = parser.parse(parsing.expression, "fun() => { return true; }");
     var expected = nodes.lambda(nodes.formalArguments([]), options.none, nodes.block([
         nodes.return(nodes.boolean(true))
     ]));
@@ -367,7 +367,7 @@ exports.functionTypeArrowsAreRightAssociative = function(test) {
 };
 
 exports.whitespaceIsIgnored = function(test) {
-    var result = parser.parse(parsing.expression, "() =>\n\ttrue");
+    var result = parser.parse(parsing.expression, "fun() =>\n\ttrue");
     var expected = nodes.lambda(
         nodes.formalArguments([]),
         options.none,
