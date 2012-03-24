@@ -204,6 +204,40 @@ exports.shedLambdaIsConvertedToSlabLambda = function(test) {
     test.done();
 };
 
+exports.shedLambdaWithFormalTypeParametersIsConvertedToTwoNestedSlabLambdas = function(test) {
+    var shedFirstFormalTypeParameter = shed.formalTypeParameter("T");
+    var shedSecondFormalTypeParameter = shed.formalTypeParameter("U");
+    var shedFormalTypeParameters = shed.formalTypeParameters([
+        shedFirstFormalTypeParameter,
+        shedSecondFormalTypeParameter
+    ]);
+    var shedLambda = shed.lambda(
+        options.some(shedFormalTypeParameters),
+        shedFormalArguments,
+        options.some(shedBooleanTypeReference),
+        shedBooleanValue
+    );
+    var slabInnerLambda = slab.lambda(
+        slabFormalArguments,
+        options.some(slabBooleanTypeReference),
+        slabBooleanValue,
+        shedLambda
+    );
+    var slabFirstType = slab.ref("$Type", shedFirstFormalTypeParameter);
+    var slabSecondType = slab.ref("$Type", shedSecondFormalTypeParameter);
+    var slabOuterLambda = slab.lambda(
+        slab.formalArguments([
+            slab.formalArgument("T", slabFirstType, shedFirstFormalTypeParameter),
+            slab.formalArgument("U", slabSecondType, shedSecondFormalTypeParameter)
+        ], shedFormalTypeParameters),
+        options.none,
+        slabInnerLambda,
+        shedLambda
+    );
+    test.deepEqual(slabOuterLambda, shedToSlab.translate(shedLambda));
+    test.done();
+};
+
 exports.shedClassIsConvertedToSlabClass = function(test) {
     var shedClass = shed.class(shedFormalArguments, [shedExpressionStatement]);
     var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement], shedClass); 
