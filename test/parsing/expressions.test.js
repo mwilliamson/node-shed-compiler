@@ -379,8 +379,7 @@ exports.whitespaceIsIgnored = function(test) {
 
 exports.sourceOfResultIsAssignedToNode = function(test) {
     var result = parser.parse(parsing.expression, "true");
-    var expected = nodes.boolean(true);
-    expected.source = {string: "true", startIndex: 0, endIndex: 4};
+    var expected = duck.isObject(nodes.boolean(true, duck.isObject({string: "true", startIndex: 0, endIndex: 4})));
     assertIsSuccessWithValue(test, result, expected);
     test.done();
 };
