@@ -106,17 +106,6 @@ exports.writesExpressionStatements = function(test) {
     );
 };
 
-exports.writesExpressionStatementsWithIndentationLevel = function(test) {
-    assertJavaScriptWriter(
-        test,
-        js.expressionStatement(js.func(["a", "b"], [js.expressionStatement(js.ref("print"))])),
-        '        function(a, b) {\n' +
-        '            print;\n' +
-        '        };',
-        2
-    );
-};
-
 exports.writesVars = function(test) {
     assertJavaScriptWriter(
         test,
@@ -150,17 +139,6 @@ exports.writesAnonymousFunctions = function(test) {
         'function(a, b) {\n' +
         '    print;\n' +
         '}'
-    );
-};
-
-exports.writesAnonymousFunctionsWithIndentationLevel = function(test) {
-    assertJavaScriptWriter(
-        test,
-        js.func(["a", "b"], [js.expressionStatement(js.ref("print"))]),
-        'function(a, b) {\n' +
-        '            print;\n' +
-        '        }',
-        2
     );
 };
 
