@@ -3,5 +3,6 @@
     "expected": {
         "exitCode": 0,
         "stdout": "Hello world"
-    }
+    },
+    "disabled": true
 }

@@ -48,13 +48,13 @@ exports.canParseNumberLiteral = function(test) {
     test.done();
 };
 
-exports.canParseListLiteral = function(test) {
-    var result = parser.parse(parsing.expression, "[1, 2]");
-    assertIsSuccessWithValue(test, result, ignoringSources(nodes.list(
-        [nodes.number("1"), nodes.number("2")]
-    )));
-    test.done();
-};
+//~ exports.canParseListLiteral = function(test) {
+    //~ var result = parser.parse(parsing.expression, "[1, 2]");
+    //~ assertIsSuccessWithValue(test, result, ignoringSources(nodes.list(
+        //~ [nodes.number("1"), nodes.number("2")]
+    //~ )));
+    //~ test.done();
+//~ };
 
 exports.canParseVariableReference = function(test) {
     var result = parser.parse(parsing.expression, "blah");
