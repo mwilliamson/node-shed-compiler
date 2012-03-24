@@ -103,6 +103,12 @@ exports.slabFunctionCallIsConvertedToJavaScriptFunctionCall = function(test) {
     assertTranslation(test, slabFunctionCall, jsFunctionCall);
 };
 
+exports.slabTypeApplicationIsConvertedToJavaScriptFunctionCall = function(test) {
+    var slabTypeApplication = slab.typeApplication(slabReference, [slabMemberAccess]);
+    var jsTypeApplication = js.call(jsReference, [jsMemberAccess], slabTypeApplication);
+    assertTranslation(test, slabTypeApplication, jsTypeApplication);
+};
+
 exports.slabMemberAccessIsConvertedToJavaScriptMemberAccess = function(test) {
     assertTranslation(test, slabMemberAccess, jsMemberAccess);
 };
