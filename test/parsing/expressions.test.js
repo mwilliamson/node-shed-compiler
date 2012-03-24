@@ -155,6 +155,7 @@ exports.canParseLongLambdaExpression = function(test) {
 exports.canParseEmptyClassDefinition = function(test) {
     var result = parser.parse(parsing.expression, "class() => { }");
     var expected = nodes.class(
+        options.none,
         nodes.formalArguments([]),
         []
     );
@@ -165,6 +166,18 @@ exports.canParseEmptyClassDefinition = function(test) {
 exports.canParseClassDefinitionWithFormalArguments = function(test) {
     var result = parser.parse(parsing.expression, "class(a: A) => { }");
     var expected = nodes.class(
+        options.none,
+        nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
+        []
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
+exports.canParseClassDefinitionWithFormalTypeParameters = function(test) {
+    var result = parser.parse(parsing.expression, "class[A] => (a: A) => { }");
+    var expected = nodes.class(
+        options.some(nodes.formalTypeParameters([nodes.formalTypeParameter("A")])),
         nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
         []
     );
@@ -175,6 +188,7 @@ exports.canParseClassDefinitionWithFormalArguments = function(test) {
 exports.canParseClassDefinitionWithBody = function(test) {
     var result = parser.parse(parsing.expression, "class() => { val x = 1; }");
     var expected = nodes.class(
+        options.none,
         nodes.formalArguments([]),
         [nodes.val("x", options.none, nodes.number("1"))]
     );

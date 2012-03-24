@@ -41,6 +41,20 @@ var slabFormalArgument = slab.formalArgument(
 var shedFormalArguments = shed.formalArguments([shedFormalArgument]);
 var slabFormalArguments = slab.formalArguments([slabFormalArgument], shedFormalArguments);
 
+var shedFormalTypeParameter = shed.formalTypeParameter("T");
+var slabFormalTypeParameter = slab.formalArgument(
+    "T",
+    slab.ref("$Type", shedFormalTypeParameter),
+    shedFormalTypeParameter
+);
+
+var shedFormalTypeParameters = shed.formalTypeParameters([
+    shedFormalTypeParameter
+]);
+var slabFormalTypeParameters = slab.formalArguments([
+    slabFormalTypeParameter
+], shedFormalTypeParameters);
+
 var shedReturn = shed.return(shedReference);
 var slabReturn = slab.return(slabReference, shedReturn);
 
@@ -205,12 +219,6 @@ exports.shedLambdaIsConvertedToSlabLambda = function(test) {
 };
 
 exports.shedLambdaWithFormalTypeParametersIsConvertedToTwoNestedSlabLambdas = function(test) {
-    var shedFirstFormalTypeParameter = shed.formalTypeParameter("T");
-    var shedSecondFormalTypeParameter = shed.formalTypeParameter("U");
-    var shedFormalTypeParameters = shed.formalTypeParameters([
-        shedFirstFormalTypeParameter,
-        shedSecondFormalTypeParameter
-    ]);
     var shedLambda = shed.lambda(
         options.some(shedFormalTypeParameters),
         shedFormalArguments,
@@ -223,13 +231,8 @@ exports.shedLambdaWithFormalTypeParametersIsConvertedToTwoNestedSlabLambdas = fu
         slabBooleanValue,
         shedLambda
     );
-    var slabFirstType = slab.ref("$Type", shedFirstFormalTypeParameter);
-    var slabSecondType = slab.ref("$Type", shedSecondFormalTypeParameter);
     var slabOuterLambda = slab.lambda(
-        slab.formalArguments([
-            slab.formalArgument("T", slabFirstType, shedFirstFormalTypeParameter),
-            slab.formalArgument("U", slabSecondType, shedSecondFormalTypeParameter)
-        ], shedFormalTypeParameters),
+        slabFormalTypeParameters,
         options.none,
         slabInnerLambda,
         shedLambda
@@ -239,9 +242,26 @@ exports.shedLambdaWithFormalTypeParametersIsConvertedToTwoNestedSlabLambdas = fu
 };
 
 exports.shedClassIsConvertedToSlabClass = function(test) {
-    var shedClass = shed.class(shedFormalArguments, [shedExpressionStatement]);
+    var shedClass = shed.class(options.none, shedFormalArguments, [shedExpressionStatement]);
     var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement], shedClass); 
     test.deepEqual(slabClass, shedToSlab.translate(shedClass));
+    test.done();
+};
+
+exports.shedClassWithFormalTypeParametersIsConvertedToSlabClassWithinLambda = function(test) {
+    var shedClass = shed.class(
+        options.some(shedFormalTypeParameters),
+        shedFormalArguments,
+        [shedExpressionStatement]
+    );
+    var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement], shedClass); 
+    var slabLambda = slab.lambda(
+        slabFormalTypeParameters,
+        options.none,
+        slabClass,
+        shedClass
+    );
+    test.deepEqual(slabLambda, shedToSlab.translate(shedClass));
     test.done();
 };
 
