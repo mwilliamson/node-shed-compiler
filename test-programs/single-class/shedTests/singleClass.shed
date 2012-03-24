@@ -1,6 +1,6 @@
 package shedTests;
 
-def Person class(name: String) {
+def Person class(name: String) => {
     public def toString fun() : String => name;
 }
 

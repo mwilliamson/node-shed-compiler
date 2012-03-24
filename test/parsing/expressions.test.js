@@ -153,7 +153,7 @@ exports.canParseLongLambdaExpression = function(test) {
 };
 
 exports.canParseEmptyClassDefinition = function(test) {
-    var result = parser.parse(parsing.expression, "class() { }");
+    var result = parser.parse(parsing.expression, "class() => { }");
     var expected = nodes.class(
         nodes.formalArguments([]),
         []
@@ -163,7 +163,7 @@ exports.canParseEmptyClassDefinition = function(test) {
 };
 
 exports.canParseClassDefinitionWithFormalArguments = function(test) {
-    var result = parser.parse(parsing.expression, "class(a: A) { }");
+    var result = parser.parse(parsing.expression, "class(a: A) => { }");
     var expected = nodes.class(
         nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
         []
@@ -173,7 +173,7 @@ exports.canParseClassDefinitionWithFormalArguments = function(test) {
 };
 
 exports.canParseClassDefinitionWithBody = function(test) {
-    var result = parser.parse(parsing.expression, "class() { val x = 1; }");
+    var result = parser.parse(parsing.expression, "class() => { val x = 1; }");
     var expected = nodes.class(
         nodes.formalArguments([]),
         [nodes.val("x", options.none, nodes.number("1"))]
