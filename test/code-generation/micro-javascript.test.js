@@ -80,9 +80,7 @@ exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmpt
     var jsClass = js.block([
         js.var("$class", js.func(["name"], [
             jsExpressionStatement,
-            js.return(js.object({
-                $isShedType: js.boolean(true, slabClass)
-            }, slabClass), slabClass)
+            js.return(js.object({}, slabClass), slabClass)
         ], slabClass), slabClass),
         js.assign(js.memberAccess(js.ref("$class", slabClass), "$isShedType", slabClass), js.boolean(true, slabClass), slabClass),
         js.return(js.ref("$class", slabClass), slabClass)
@@ -95,9 +93,7 @@ exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfPublicMembers =
     var slabFormalArguments = slab.formalArguments([]);
     var slabClass = slab.class(slabFormalArguments, [slabPublicVal]); 
     
-    var expectedJsObject = {
-        $isShedType: js.boolean(true, slabClass)
-    };
+    var expectedJsObject = {};
     expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabPublicVal);
     
     var jsClass = js.block([
