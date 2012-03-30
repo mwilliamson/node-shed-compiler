@@ -17,6 +17,14 @@ exports.writesVariableReference = function(test) {
     assertJavaScriptWriter(test, js.ref("print"), 'print');
 };
 
+exports.writesAssignment = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.assign(js.ref("a"), js.ref("b")),
+        'a = b'
+    );
+};
+
 exports.writesFunctionCallWithArguments = function(test) {
     assertJavaScriptWriter(
         test,

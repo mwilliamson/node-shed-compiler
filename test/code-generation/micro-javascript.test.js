@@ -77,9 +77,15 @@ exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmpt
         slab.formalArgument("name", slab.ref("String"))
     ]);
     var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement]); 
-    var jsClass = js.func(["name"], [
-        jsExpressionStatement,
-        js.return(js.object({}, slabClass), slabClass)
+    var jsClass = js.block([
+        js.var("$class", js.func(["name"], [
+            jsExpressionStatement,
+            js.return(js.object({
+                $isShedType: js.boolean(true, slabClass)
+            }, slabClass), slabClass)
+        ], slabClass), slabClass),
+        js.assign(js.memberAccess(js.ref("$class", slabClass), "$isShedType", slabClass), js.boolean(true, slabClass), slabClass),
+        js.return(js.ref("$class", slabClass), slabClass)
     ], slabClass);
     assertTranslation(test, slabClass, jsClass);
 };
@@ -89,12 +95,18 @@ exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfPublicMembers =
     var slabFormalArguments = slab.formalArguments([]);
     var slabClass = slab.class(slabFormalArguments, [slabPublicVal]); 
     
-    var expectedJsObject = {}
+    var expectedJsObject = {
+        $isShedType: js.boolean(true, slabClass)
+    };
     expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabPublicVal);
     
-    var jsClass = js.func([], [
-        jsVal,
-        js.return(js.object(expectedJsObject, slabClass), slabClass)
+    var jsClass = js.block([
+        js.var("$class", js.func([], [
+            jsVal,
+            js.return(js.object(expectedJsObject, slabClass), slabClass)
+        ], slabClass), slabClass),
+        js.assign(js.memberAccess(js.ref("$class", slabClass), "$isShedType", slabClass), js.boolean(true, slabClass), slabClass),
+        js.return(js.ref("$class", slabClass), slabClass)
     ], slabClass);
     assertTranslation(test, slabClass, jsClass);
 };
