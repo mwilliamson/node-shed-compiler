@@ -301,7 +301,7 @@ exports.memberAccessAndFunctionCallHaveSamePrecendence = function(test) {
 };
 
 exports.canParseEmptyIfExpression = function(test) {
-    var result = parser.parse(parsing.expression, "if (true) { }");
+    var result = parser.parse(parsing.expression, "if true then { }");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if(
             [{condition: nodes.boolean(true), body: nodes.block([])}]
@@ -311,7 +311,7 @@ exports.canParseEmptyIfExpression = function(test) {
 };
 
 exports.canParseIfExpression = function(test) {
-    var result = parser.parse(parsing.expression, "if (true) 1");
+    var result = parser.parse(parsing.expression, "if true then 1");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if([
             {
@@ -324,7 +324,7 @@ exports.canParseIfExpression = function(test) {
 };
 
 exports.canParseIfElseExpression = function(test) {
-    var result = parser.parse(parsing.expression, "if (true) 1 else 2");
+    var result = parser.parse(parsing.expression, "if true then 1 else 2");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if([
             {
@@ -340,7 +340,7 @@ exports.canParseIfElseExpression = function(test) {
 };
 
 exports.canParseIfElseIfElseExpression = function(test) {
-    var source = "if (true) 1 else if (false) 2 else 3";
+    var source = "if true then 1 else if false then 2 else 3";
     var result = parser.parse(parsing.expression, source);
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if([

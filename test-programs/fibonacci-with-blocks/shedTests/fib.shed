@@ -1,9 +1,9 @@
 package shedTests;
 
 def fib fun(n: Double) : Double => 
-    if n.equals(0)
+    if n.equals(0) then
         0
-    else if n.equals(1)
+    else if n.equals(1) then
         1
     else {
         val a = fib(n.subtract(1));
