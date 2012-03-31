@@ -10,6 +10,7 @@ var assertIsSuccessWithValue = parsingTesting.assertIsSuccessWithValue;
 var assertIsSuccess = parsingTesting.assertIsSuccess;
 var assertIsFailure = parsingTesting.assertIsFailure;
 var assertIsError = parsingTesting.assertIsError;
+var StringSource = require("lop").StringSource;
 
 var nodes = require("../../lib/nodes");
 var parsing = require("../../lib/parsing");
@@ -436,7 +437,7 @@ exports.whitespaceIsIgnored = function(test) {
 
 exports.sourceOfResultIsAssignedToNode = function(test) {
     var result = parser.parse(parsing.expression, "true");
-    var expected = duck.isObject(nodes.boolean(true, duck.isObject({string: "true", startIndex: 0, endIndex: 4})));
+    var expected = duck.isObject(nodes.boolean(true, new StringSource("true").range(0, 4)));
     assertIsSuccessWithValue(test, result, expected);
     test.done();
 };
