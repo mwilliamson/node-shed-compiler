@@ -17,40 +17,38 @@ var parsing = require("../../lib/parsing");
 var expressions = require("../../lib/parsing/expressions");
 var ignoringSources = require("./util").ignoringSources;
 
-var parser = new parsing.Parser();
-
 exports.canParseBooleanLiteralTrue = function(test) {
-    var result = parser.parse(parsing.expression, "true");
+    var result = parse(parsing.expression, "true");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.boolean(true)));
     test.done();
 };
 
 exports.canParseBooleanLiteralFalse = function(test) {
-    var result = parser.parse(parsing.expression, "false");
+    var result = parse(parsing.expression, "false");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.boolean(false)));
     test.done();
 };
 
 exports.canParseUnitLiteral = function(test) {
-    var result = parser.parse(parsing.expression, "()");
+    var result = parse(parsing.expression, "()");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.unit()));
     test.done();
 };
 
 exports.canParseStringLiteral = function(test) {
-    var result = parser.parse(parsing.expression, "\"blah\"");
+    var result = parse(parsing.expression, "\"blah\"");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.string("blah")));
     test.done();
 };
 
 exports.canParseNumberLiteral = function(test) {
-    var result = parser.parse(parsing.expression, "42");
+    var result = parse(parsing.expression, "42");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.number("42")));
     test.done();
 };
 
 //~ exports.canParseListLiteral = function(test) {
-    //~ var result = parser.parse(parsing.expression, "[1, 2]");
+    //~ var result = parse(parsing.expression, "[1, 2]");
     //~ assertIsSuccessWithValue(test, result, ignoringSources(nodes.list(
         //~ [nodes.number("1"), nodes.number("2")]
     //~ )));
@@ -58,19 +56,19 @@ exports.canParseNumberLiteral = function(test) {
 //~ };
 
 exports.canParseVariableReference = function(test) {
-    var result = parser.parse(parsing.expression, "blah");
+    var result = parse(parsing.expression, "blah");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.variableReference("blah")));
     test.done();
 };
 
 exports.canParseExpressionInParentheses = function(test) {
-    var result = parser.parse(parsing.expression, "(blah)");
+    var result = parse(parsing.expression, "(blah)");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.variableReference("blah")));
     test.done();
 };
 
 exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
-    var result = parser.parse(parsing.expression, "fun()=>true");
+    var result = parse(parsing.expression, "fun()=>true");
     var expected = nodes.lambda(
         options.none,
         nodes.formalArguments([]),
@@ -82,7 +80,7 @@ exports.canParseShortLambdaExpressionWithNoArguments = function(test) {
 };
 
 exports.canParseShortLambdaExpressionWithExplicitReturnType = function(test) {
-    var result = parser.parse(parsing.expression, "fun() : Boolean => true");
+    var result = parse(parsing.expression, "fun() : Boolean => true");
     var expected = nodes.lambda(
         options.none,
         nodes.formalArguments([]),
@@ -94,7 +92,7 @@ exports.canParseShortLambdaExpressionWithExplicitReturnType = function(test) {
 };
 
 exports.canParseShortLambdaExpressionWithFormalArguments = function(test) {
-    var result = parser.parse(parsing.expression, "fun(name: String, age: Age) => true");
+    var result = parse(parsing.expression, "fun(name: String, age: Age) => true");
     var expected = nodes.lambda(
         options.none,
         nodes.formalArguments([
@@ -109,7 +107,7 @@ exports.canParseShortLambdaExpressionWithFormalArguments = function(test) {
 };
 
 exports.canParseFormalTypeParameters = function(test) {
-    var result = parser.parse(expressions.formalTypeParameters, "[T, U] =>");
+    var result = parse(expressions.formalTypeParameters, "[T, U] =>");
     var expected = nodes.formalTypeParameters([
         nodes.formalTypeParameter("T"),
         nodes.formalTypeParameter("U")
@@ -119,7 +117,7 @@ exports.canParseFormalTypeParameters = function(test) {
 };
 
 exports.canParseLambdaExpressionWithFormalTypeParameters = function(test) {
-    var result = parser.parse(parsing.expression, "fun[T, U] => () => true");
+    var result = parse(parsing.expression, "fun[T, U] => () => true");
     var expected = nodes.lambda(
         options.some(nodes.formalTypeParameters([
             nodes.formalTypeParameter("T"),
@@ -134,7 +132,7 @@ exports.canParseLambdaExpressionWithFormalTypeParameters = function(test) {
 };
 
 exports.lambdaIsRightAssociative = function(test) {
-    var result = parser.parse(parsing.expression, "fun()=>fun()=>true");
+    var result = parse(parsing.expression, "fun()=>fun()=>true");
     var expected = nodes.lambda(options.none, nodes.formalArguments([]), options.none,
         nodes.lambda(options.none, nodes.formalArguments([]), options.none,
             nodes.boolean(true)
@@ -145,7 +143,7 @@ exports.lambdaIsRightAssociative = function(test) {
 };
 
 exports.canParseLongLambdaExpression = function(test) {
-    var result = parser.parse(parsing.expression, "fun() => { return true; }");
+    var result = parse(parsing.expression, "fun() => { return true; }");
     var expected = nodes.lambda(options.none, nodes.formalArguments([]), options.none, nodes.block([
         nodes.return(nodes.boolean(true))
     ]));
@@ -154,7 +152,7 @@ exports.canParseLongLambdaExpression = function(test) {
 };
 
 exports.canParseEmptyClassDefinition = function(test) {
-    var result = parser.parse(parsing.expression, "class() => { }");
+    var result = parse(parsing.expression, "class() => { }");
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([]),
@@ -165,7 +163,7 @@ exports.canParseEmptyClassDefinition = function(test) {
 };
 
 exports.canParseClassDefinitionWithFormalArguments = function(test) {
-    var result = parser.parse(parsing.expression, "class(a: A) => { }");
+    var result = parse(parsing.expression, "class(a: A) => { }");
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
@@ -176,7 +174,7 @@ exports.canParseClassDefinitionWithFormalArguments = function(test) {
 };
 
 exports.canParseClassDefinitionWithFormalTypeParameters = function(test) {
-    var result = parser.parse(parsing.expression, "class[A] => (a: A) => { }");
+    var result = parse(parsing.expression, "class[A] => (a: A) => { }");
     var expected = nodes.class(
         options.some(nodes.formalTypeParameters([nodes.formalTypeParameter("A")])),
         nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
@@ -187,7 +185,7 @@ exports.canParseClassDefinitionWithFormalTypeParameters = function(test) {
 };
 
 exports.canParseClassDefinitionWithBody = function(test) {
-    var result = parser.parse(parsing.expression, "class() => { val x = 1; }");
+    var result = parse(parsing.expression, "class() => { val x = 1; }");
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([]),
@@ -198,28 +196,28 @@ exports.canParseClassDefinitionWithBody = function(test) {
 };
 
 exports.canParseEmptyObject = function(test) {
-    var result = parser.parse(parsing.expression, "object { }");
+    var result = parse(parsing.expression, "object { }");
     var expected = nodes.object([]);
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.canParseObjectWithBody = function(test) {
-    var result = parser.parse(parsing.expression, "object { val x = 1; }");
+    var result = parse(parsing.expression, "object { val x = 1; }");
     var expected = nodes.object([nodes.val("x", options.none, nodes.number("1"))]);
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.canAssignToVariableReference = function(test) {
-    var result = parser.parse(parsing.expression, "blah = true");
+    var result = parse(parsing.expression, "blah = true");
     var expected = nodes.assign(nodes.ref("blah"), nodes.boolean(true));
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.assignmentIsRightAssociative = function(test) {
-    var result = parser.parse(parsing.expression, "blah = hooray = true");
+    var result = parse(parsing.expression, "blah = hooray = true");
     var expected = nodes.assign(
         nodes.ref("blah"),
         nodes.assign(nodes.ref("hooray"), nodes.boolean(true))
@@ -229,7 +227,7 @@ exports.assignmentIsRightAssociative = function(test) {
 };
 
 exports.canCallFunctionWithNoArguments = function(test) {
-    var result = parser.parse(parsing.expression, "max()");
+    var result = parse(parsing.expression, "max()");
     var expected = nodes.call(
         nodes.ref("max"),
         []
@@ -239,7 +237,7 @@ exports.canCallFunctionWithNoArguments = function(test) {
 };
 
 exports.canCallFunctionWithMultipleArguments = function(test) {
-    var result = parser.parse(parsing.expression, "max(a, b)");
+    var result = parse(parsing.expression, "max(a, b)");
     var expected = nodes.call(
         nodes.ref("max"),
         [nodes.ref("a"), nodes.ref("b")]
@@ -249,7 +247,7 @@ exports.canCallFunctionWithMultipleArguments = function(test) {
 };
 
 exports.functionCallsAreLeftAssociative = function(test) {
-    var result = parser.parse(parsing.expression, "go()()()");
+    var result = parse(parsing.expression, "go()()()");
     var expected = nodes.call(
         nodes.call(
             nodes.call(
@@ -265,7 +263,7 @@ exports.functionCallsAreLeftAssociative = function(test) {
 };
 
 exports.canCallFunctionWithTypeParameters = function(test) {
-    var result = parser.parse(parsing.expression, "Map[A, B]");
+    var result = parse(parsing.expression, "Map[A, B]");
     var expected = nodes.typeApplication(
         nodes.ref("Map"),
         [nodes.ref("A"), nodes.ref("B")]
@@ -275,7 +273,7 @@ exports.canCallFunctionWithTypeParameters = function(test) {
 };
 
 exports.canAccessMemberOfValue = function(test) {
-    var result = parser.parse(parsing.expression, "song.title");
+    var result = parse(parsing.expression, "song.title");
     var expected = nodes.memberAccess(
         nodes.ref("song"),
         "title"
@@ -285,7 +283,7 @@ exports.canAccessMemberOfValue = function(test) {
 };
 
 exports.memberAccessAndFunctionCallHaveSamePrecendence = function(test) {
-    var result = parser.parse(parsing.expression, "songs.head().title");
+    var result = parse(parsing.expression, "songs.head().title");
     var expected = nodes.memberAccess(
         nodes.call(
             nodes.memberAccess(
@@ -301,7 +299,7 @@ exports.memberAccessAndFunctionCallHaveSamePrecendence = function(test) {
 };
 
 exports.canParseEmptyIfExpression = function(test) {
-    var result = parser.parse(parsing.expression, "if true then { }");
+    var result = parse(parsing.expression, "if true then { }");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if(
             [{condition: nodes.boolean(true), body: nodes.block([])}]
@@ -311,7 +309,7 @@ exports.canParseEmptyIfExpression = function(test) {
 };
 
 exports.canParseIfExpression = function(test) {
-    var result = parser.parse(parsing.expression, "if true then 1");
+    var result = parse(parsing.expression, "if true then 1");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if([
             {
@@ -324,7 +322,7 @@ exports.canParseIfExpression = function(test) {
 };
 
 exports.canParseIfElseExpression = function(test) {
-    var result = parser.parse(parsing.expression, "if true then 1 else 2");
+    var result = parse(parsing.expression, "if true then 1 else 2");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if([
             {
@@ -341,7 +339,7 @@ exports.canParseIfElseExpression = function(test) {
 
 exports.canParseIfElseIfElseExpression = function(test) {
     var source = "if true then 1 else if false then 2 else 3";
-    var result = parser.parse(parsing.expression, source);
+    var result = parse(parsing.expression, source);
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.if([
             {
@@ -362,7 +360,7 @@ exports.canParseIfElseIfElseExpression = function(test) {
 
 exports.canParseBlockExpression = function(test) {
     var source = "{ go(); return 1;}";
-    var result = parser.parse(parsing.expression, source);
+    var result = parse(parsing.expression, source);
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.block([
             nodes.expressionStatement(nodes.call(nodes.ref("go"), [])),
@@ -374,7 +372,7 @@ exports.canParseBlockExpression = function(test) {
 
 exports.canParseTypeApplication = function(test) {
     var source = "Map[String, Boolean]";
-    var result = parser.parse(expressions.typeExpression, source);
+    var result = parse(expressions.typeExpression, source);
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.typeApplication(
             nodes.ref("Map"),
@@ -386,7 +384,7 @@ exports.canParseTypeApplication = function(test) {
 
 exports.canParseFunctionTypeUsingArrow = function(test) {
     var source = "(String) -> Boolean";
-    var result = parser.parse(expressions.typeExpression, source);
+    var result = parse(expressions.typeExpression, source);
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.functionType(
             [nodes.ref("String")],
@@ -398,7 +396,7 @@ exports.canParseFunctionTypeUsingArrow = function(test) {
 
 exports.canParseFunctionTypeWithMultipleArgumentTypesUsingArrow = function(test) {
     var source = "(String, Number) -> Boolean";
-    var result = parser.parse(expressions.typeExpression, source);
+    var result = parse(expressions.typeExpression, source);
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.functionType(
             [nodes.ref("String"), nodes.ref("Number")],
@@ -410,7 +408,7 @@ exports.canParseFunctionTypeWithMultipleArgumentTypesUsingArrow = function(test)
 
 exports.functionTypeArrowsAreRightAssociative = function(test) {
     var source = "(String) -> (Number) -> Boolean";
-    var result = parser.parse(expressions.typeExpression, source);
+    var result = parse(expressions.typeExpression, source);
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.functionType(
             [nodes.ref("String")],
@@ -424,7 +422,7 @@ exports.functionTypeArrowsAreRightAssociative = function(test) {
 };
 
 exports.whitespaceIsIgnored = function(test) {
-    var result = parser.parse(parsing.expression, "fun() =>\n\ttrue");
+    var result = parse(parsing.expression, "fun() =>\n\ttrue");
     var expected = nodes.lambda(
         options.none,
         nodes.formalArguments([]),
@@ -436,8 +434,13 @@ exports.whitespaceIsIgnored = function(test) {
 };
 
 exports.sourceOfResultIsAssignedToNode = function(test) {
-    var result = parser.parse(parsing.expression, "true");
+    var result = parse(parsing.expression, "true");
     var expected = duck.isObject(nodes.boolean(true, new StringSource("true").range(0, 4)));
     assertIsSuccessWithValue(test, result, expected);
     test.done();
+};
+
+var parse = function(rule, string) {
+    var parser = new parsing.Parser();
+    return parser.parse(rule, new StringSource(string));
 };

@@ -12,18 +12,18 @@ var nodes = require("../../lib/nodes");
 var parsing = require("../../lib/parsing");
 var statements = require("../../lib/parsing/statements");
 
-var parser = new parsing.Parser();
+var StringSource = require("lop").StringSource;
 
 var ignoringSources = require("./util").ignoringSources;
 
 exports.canParseReturnStatement = function(test) {
-    var result = parser.parse(parsing.statement, "return true;");
+    var result = parse(parsing.statement, "return true;");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.return(nodes.boolean(true))));
     test.done();
 };
 
 exports.canParseExpressionStatement = function(test) {
-    var result = parser.parse(statements.statement, "blah = true;");
+    var result = parse(statements.statement, "blah = true;");
     assertIsSuccessWithValue(
         test, result,
         ignoringSources(nodes.expressionStatement(nodes.assign(nodes.ref("blah"), nodes.boolean(true))))
@@ -32,7 +32,7 @@ exports.canParseExpressionStatement = function(test) {
 };
 
 exports.canParseValStatement = function(test) {
-    var result = parser.parse(statements.statement, "val blah = true;");
+    var result = parse(statements.statement, "val blah = true;");
     assertIsSuccessWithValue(
         test, result,
         ignoringSources(nodes.val("blah", options.none, nodes.boolean(true)))
@@ -41,7 +41,7 @@ exports.canParseValStatement = function(test) {
 };
 
 exports.canParseValStatementWithExplicitType = function(test) {
-    var result = parser.parse(statements.statement, "val blah : Boolean = true;");
+    var result = parse(statements.statement, "val blah : Boolean = true;");
     assertIsSuccessWithValue(
         test, result,
         ignoringSources(nodes.val("blah", some(nodes.ref("Boolean")), nodes.boolean(true)))
@@ -50,7 +50,7 @@ exports.canParseValStatementWithExplicitType = function(test) {
 };
 
 exports.canParseVarStatement = function(test) {
-    var result = parser.parse(statements.statement, "var blah = true;");
+    var result = parse(statements.statement, "var blah = true;");
     assertIsSuccessWithValue(
         test, result,
         ignoringSources(nodes.var("blah", options.none, nodes.boolean(true)))
@@ -59,7 +59,7 @@ exports.canParseVarStatement = function(test) {
 };
 
 exports.canParseDefinition = function(test) {
-    var result = parser.parse(statements.statement, "def nop fun() : Unit => { }");
+    var result = parse(statements.statement, "def nop fun() : Unit => { }");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.def(
             "nop",
@@ -75,7 +75,7 @@ exports.canParseDefinition = function(test) {
 };
 
 exports.definitionCanHaveTrailingSemiColon = function(test) {
-    var result = parser.parse(statements.statement, "def nop fun() : Unit => { };");
+    var result = parse(statements.statement, "def nop fun() : Unit => { };");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.def(
             "nop",
@@ -91,10 +91,15 @@ exports.definitionCanHaveTrailingSemiColon = function(test) {
 };
 
 exports.canParsePublicDeclarations = function(test) {
-    var result = parser.parse(statements.statement, "public val blah = true;");
+    var result = parse(statements.statement, "public val blah = true;");
     assertIsSuccessWithValue(
         test, result,
         ignoringSources(nodes.public(nodes.val("blah", options.none, nodes.boolean(true))))
     );
     test.done();
+};
+
+var parse = function(rule, string) {
+    var parser = new parsing.Parser();
+    return parser.parse(rule, new StringSource(string));
 };

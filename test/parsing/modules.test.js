@@ -16,10 +16,10 @@ var parsing = require("../../lib/parsing");
 var modulesParsing = require("../../lib/parsing/modules");
 var ignoringSources = require("./util").ignoringSources;
 
-var parser = new parsing.Parser();
+var StringSource = require("lop").StringSource;
 
 exports.moduleContainsPackageDeclarationFollowedByBody = function(test) {
-    var result = parser.parse(modulesParsing.module, "package shed.example; true;false;");
+    var result = parse(modulesParsing.module, "package shed.example; true;false;");
     assertIsSuccess(test, result, {
         value: ignoringSources(
             nodes.module(
@@ -34,7 +34,7 @@ exports.moduleContainsPackageDeclarationFollowedByBody = function(test) {
 };
 
 exports.modulePackageDeclarationIsOptional = function(test) {
-    var result = parser.parse(modulesParsing.module, "true;false;");
+    var result = parse(modulesParsing.module, "true;false;");
     assertIsSuccess(test, result, {
         value: ignoringSources(
             nodes.module(
@@ -49,7 +49,7 @@ exports.modulePackageDeclarationIsOptional = function(test) {
 };
 
 exports.moduleContainsPackageDeclarationFollowedByImportsThenBody = function(test) {
-    var result = parser.parse(modulesParsing.module, "package shed.example; import shed.options; import shed.time; true;");
+    var result = parse(modulesParsing.module, "package shed.example; import shed.options; import shed.time; true;");
     assertIsSuccess(test, result, {
         value: ignoringSources(
             nodes.module(
@@ -65,13 +65,18 @@ exports.moduleContainsPackageDeclarationFollowedByImportsThenBody = function(tes
 
 
 exports.packageDeclarationIsPackageKeywordFollowedByListOfIdentifiers = function(test) {
-    var result = parser.parse(modulesParsing.packageDeclaration, "package shed.example;");
+    var result = parse(modulesParsing.packageDeclaration, "package shed.example;");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.packageDeclaration(["shed", "example"])));
     test.done();
 };
 
 exports.importIsImportKeywordFollowedByListOfIdentifiers = function(test) {
-    var result = parser.parse(modulesParsing.import, "import shed.example;");
+    var result = parse(modulesParsing.import, "import shed.example;");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.import(["shed", "example"])));
     test.done();
+};
+
+var parse = function(rule, string) {
+    var parser = new parsing.Parser();
+    return parser.parse(rule, new StringSource(string));
 };
