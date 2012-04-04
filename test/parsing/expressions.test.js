@@ -421,14 +421,9 @@ exports.functionTypeArrowsAreRightAssociative = function(test) {
     test.done();
 };
 
-exports.whitespaceIsIgnored = function(test) {
-    var result = parse(parsing.expression, "fun() =>\n\ttrue");
-    var expected = nodes.lambda(
-        options.none,
-        nodes.formalArguments([]),
-        options.none,
-        nodes.boolean(true)
-    );
+exports.spacesAndTabsAreIgnored = function(test) {
+    var result = parse(parsing.expression, "( true\t )");
+    var expected = nodes.boolean(true);
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
