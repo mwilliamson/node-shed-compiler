@@ -428,6 +428,13 @@ exports.spacesAndTabsAreIgnored = function(test) {
     test.done();
 };
 
+exports.commentsAreIgnored = function(test) {
+    var result = parse(parsing.expression, "true // ()");
+    var expected = nodes.boolean(true);
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.sourceOfResultIsAssignedToNode = function(test) {
     var result = parse(parsing.expression, "true");
     var expected = duck.isObject(nodes.boolean(true, new StringSource("true").range(0, 4)));
