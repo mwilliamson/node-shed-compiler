@@ -63,9 +63,14 @@ exports.moduleContainsPackageDeclarationFollowedByImportsThenBody = function(tes
     test.done();
 };
 
-
 exports.packageDeclarationIsPackageKeywordFollowedByListOfIdentifiers = function(test) {
     var result = parse(modulesParsing.packageDeclaration, "package shed.example;");
+    assertIsSuccessWithValue(test, result, ignoringSources(nodes.packageDeclaration(["shed", "example"])));
+    test.done();
+};
+
+exports.packageDeclarationCanBeTerminatedByNewLine = function(test) {
+    var result = parse(modulesParsing.packageDeclaration, "package shed.example\n");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.packageDeclaration(["shed", "example"])));
     test.done();
 };
