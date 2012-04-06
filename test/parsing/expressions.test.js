@@ -416,6 +416,13 @@ exports.commentsAreIgnored = function(test) {
     test.done();
 };
 
+//~ exports.indentsInExpressionsAreIgnored = function(test) {
+    //~ var result = parse(parsing.expression, "blah(\n    true)");
+    //~ var expected = nodes.call(nodes.ref("blah"), [nodes.boolean(true)]);
+    //~ assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    //~ test.done();
+//~ };
+
 exports.sourceOfResultIsAssignedToNode = function(test) {
     var result = parse(parsing.expression, "true");
     var expected = duck.isObject(nodes.boolean(true, new StringSource("true").range(0, 4)));
