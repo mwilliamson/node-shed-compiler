@@ -423,6 +423,13 @@ exports.commentsAreIgnored = function(test) {
     //~ test.done();
 //~ };
 
+exports.expressionsCanBeIndented = function(test) {
+    var result = parse(parsing.expression, "\n    true");
+    var expected = nodes.boolean(true);
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.sourceOfResultIsAssignedToNode = function(test) {
     var result = parse(parsing.expression, "true");
     var expected = duck.isObject(nodes.boolean(true, new StringSource("true").range(0, 4)));
