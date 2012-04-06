@@ -289,16 +289,6 @@ exports.memberAccessAndFunctionCallHaveSamePrecendence = function(test) {
     test.done();
 };
 
-exports.canParseEmptyIfExpression = function(test) {
-    var result = parse(parsing.expression, "if true then { }");
-    assertIsSuccess(test, result, {
-        value: ignoringSources(nodes.if(
-            [{condition: nodes.boolean(true), body: nodes.block([])}]
-        ))
-    });
-    test.done();
-};
-
 exports.canParseIfExpression = function(test) {
     var result = parse(parsing.expression, "if true then 1");
     assertIsSuccess(test, result, {
