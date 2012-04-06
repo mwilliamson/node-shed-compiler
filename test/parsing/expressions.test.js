@@ -142,15 +142,6 @@ exports.lambdaIsRightAssociative = function(test) {
     test.done();
 };
 
-exports.canParseLongLambdaExpression = function(test) {
-    var result = parse(parsing.expression, "fun() => { return true; }");
-    var expected = nodes.lambda(options.none, nodes.formalArguments([]), options.none, nodes.block([
-        nodes.return(nodes.boolean(true))
-    ]));
-    assertIsSuccessWithValue(test, result, ignoringSources(expected));
-    test.done();
-};
-
 exports.canParseEmptyClassDefinition = function(test) {
     var result = parse(parsing.expression, "class() => { }");
     var expected = nodes.class(
@@ -298,16 +289,6 @@ exports.memberAccessAndFunctionCallHaveSamePrecendence = function(test) {
     test.done();
 };
 
-exports.canParseEmptyIfExpression = function(test) {
-    var result = parse(parsing.expression, "if true then { }");
-    assertIsSuccess(test, result, {
-        value: ignoringSources(nodes.if(
-            [{condition: nodes.boolean(true), body: nodes.block([])}]
-        ))
-    });
-    test.done();
-};
-
 exports.canParseIfExpression = function(test) {
     var result = parse(parsing.expression, "if true then 1");
     assertIsSuccess(test, result, {
@@ -359,7 +340,7 @@ exports.canParseIfElseIfElseExpression = function(test) {
 };
 
 exports.canParseBlockExpression = function(test) {
-    var source = "{ go(); return 1;}";
+    var source = "do\n    go()\n    return 1\n    ";
     var result = parse(parsing.expression, source);
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.block([
