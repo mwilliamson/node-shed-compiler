@@ -340,7 +340,7 @@ exports.canParseIfElseIfElseExpression = function(test) {
 };
 
 exports.canParseBlockExpression = function(test) {
-    var source = "{ go(); return 1;}";
+    var source = "do { go(); return 1;}";
     var result = parse(parsing.expression, source);
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.block([

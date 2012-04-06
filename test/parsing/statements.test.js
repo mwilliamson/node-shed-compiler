@@ -59,7 +59,7 @@ exports.canParseVarStatement = function(test) {
 };
 
 exports.canParseDefinition = function(test) {
-    var result = parse(statements.statement, "def nop fun() : Unit => { }");
+    var result = parse(statements.statement, "def nop fun() : Unit => ()");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.def(
             "nop",
@@ -67,7 +67,7 @@ exports.canParseDefinition = function(test) {
                 options.none,
                 nodes.formalArguments([]),
                 some(nodes.ref("Unit")),
-                nodes.block([])
+                nodes.unit()
             )
         ))
     });
@@ -75,7 +75,7 @@ exports.canParseDefinition = function(test) {
 };
 
 exports.definitionCanHaveTrailingSemiColon = function(test) {
-    var result = parse(statements.statement, "def nop fun() : Unit => { };");
+    var result = parse(statements.statement, "def nop fun() : Unit => ();");
     assertIsSuccess(test, result, {
         value: ignoringSources(nodes.def(
             "nop",
@@ -83,7 +83,7 @@ exports.definitionCanHaveTrailingSemiColon = function(test) {
                 options.none,
                 nodes.formalArguments([]),
                 some(nodes.ref("Unit")),
-                nodes.block([])
+                nodes.unit()
             )
         ))
     });
