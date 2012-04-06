@@ -11,8 +11,10 @@ var assertIsError = parsingTesting.assertIsError;
 var nodes = require("../../lib/nodes");
 var parsing = require("../../lib/parsing");
 var statements = require("../../lib/parsing/statements");
+var symbol = require("../../lib/parsing/tokens").symbol;
 
 var StringSource = require("lop").StringSource;
+var tokens = require("shed-tokeniser").tokens;
 
 var ignoringSources = require("./util").ignoringSources;
 
@@ -99,7 +101,35 @@ exports.canParsePublicDeclarations = function(test) {
     test.done();
 };
 
+exports.statementsCanBeTerminatedBySemiColons = function(test) {
+    var result = parse(statements.singleLineStatement(symbol("+")), "+;+");
+    assertIsSuccess(test, result, {
+        value: "+",
+        remaining: [tokens.symbol("+"), tokens.end()]
+    });
+    test.done();
+};
+
+exports.statementsCanBeTerminatedByNewLines = function(test) {
+    var result = parse(statements.singleLineStatement(symbol("+")), "+\n+");
+    assertIsSuccess(test, result, {
+        value: "+",
+        remaining: [tokens.symbol("+"), tokens.end()]
+    });
+    test.done();
+};
+
+exports.statementsCanBeTerminatedByEndOfFile = function(test) {
+    var result = parse(statements.singleLineStatement(symbol("+")), "+");
+    assertIsSuccess(test, result, {
+        value: "",
+        remaining: [tokens.end()]
+    });
+    test.done();
+};
+
 var parse = function(rule, string) {
     var parser = new parsing.Parser();
     return parser.parse(rule, new StringSource(string));
 };
+

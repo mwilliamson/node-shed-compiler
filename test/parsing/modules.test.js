@@ -69,21 +69,6 @@ exports.packageDeclarationIsPackageKeywordFollowedByListOfIdentifiers = function
     test.done();
 };
 
-exports.packageDeclarationCanBeTerminatedByNewLine = function(test) {
-    var result = parse(modulesParsing.module, "package shed.example\ntrue;");
-    assertIsSuccess(test, result, {
-        value: ignoringSources(
-            nodes.module(
-                options.some(nodes.packageDeclaration(["shed", "example"])),
-                [],
-                [nodes.expressionStatement(nodes.boolean(true))]
-            )
-        ),
-        remaining: []
-    });
-    test.done();
-};
-
 exports.importIsImportKeywordFollowedByListOfIdentifiers = function(test) {
     var result = parse(modulesParsing.import, "import shed.example;");
     assertIsSuccessWithValue(test, result, ignoringSources(nodes.import(["shed", "example"])));
