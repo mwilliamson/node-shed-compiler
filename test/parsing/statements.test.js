@@ -101,7 +101,7 @@ exports.canParsePublicDeclarations = function(test) {
     test.done();
 };
 
-exports.statementsCanBeTerminatedBySemiColons = function(test) {
+exports.statementsCanBeTerminatedBySemiColon = function(test) {
     var result = parse(statements.singleLineStatement(symbol("+")), "+;+");
     assertIsSuccess(test, result, {
         value: "+",
@@ -110,8 +110,17 @@ exports.statementsCanBeTerminatedBySemiColons = function(test) {
     test.done();
 };
 
-exports.statementsCanBeTerminatedByNewLines = function(test) {
+exports.statementsCanBeTerminatedByNewLine = function(test) {
     var result = parse(statements.singleLineStatement(symbol("+")), "+\n+");
+    assertIsSuccess(test, result, {
+        value: "+",
+        remaining: [tokens.symbol("+"), tokens.end()]
+    });
+    test.done();
+};
+
+exports.semiColonAndNewLineFollowingStatementAreBothConsumed = function(test) {
+    var result = parse(statements.singleLineStatement(symbol("+")), "+;\n+");
     assertIsSuccess(test, result, {
         value: "+",
         remaining: [tokens.symbol("+"), tokens.end()]
