@@ -143,40 +143,40 @@ exports.lambdaIsRightAssociative = function(test) {
 };
 
 exports.canParseEmptyClassDefinition = function(test) {
-    var result = parse(parsing.expression, "class() => { }");
+    var result = parse(parsing.expression, "class() =>\n    ()");
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([]),
-        []
+        [nodes.expressionStatement(nodes.unit())]
     );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.canParseClassDefinitionWithFormalArguments = function(test) {
-    var result = parse(parsing.expression, "class(a: A) => { }");
+    var result = parse(parsing.expression, "class(a: A) =>\n    ()");
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
-        []
+        [nodes.expressionStatement(nodes.unit())]
     );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.canParseClassDefinitionWithFormalTypeParameters = function(test) {
-    var result = parse(parsing.expression, "class[A] => (a: A) => { }");
+    var result = parse(parsing.expression, "class[A] => (a: A) => \n    ()");
     var expected = nodes.class(
         options.some(nodes.formalTypeParameters([nodes.formalTypeParameter("A")])),
         nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
-        []
+        [nodes.expressionStatement(nodes.unit())]
     );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.canParseClassDefinitionWithBody = function(test) {
-    var result = parse(parsing.expression, "class() => { val x = 1; }");
+    var result = parse(parsing.expression, "class() =>\n    val x = 1");
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([]),
@@ -187,14 +187,14 @@ exports.canParseClassDefinitionWithBody = function(test) {
 };
 
 exports.canParseEmptyObject = function(test) {
-    var result = parse(parsing.expression, "object { }");
-    var expected = nodes.object([]);
+    var result = parse(parsing.expression, "object\n    ();");
+    var expected = nodes.object([nodes.expressionStatement(nodes.unit())]);
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.canParseObjectWithBody = function(test) {
-    var result = parse(parsing.expression, "object { val x = 1; }");
+    var result = parse(parsing.expression, "object\n    val x = 1");
     var expected = nodes.object([nodes.val("x", options.none, nodes.number("1"))]);
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
