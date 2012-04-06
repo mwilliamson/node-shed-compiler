@@ -142,15 +142,6 @@ exports.lambdaIsRightAssociative = function(test) {
     test.done();
 };
 
-exports.canParseLongLambdaExpression = function(test) {
-    var result = parse(parsing.expression, "fun() => { return true; }");
-    var expected = nodes.lambda(options.none, nodes.formalArguments([]), options.none, nodes.block([
-        nodes.return(nodes.boolean(true))
-    ]));
-    assertIsSuccessWithValue(test, result, ignoringSources(expected));
-    test.done();
-};
-
 exports.canParseEmptyClassDefinition = function(test) {
     var result = parse(parsing.expression, "class() => { }");
     var expected = nodes.class(
