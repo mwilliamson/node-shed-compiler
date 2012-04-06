@@ -1,8 +1,8 @@
-package shedTests;
+package shedTests
 
-import shedTests.hello;
-import shedTests.world;
+import shedTests.hello
+import shedTests.world
 
-public def main fun() : Unit => {
-    print(hello.concat(" ").concat(world));
-}
+public def main fun() : Unit => do
+    print(hello.concat(" ").concat(world))
+

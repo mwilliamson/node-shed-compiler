@@ -70,8 +70,17 @@ exports.packageDeclarationIsPackageKeywordFollowedByListOfIdentifiers = function
 };
 
 exports.packageDeclarationCanBeTerminatedByNewLine = function(test) {
-    var result = parse(modulesParsing.packageDeclaration, "package shed.example\n");
-    assertIsSuccessWithValue(test, result, ignoringSources(nodes.packageDeclaration(["shed", "example"])));
+    var result = parse(modulesParsing.module, "package shed.example\ntrue;");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(
+            nodes.module(
+                options.some(nodes.packageDeclaration(["shed", "example"])),
+                [],
+                [nodes.expressionStatement(nodes.boolean(true))]
+            )
+        ),
+        remaining: []
+    });
     test.done();
 };
 

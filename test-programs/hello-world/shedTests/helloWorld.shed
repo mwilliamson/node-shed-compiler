@@ -1,3 +1,3 @@
-package shedTests;
+package shedTests
 
-print("Hello world");
+print("Hello world")

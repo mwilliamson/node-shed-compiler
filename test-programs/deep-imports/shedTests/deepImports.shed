@@ -1,5 +1,5 @@
-package shedTests;
+package shedTests
 
-public val deepImports = object {
-    public def main fun() : Unit => print("Hello world");
-};
+public val deepImports = object
+    public def main fun() : Unit => print("Hello world")
+

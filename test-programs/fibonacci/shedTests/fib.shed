@@ -1,4 +1,4 @@
-package shedTests;
+package shedTests
 
 def fib fun(n: Double) : Double => 
     if n.equals(0) then
@@ -8,4 +8,4 @@ def fib fun(n: Double) : Double =>
     else
         fib(n.subtract(1)).add(fib(n.subtract(2)))
 
-print(fib(8).toString());
+print(fib(8).toString())
