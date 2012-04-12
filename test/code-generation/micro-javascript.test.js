@@ -64,6 +64,11 @@ exports.slabNumberLiteralIsConvertedToBoxedJavaScriptNumberLiteral = function(te
     assertTranslation(test, slabNumber, jsNumber);
 };
 
+exports.slabUnitLiteralIsConvertedToReferenceToShedUnitConstant = function(test) {
+    var slabUnit = slab.unit();
+    assertTranslation(test, slabUnit, js.ref("$shed.unit", slabUnit));
+};
+
 exports.slabReferenceIsConvertedToJavaScriptReference = function(test) {
     assertTranslation(test, slabReference, jsReference);
 };
