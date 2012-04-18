@@ -6,6 +6,7 @@ var child_process = require("child_process");
 var temp = require("temp");
 
 var Compiler = require("../lib/compiler").Compiler;
+var ifSuccess = require("../lib/util").ifSuccess;
 
 var compiler = new Compiler();
 
@@ -75,14 +76,4 @@ var compile = function(string, callback) {
 
 var compileDirectory = function(directoryPath, main, callback) {
     compiler.compileToString({files: [directoryPath], main: main}, callback);
-};
-
-var ifSuccess = function(callback, func) {
-    return function(err) {
-        if (err) {
-            callback(err);
-        } else {
-            func.apply(this, Array.prototype.slice.call(arguments, 1));
-        }
-    };
 };
