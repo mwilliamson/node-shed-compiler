@@ -1,5 +1,19 @@
 package shedTests;
 
-import shedTests.Empty;
+def First class() => {
+}
 
-public def main fun() => print(representation(classOf(Empty())));
+def Second class() => {
+}
+
+val first = First();
+val second = Second();
+
+public def main fun() => print(
+    if classOf(first).equals(classOf(second)) then
+        "Fail: classOf(first) == classOf(second)"
+    else if not(classOf(first).equals(classOf(first))) then
+        "Fail: classOf(first) != classOf(first)"
+    else
+        "Success"
+)

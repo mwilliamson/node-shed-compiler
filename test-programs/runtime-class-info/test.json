@@ -2,6 +2,6 @@
     "main": "shedTests.main",
     "expected": {
         "exitCode": 0,
-        "stdout": "shedTests.Empty"
+        "stdout": "Success"
     }
 }
