@@ -1,0 +1,5 @@
+package shedTests;
+
+import shedTests.Empty;
+
+public def main fun() => print(representation(classOf(Empty())));

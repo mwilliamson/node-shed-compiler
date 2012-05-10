@@ -1,0 +1,3 @@
+package shedTests;
+
+public def Empty class() => {}
