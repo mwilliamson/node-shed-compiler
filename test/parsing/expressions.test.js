@@ -190,6 +190,18 @@ exports.canParseClassDefinitionWithBody = function(test) {
     test.done();
 };
 
+exports.canParseClassDefinitionWithMembersDeclaration = function(test) {
+    var result = parse(parsing.expression, "class() => { members { blah } }");
+    var expected = nodes.class(
+        options.none,
+        nodes.formalArguments([]),
+        [nodes.memberDeclarationByReference("blah")],
+        []
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.canParseEmptyObject = function(test) {
     var result = parse(parsing.expression, "object { }");
     var expected = nodes.object([]);
