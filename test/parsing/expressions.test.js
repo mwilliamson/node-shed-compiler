@@ -147,6 +147,7 @@ exports.canParseEmptyClassDefinition = function(test) {
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([]),
+        [],
         []
     );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
@@ -158,6 +159,7 @@ exports.canParseClassDefinitionWithFormalArguments = function(test) {
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
+        [],
         []
     );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
@@ -169,6 +171,7 @@ exports.canParseClassDefinitionWithFormalTypeParameters = function(test) {
     var expected = nodes.class(
         options.some(nodes.formalTypeParameters([nodes.formalTypeParameter("A")])),
         nodes.formalArguments([nodes.formalArgument("a", nodes.ref("A"))]),
+        [],
         []
     );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
@@ -180,6 +183,7 @@ exports.canParseClassDefinitionWithBody = function(test) {
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([]),
+        [],
         [nodes.val("x", options.none, nodes.number("1"))]
     );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));

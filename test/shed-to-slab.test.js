@@ -242,7 +242,7 @@ exports.shedLambdaWithFormalTypeParametersIsConvertedToTwoNestedSlabLambdas = fu
 };
 
 exports.shedClassIsConvertedToSlabClass = function(test) {
-    var shedClass = shed.class(options.none, shedFormalArguments, [shedExpressionStatement]);
+    var shedClass = shed.class(options.none, shedFormalArguments, [], [shedExpressionStatement]);
     var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement], shedClass); 
     test.deepEqual(slabClass, shedToSlab.translate(shedClass));
     test.done();
@@ -252,6 +252,7 @@ exports.shedClassWithFormalTypeParametersIsConvertedToSlabClassWithinLambda = fu
     var shedClass = shed.class(
         options.some(shedFormalTypeParameters),
         shedFormalArguments,
+        [],
         [shedExpressionStatement]
     );
     var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement], shedClass); 
