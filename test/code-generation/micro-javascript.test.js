@@ -43,11 +43,17 @@ var slabLambda = slab.lambda(
     slab.ref("Boolean"),
     slabBoolean
 );
-var jsFunction = js.func(
-    ["name"],
-    [js.return(jsBoolean, slabLambda)],
-    slabLambda);
-    
+var jsFunction = js.call(
+    js.ref("$shed.function", slabLambda),
+    [
+        js.func(
+            ["name"],
+            [js.return(jsBoolean, slabLambda)],
+            slabLambda
+        )
+    ],
+    slabLambda
+);
     
 var slabVal = slab.val("coins", options.none, slabNumber);
 var jsVal = js.var("coins", jsNumber, slabVal);
