@@ -116,10 +116,18 @@ exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfPublicMembers =
     expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabPublicVal);
     
     var jsClass = js.block([
-        js.var("$class", js.func([], [
-            jsVal,
-            js.return(js.object(expectedJsObject, slabClass), slabClass)
-        ], slabClass), slabClass),
+        js.var(
+            "$class",
+            js.call(
+                js.ref("$shed.class"),
+                [js.func([], [
+                    jsVal,
+                    js.return(js.object(expectedJsObject, slabClass), slabClass)
+                ], slabClass)],
+                slabClass
+            ),
+            slabClass
+        ),
         js.assign(js.memberAccess(js.ref("$class", slabClass), "$isShedType", slabClass), js.boolean(true, slabClass), slabClass),
         js.return(js.ref("$class", slabClass), slabClass)
     ], slabClass);
