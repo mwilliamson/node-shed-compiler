@@ -150,7 +150,19 @@ exports.slabValIsConvertedToJavaScriptVar = function(test) {
 
 exports.slabDefinitionDeclarationIsConvertedToJavaScriptVariable = function(test) {
     var slabDef = slab.def("go", slabLambda);
-    var expectedJs = js.var("go", jsFunction, slabDef)
+    
+    var expectedJs = js.var(
+        "go",
+        js.call(
+            js.memberAccess(
+                jsFunction,
+                "$define",
+                slabDef
+            ),
+            [js.string(slabDef.identifier, slabDef)]
+        ),
+        slabDef
+    );
     assertTranslation(test, slabDef, expectedJs);
 };
 
