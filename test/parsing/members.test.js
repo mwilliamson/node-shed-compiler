@@ -29,6 +29,13 @@ exports.memberCanBeReferenceToVariable = function(test) {
     test.done();
 };
 
+exports.canDeclareMemberValueInline = function(test) {
+    var result = parseMember("one 1");
+    var expected = nodes.memberDeclaration("one", nodes.number("1"));
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 var parseMembers = function(string) {
     return parse(memberRules.membersRule, string);
 };
