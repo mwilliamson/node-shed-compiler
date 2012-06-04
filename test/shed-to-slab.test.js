@@ -258,6 +258,18 @@ exports.shedMembersAreConvertedToSlabMembers = function(test) {
     test.done();
 };
 
+exports.shedPublicValuesInClassAreConvertedToSlabMembers = function(test) {
+    var shedVal = shed.val("x", options.none, shedReference);
+    var shedPublicVal = shed.public(shedVal);
+    var slabVal = slab.val("x", options.none, slabReference, shedVal);
+    var slabMember = slab.memberDeclaration("x", slab.ref("x", shedPublicVal), shedPublicVal);
+    
+    var shedClass = shed.class(options.none, shedFormalArguments, [], [shedPublicVal]);
+    var slabClass = slab.class(slabFormalArguments, [slabMember], [slabVal], shedClass); 
+    test.deepEqual(slabClass, shedToSlab.translate(shedClass));
+    test.done();
+};
+
 exports.shedClassWithFormalTypeParametersIsConvertedToSlabClassWithinLambda = function(test) {
     var shedClass = shed.class(
         options.some(shedFormalTypeParameters),
@@ -355,11 +367,11 @@ exports.shedVarIsConvertedToSlabVar = function(test) {
     test.done();
 };
 
-exports.shedPublicDeclarationIsConvertedToSlabPublicDeclaration = function(test) {
+exports.shedPublicDeclarationIsConvertedToOrdinarySlabDeclaration = function(test) {
     var declaration = shed.val("blah", options.none, shedValue);
     var original = shed.public(declaration);
     test.deepEqual(
-        slab.public(slab.val("blah", options.none, slabValue, declaration), original),
+        slab.val("blah", options.none, slabValue, declaration),
         shedToSlab.translate(original)
     );
     test.done();
