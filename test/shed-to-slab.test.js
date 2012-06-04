@@ -248,6 +248,16 @@ exports.shedClassIsConvertedToSlabClass = function(test) {
     test.done();
 };
 
+exports.shedMembersAreConvertedToSlabMembers = function(test) {
+    var shedMember = shed.memberDeclaration("x", shedReference);
+    var slabMember = slab.memberDeclaration("x", slabReference, shedMember);
+    
+    var shedClass = shed.class(options.none, shedFormalArguments, [shedMember], []);
+    var slabClass = slab.class(slabFormalArguments, [slabMember], [], shedClass); 
+    test.deepEqual(slabClass, shedToSlab.translate(shedClass));
+    test.done();
+};
+
 exports.shedClassWithFormalTypeParametersIsConvertedToSlabClassWithinLambda = function(test) {
     var shedClass = shed.class(
         options.some(shedFormalTypeParameters),
