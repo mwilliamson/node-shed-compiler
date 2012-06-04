@@ -17,14 +17,14 @@ exports.membersCanBeEmpty = function(test) {
 
 exports.membersCanContainMultipleMembers = function(test) {
     var result = parseMembers("members { one, two }");
-    var expected = [nodes.memberDeclarationByReference("one"), nodes.memberDeclarationByReference("two")];
+    var expected = [nodes.memberDeclaration("one", nodes.ref("one")), nodes.memberDeclaration("two", nodes.ref("two"))];
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.memberCanBeReferenceToVariable = function(test) {
     var result = parseMember("one");
-    var expected = nodes.memberDeclarationByReference("one");
+    var expected = nodes.memberDeclaration("one", nodes.ref("one"));
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };

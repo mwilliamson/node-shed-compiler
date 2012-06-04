@@ -195,7 +195,7 @@ exports.canParseClassDefinitionWithMembersDeclaration = function(test) {
     var expected = nodes.class(
         options.none,
         nodes.formalArguments([]),
-        [nodes.memberDeclarationByReference("blah")],
+        [nodes.memberDeclaration("blah", nodes.ref("blah"))],
         []
     );
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
