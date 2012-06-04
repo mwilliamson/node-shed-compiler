@@ -22,9 +22,20 @@ exports.membersCanContainMultipleMembers = function(test) {
     test.done();
 };
 
+exports.memberCanBeReferenceToVariable = function(test) {
+    var result = parseMember("one");
+    var expected = nodes.memberDeclarationByReference("one");
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 var parseMembers = function(string) {
     return parse(memberRules.membersRule, string);
-}
+};
+
+var parseMember = function(string) {
+    return parse(memberRules.memberRule, string);
+};
 
 var parse = function(rule, string) {
     var parser = new parsing.Parser();
