@@ -204,14 +204,21 @@ exports.canParseClassDefinitionWithMembersDeclaration = function(test) {
 
 exports.canParseEmptyObject = function(test) {
     var result = parse(parsing.expression, "object { }");
-    var expected = nodes.object([]);
+    var expected = nodes.object([], []);
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };
 
 exports.canParseObjectWithBody = function(test) {
     var result = parse(parsing.expression, "object { val x = 1; }");
-    var expected = nodes.object([nodes.val("x", options.none, nodes.number("1"))]);
+    var expected = nodes.object([], [nodes.val("x", options.none, nodes.number("1"))]);
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
+exports.canParseObjectWithMembersDeclaration = function(test) {
+    var result = parse(parsing.expression, "object { members { x } }");
+    var expected = nodes.object([nodes.memberDeclaration("x", nodes.ref("x"))], []);
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
 };

@@ -267,7 +267,7 @@ exports.shedClassWithFormalTypeParametersIsConvertedToSlabClassWithinLambda = fu
 };
 
 exports.shedObjectIsConvertedToSlabClassWithImmediateInstance = function(test) {
-    var shedObject = shed.object([shedExpressionStatement]);
+    var shedObject = shed.object([], [shedExpressionStatement]);
     var slabObject = slab.block([
         slab.val(
             "$classForObject",
