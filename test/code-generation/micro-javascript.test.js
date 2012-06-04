@@ -107,13 +107,15 @@ exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmpt
     assertTranslation(test, slabClass, jsClass);
 };
 
-exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfPublicMembers = function(test) {
-    var slabPublicVal = slab.public(slabVal);
+exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfMembers = function(test) {
+    var memberName = slabVal.identifier;
     var slabFormalArguments = slab.formalArguments([]);
-    var slabClass = slab.class(slabFormalArguments, [], [slabPublicVal]); 
+    var slabMemberRef = slab.ref(memberName);
+    var slabMember = slab.memberDeclaration(memberName, slabMemberRef);
+    var slabClass = slab.class(slabFormalArguments, [slabMember], [slabVal]); 
     
     var expectedJsObject = {};
-    expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabPublicVal);
+    expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabMemberRef);
     
     var jsClass = js.block([
         js.var(
