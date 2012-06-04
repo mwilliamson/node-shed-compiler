@@ -243,7 +243,7 @@ exports.shedLambdaWithFormalTypeParametersIsConvertedToTwoNestedSlabLambdas = fu
 
 exports.shedClassIsConvertedToSlabClass = function(test) {
     var shedClass = shed.class(options.none, shedFormalArguments, [], [shedExpressionStatement]);
-    var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement], shedClass); 
+    var slabClass = slab.class(slabFormalArguments, [], [slabExpressionStatement], shedClass); 
     test.deepEqual(slabClass, shedToSlab.translate(shedClass));
     test.done();
 };
@@ -255,7 +255,7 @@ exports.shedClassWithFormalTypeParametersIsConvertedToSlabClassWithinLambda = fu
         [],
         [shedExpressionStatement]
     );
-    var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement], shedClass); 
+    var slabClass = slab.class(slabFormalArguments, [], [slabExpressionStatement], shedClass); 
     var slabLambda = slab.lambda(
         slabFormalTypeParameters,
         options.none,
@@ -272,7 +272,7 @@ exports.shedObjectIsConvertedToSlabClassWithImmediateInstance = function(test) {
         slab.val(
             "$classForObject",
             options.none,
-            slab.class(slab.formalArguments([], shedObject), [slabExpressionStatement], shedObject),
+            slab.class(slab.formalArguments([], shedObject), [], [slabExpressionStatement], shedObject),
             shedObject
         ),
         slab.return(slab.call(slab.ref("$classForObject", shedObject), [], shedObject), shedObject)

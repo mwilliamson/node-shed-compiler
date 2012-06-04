@@ -87,7 +87,7 @@ exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmpt
     var slabFormalArguments = slab.formalArguments([
         slab.formalArgument("name", slab.ref("String"))
     ]);
-    var slabClass = slab.class(slabFormalArguments, [slabExpressionStatement]); 
+    var slabClass = slab.class(slabFormalArguments, [], [slabExpressionStatement]); 
     var jsClass = js.block([
         js.var(
             "$class",
@@ -110,7 +110,7 @@ exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmpt
 exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfPublicMembers = function(test) {
     var slabPublicVal = slab.public(slabVal);
     var slabFormalArguments = slab.formalArguments([]);
-    var slabClass = slab.class(slabFormalArguments, [slabPublicVal]); 
+    var slabClass = slab.class(slabFormalArguments, [], [slabPublicVal]); 
     
     var expectedJsObject = {};
     expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabPublicVal);
