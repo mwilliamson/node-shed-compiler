@@ -1,0 +1,26 @@
+package shedTests;
+
+import values;
+
+def Pair class(first: String, second: String) => {
+    members {
+        first fun() => first,
+        second fun() => second,
+        equals fun(other: Pair) => asValue().equals(other)
+    }
+    
+    def asValue fun() => values.asValue[Pair](Pair(first, second), Pair, listOf(
+        values.attribute[Pair, String]("first", fun(pair: Pair) => pair.first()),
+        values.attribute[Pair, String]("second", fun(pair: Pair) => pair.second())
+    ));
+};
+
+public def main fun() => do {
+    printBoolean(Pair("a", "b").equals(Pair("a", "b")));
+    printBoolean(Pair("a", "b").equals(Pair("c", "b")));
+    printBoolean(Pair("a", "b").equals(Pair("a", "d")));
+    printBoolean(Pair("a", "b").equals(Pair("c", "d")));
+}
+
+def printBoolean fun(value: Boolean) =>
+    print(if value then "true\n" else "false\n")
