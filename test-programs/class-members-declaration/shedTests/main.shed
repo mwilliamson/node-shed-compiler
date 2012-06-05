@@ -1,0 +1,18 @@
+package shedTests;
+
+def Numbers class(one: String) => {
+    members {
+        one fun() => one,
+        two
+    }
+    
+    def two fun() => "two"
+};
+
+val numbers = Numbers("One");
+
+public def main fun() => do {
+    print(numbers.one());
+    print(" ");
+    print(numbers.two());
+}
