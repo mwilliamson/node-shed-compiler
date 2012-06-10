@@ -42,18 +42,10 @@ var shedFormalArguments = shed.formalArguments([shedFormalArgument]);
 var slabFormalArguments = slab.formalArguments([slabFormalArgument], shedFormalArguments);
 
 var shedFormalTypeParameter = shed.formalTypeParameter("T");
-var slabFormalTypeParameter = slab.formalArgument(
-    "T",
-    slab.ref("$Type", shedFormalTypeParameter),
-    shedFormalTypeParameter
-);
 
 var shedFormalTypeParameters = shed.formalTypeParameters([
     shedFormalTypeParameter
 ]);
-var slabFormalTypeParameters = slab.formalArguments([
-    slabFormalTypeParameter
-], shedFormalTypeParameters);
 
 var shedReturn = shed.return(shedReference);
 var slabReturn = slab.return(slabReference, shedReturn);
@@ -136,33 +128,25 @@ exports.shedFunctionCallIsConvertedToSlabFunctionCall = function(test) {
     test.done();
 };
 
-exports.shedTypeApplicationIsConvertedToSlabTypeApplication = function(test) {
+exports.shedTypeApplicationIsIdentityInSlab = function(test) {
     var original = shed.typeApplication(
         shedStringTypeReference,
         [shedBooleanTypeReference]
     );
     test.deepEqual(
-        slab.typeApplication(
-            slabStringTypeReference,
-            [slabBooleanTypeReference],
-            original
-        ),
+        slabStringTypeReference,
         shedToSlab.translate(original)
     );
     test.done();
 };
 
-exports.shedFunctionTypeIsConvertedToTypeApplication = function(test) {
+exports.shedFunctionTypeIsConstant = function(test) {
     var original = shed.functionType(
         [shedStringTypeReference, shedBooleanTypeReference],
         shedUnitTypeReference
     );
     test.deepEqual(
-        slab.typeApplication(
-            slab.ref("$Function", original),
-            [slabStringTypeReference, slabBooleanTypeReference, slabUnitTypeReference],
-            original
-        ),
+        slab.ref("$Function", original),
         shedToSlab.translate(original)
     );
     test.done();
@@ -218,26 +202,20 @@ exports.shedLambdaIsConvertedToSlabLambda = function(test) {
     test.done();
 };
 
-exports.shedLambdaWithFormalTypeParametersIsConvertedToTwoNestedSlabLambdas = function(test) {
+exports.shedLambdaWithFormalTypeParametersIsConvertedToSingleSlabLambda = function(test) {
     var shedLambda = shed.lambda(
         options.some(shedFormalTypeParameters),
         shedFormalArguments,
         options.some(shedBooleanTypeReference),
         shedBooleanValue
     );
-    var slabInnerLambda = slab.lambda(
+    var slabLambda = slab.lambda(
         slabFormalArguments,
         options.some(slabBooleanTypeReference),
         slabBooleanValue,
         shedLambda
     );
-    var slabOuterLambda = slab.lambda(
-        slabFormalTypeParameters,
-        options.none,
-        slabInnerLambda,
-        shedLambda
-    );
-    test.deepEqual(slabOuterLambda, shedToSlab.translate(shedLambda));
+    test.deepEqual(slabLambda, shedToSlab.translate(shedLambda));
     test.done();
 };
 
@@ -271,7 +249,7 @@ exports.shedPublicValuesInClassAreConvertedToSlabMembers = function(test) {
     test.done();
 };
 
-exports.shedClassWithFormalTypeParametersIsConvertedToSlabClassWithinLambda = function(test) {
+exports.shedClassWithFormalTypeParametersIsConvertedToSlabClass = function(test) {
     var shedClass = shed.class(
         options.some(shedFormalTypeParameters),
         shedFormalArguments,
@@ -279,13 +257,7 @@ exports.shedClassWithFormalTypeParametersIsConvertedToSlabClassWithinLambda = fu
         [shedExpressionStatement]
     );
     var slabClass = slab.class(slabFormalArguments, [], [slabExpressionStatement], shedClass); 
-    var slabLambda = slab.lambda(
-        slabFormalTypeParameters,
-        options.none,
-        slabClass,
-        shedClass
-    );
-    test.deepEqual(slabLambda, shedToSlab.translate(shedClass));
+    test.deepEqual(slabClass, shedToSlab.translate(shedClass));
     test.done();
 };
 
