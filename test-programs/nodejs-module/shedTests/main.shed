@@ -1,0 +1,7 @@
+package shedTests;
+
+import nodejs;
+
+public def main fun() =>
+    nodejs.executeString("console.log(\"Hello world\");")
+        .map(fun(result: ExecutionResult) => print(result.stdout()))
