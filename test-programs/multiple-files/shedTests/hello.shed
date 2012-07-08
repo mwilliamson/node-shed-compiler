@@ -1,3 +1,5 @@
-package shedTests;
+module shedTests.hello;
 
-public val hello = "Hello";
+members {
+    hello "Hello"
+}

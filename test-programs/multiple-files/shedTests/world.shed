@@ -1,3 +1,5 @@
-package shedTests;
+module shedTests.world;
 
-public val world = "world";
+members {
+    world "world"
+}

@@ -1,4 +1,8 @@
-package shedTests;
+module shedTests;
+
+members {
+    main
+}
 
 def Numbers class(one: String) => {
     members {
@@ -11,7 +15,7 @@ def Numbers class(one: String) => {
 
 val numbers = Numbers("One");
 
-public def main fun() => do {
+def main fun() => do {
     print(numbers.one());
     print(" ");
     print(numbers.two());

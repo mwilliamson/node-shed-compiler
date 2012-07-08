@@ -1,4 +1,4 @@
-package shedTests;
+module shedTests;
 
 def fib fun(n: Double) : Double => 
     if n.equals(0) then

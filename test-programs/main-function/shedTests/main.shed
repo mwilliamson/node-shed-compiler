@@ -1,3 +1,5 @@
-package shedTests;
+module shedTests;
 
-public def main fun() => print("Hello world");
+members {
+    main fun() => print("Hello world")
+}

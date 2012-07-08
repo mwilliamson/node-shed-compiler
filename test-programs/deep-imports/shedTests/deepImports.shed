@@ -1,5 +1,11 @@
-package shedTests;
+module shedTests;
 
-public val deepImports = object {
-    public def main fun() : Unit => print("Hello world");
+members {
+    deepImports
+}
+
+val deepImports = object {
+    members {
+        main fun() : Unit => print("Hello world")
+    }
 };

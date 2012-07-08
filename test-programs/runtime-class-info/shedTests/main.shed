@@ -1,4 +1,8 @@
-package shedTests;
+module shedTests;
+
+members {
+    main
+}
 
 def First class() => {
 }
@@ -9,7 +13,7 @@ def Second class() => {
 val first = First();
 val second = Second();
 
-public def main fun() => print(
+def main fun() => print(
     if classOf(first).equals(classOf(second)) then
         "Fail: classOf(first) == classOf(second)"
     else if not(classOf(first).equals(classOf(first))) then

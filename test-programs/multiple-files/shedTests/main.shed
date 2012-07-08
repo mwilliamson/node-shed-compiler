@@ -1,7 +1,11 @@
-package shedTests;
+module shedTests;
+
+members {
+    main
+}
 
 import shedTests.hello;
 import shedTests.world;
 
-public def main fun() : Unit => 
-    print(hello.concat(" ").concat(world));
+def main fun() : Unit => 
+    print(hello.value.concat(" ").concat(world.value));

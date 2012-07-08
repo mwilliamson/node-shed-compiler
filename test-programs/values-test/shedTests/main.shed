@@ -1,4 +1,8 @@
-package shedTests;
+module shedTests;
+
+members {
+    main
+}
 
 import values;
 
@@ -15,7 +19,7 @@ def Pair class(first: String, second: String) => {
     ));
 };
 
-public def main fun() => do {
+def main fun() => do {
     printBoolean(Pair("a", "b").equals(Pair("a", "b")));
     printBoolean(Pair("a", "b").equals(Pair("c", "b")));
     printBoolean(Pair("a", "b").equals(Pair("a", "d")));

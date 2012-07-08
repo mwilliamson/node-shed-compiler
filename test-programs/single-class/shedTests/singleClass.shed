@@ -1,7 +1,9 @@
-package shedTests;
+module shedTests;
 
 def Person class(name: String) => {
-    public def toString fun() : String => name;
+    members {
+        toString fun() : String => name
+    }
 }
 
 print(Person("Bob").toString());

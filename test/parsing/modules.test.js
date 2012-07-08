@@ -18,28 +18,14 @@ var ignoringSources = require("./util").ignoringSources;
 
 var StringSource = require("lop").StringSource;
 
-exports.moduleContainsPackageDeclarationFollowedByBody = function(test) {
-    var result = parse(modulesParsing.module, "package shed.example; true;false;");
-    assertIsSuccess(test, result, {
-        value: ignoringSources(
-            nodes.module(
-                options.some(nodes.packageDeclaration(["shed", "example"])),
-                [],
-                [nodes.expressionStatement(nodes.boolean(true)), nodes.expressionStatement(nodes.boolean(false))]
-            )
-        ),
-        remaining: []
-    });
-    test.done();
-};
-
-exports.modulePackageDeclarationIsOptional = function(test) {
+exports.moduleDeclarationIsOptional = function(test) {
     var result = parse(modulesParsing.module, "true;false;");
     assertIsSuccess(test, result, {
         value: ignoringSources(
             nodes.module(
                 options.none,
                 [],
+                [],
                 [nodes.expressionStatement(nodes.boolean(true)), nodes.expressionStatement(nodes.boolean(false))]
             )
         ),
@@ -48,12 +34,29 @@ exports.modulePackageDeclarationIsOptional = function(test) {
     test.done();
 };
 
-exports.moduleContainsPackageDeclarationFollowedByImportsThenBody = function(test) {
-    var result = parse(modulesParsing.module, "package shed.example; import shed.options; import shed.time; true;");
+exports.moduleContainsNameThenMembersThenBody = function(test) {
+    var result = parse(modulesParsing.module, "module shed.example; members { one 1 } true;false;");
     assertIsSuccess(test, result, {
         value: ignoringSources(
             nodes.module(
-                options.some(nodes.packageDeclaration(["shed", "example"])),
+                options.some(["shed", "example"]),
+                [nodes.memberDeclaration("one", nodes.number("1"))],
+                [],
+                [nodes.expressionStatement(nodes.boolean(true)), nodes.expressionStatement(nodes.boolean(false))]
+            )
+        ),
+        remaining: []
+    });
+    test.done();
+};
+
+exports.moduleContainsNameThenMembersThenImportsThenBody = function(test) {
+    var result = parse(modulesParsing.module, "module shed.example; members { one 1 } import shed.options; import shed.time; true;");
+    assertIsSuccess(test, result, {
+        value: ignoringSources(
+            nodes.module(
+                options.some(["shed", "example"]),
+                [nodes.memberDeclaration("one", nodes.number("1"))],
                 [nodes.import(["shed", "options"]), nodes.import(["shed", "time"])],
                 [nodes.expressionStatement(nodes.boolean(true))]
             )
@@ -63,10 +66,9 @@ exports.moduleContainsPackageDeclarationFollowedByImportsThenBody = function(tes
     test.done();
 };
 
-
-exports.packageDeclarationIsPackageKeywordFollowedByListOfIdentifiers = function(test) {
-    var result = parse(modulesParsing.packageDeclaration, "package shed.example;");
-    assertIsSuccessWithValue(test, result, ignoringSources(nodes.packageDeclaration(["shed", "example"])));
+exports.moduleNameIsModuleKeywordFollowedByListOfIdentifiers = function(test) {
+    var result = parse(modulesParsing.moduleName, "module shed.example;");
+    assertIsSuccessWithValue(test, result, ignoringSources(["shed", "example"]));
     test.done();
 };
 
