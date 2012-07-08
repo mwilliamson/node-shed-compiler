@@ -1,5 +1,3 @@
-module shedTests;
-
 def Person class(name: String) => {
     members {
         toString fun() : String => name

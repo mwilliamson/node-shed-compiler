@@ -41,6 +41,7 @@ var executeMain = function(testDirectory, testDescription, callback) {
         executeShedFile(mainTestFilePath, callback);
     } else if (testDescription.main) {
         compileDirectory(testDirectory, testDescription.main, then(function(compiledJavaScript) {
+            fs.writeFile("/tmp/" + path.basename(testDirectory) + ".test.shed.js", compiledJavaScript);
             executeJsString(compiledJavaScript, callback);
         }));
     } else {

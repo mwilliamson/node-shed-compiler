@@ -1,5 +1,5 @@
 module shedTests.world;
 
 members {
-    world "world"
+    value "world"
 }
