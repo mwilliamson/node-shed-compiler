@@ -359,14 +359,17 @@ exports.shedImportIsConvertedToSlabValDeclarationAndFunctionCall = function(test
 };
 
 exports.shedModuleIsConvertedToSlabModule = function(test) {
+    var shedMember = shed.memberDeclaration("one", shedValue);
     var original = shed.module(
-            options.some(shed.packageDeclaration(["shed", "example"])),
-            [shedImport],
-            [shedReturn]
-        )
+        options.some(["shed", "example"]),
+        [shedMember],
+        [shedImport],
+        [shedReturn]
+    );
     test.deepEqual(
         slab.module(
             ["shed", "example"],
+            [slab.memberDeclaration("one", slabValue, shedMember)],
             [slabImport, slabReturn],
             original
         ),
@@ -378,11 +381,13 @@ exports.shedModuleIsConvertedToSlabModule = function(test) {
 exports.slabPackageIsEmptyArrayIfPackageDeclarationIsMissingFromShedModule = function(test) {
     var original = shed.module(
             options.none,
+            [],
             [shedImport],
             [shedReturn]
         )
     test.deepEqual(
         slab.module(
+            [],
             [],
             [slabImport, slabReturn],
             original
