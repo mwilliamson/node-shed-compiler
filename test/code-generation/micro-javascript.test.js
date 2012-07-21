@@ -88,22 +88,14 @@ exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmpt
         slab.formalArgument("name", slab.ref("String"))
     ]);
     var slabClass = slab.class(slabFormalArguments, [], [slabExpressionStatement]); 
-    var jsClass = js.block([
-        js.var(
-            "$class",
-            js.call(
-                js.ref("$shed.class"),
-                [js.func(["name"], [
-                    jsExpressionStatement,
-                    js.return(js.object({}, slabClass), slabClass)
-                ], slabClass)],
-                slabClass
-            ),
-            slabClass
-        ),
-        js.assign(js.memberAccess(js.ref("$class", slabClass), "$isShedType", slabClass), js.boolean(true, slabClass), slabClass),
-        js.return(js.ref("$class", slabClass), slabClass)
-    ], slabClass);
+    var jsClass = js.call(
+        js.ref("$shed.class"),
+        [js.func(["name"], [
+            jsExpressionStatement,
+            js.return(js.object({}, slabClass), slabClass)
+        ], slabClass)],
+        slabClass
+    );
     assertTranslation(test, slabClass, jsClass);
 };
 
@@ -117,22 +109,14 @@ exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfMembers = funct
     var expectedJsObject = {};
     expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabMemberRef);
     
-    var jsClass = js.block([
-        js.var(
-            "$class",
-            js.call(
-                js.ref("$shed.class"),
-                [js.func([], [
-                    jsVal,
-                    js.return(js.object(expectedJsObject, slabClass), slabClass)
-                ], slabClass)],
-                slabClass
-            ),
-            slabClass
-        ),
-        js.assign(js.memberAccess(js.ref("$class", slabClass), "$isShedType", slabClass), js.boolean(true, slabClass), slabClass),
-        js.return(js.ref("$class", slabClass), slabClass)
-    ], slabClass);
+    var jsClass = js.call(
+        js.ref("$shed.class"),
+        [js.func([], [
+            jsVal,
+            js.return(js.object(expectedJsObject, slabClass), slabClass)
+        ], slabClass)],
+        slabClass
+    );
     assertTranslation(test, slabClass, jsClass);
 };
 
