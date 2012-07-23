@@ -44,7 +44,7 @@ var slabLambda = slab.lambda(
     slabBoolean
 );
 var jsFunction = js.call(
-    js.ref("$shed.function", slabLambda),
+    js.ref("$shed.function_", slabLambda),
     [
         js.func(
             ["name"],

@@ -30,7 +30,7 @@ var match = function(value) {
 };
 
 (function() {
-    $shed.function = function(func) {
+    $shed.function_ = function(func) {
         func.$define = function(name) {
             return func;
         };
