@@ -1,5 +1,5 @@
 $shed.exportModule("regex", function() {
-    var options = $shed.js.import("options");
+    var options = $shed.js.import_("options");
     return {
         create: function(shedRegexString) {
             var RegexResult = function(jsResult) {

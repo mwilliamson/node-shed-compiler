@@ -1,6 +1,6 @@
 $shed.exportModule("files", function() {
     var fs = require("fs");
-    var promises = $shed.js.import("promises");
+    var promises = $shed.js.import_("promises");
     
     function readFile(filePath, encoding) {
         var promise = promises.createPromise();

@@ -1,5 +1,5 @@
 $shed.exportModule("trampolining", function() {
-    var options = $shed.js.import("options");
+    var options = $shed.js.import_("options");
     var trampoline = function(func) {
         var next = nextFunction(func);
         

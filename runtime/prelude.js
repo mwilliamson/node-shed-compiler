@@ -159,7 +159,7 @@ var match = function(value) {
             },
             toSequence: function() {
                 // HACK: should really define ImmutableArrayList later to avoid this late import
-                var sequences = $shed.js.import("sequences");
+                var sequences = $shed.js.import_("sequences");
                 
                 var sequence = function(index) {
                     if (values.length === index) {
@@ -227,7 +227,7 @@ var classOf = function(value) {
 
 };
 
-var $import = $shed.import;
+var $import = $shed.import_;
 var $lists = $shed.lists;
 
 var print = function(string) {

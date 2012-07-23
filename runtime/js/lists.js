@@ -1,7 +1,7 @@
 $shed.exportModule("lists", function() {
-    var options = $shed.js.import("options");
-    var sequences = $shed.js.import("sequences");
-    var tuples = $shed.js.import("tuples");
+    var options = $shed.js.import_("options");
+    var sequences = $shed.js.import_("sequences");
+    var tuples = $shed.js.import_("tuples");
     
     var sequenceToList = function(sequence) {
         var result = [];

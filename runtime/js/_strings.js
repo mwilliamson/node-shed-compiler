@@ -1,5 +1,5 @@
 $shed.exportModule("_strings", function() {
-    var lists = $shed.js.import("lists");
+    var lists = $shed.js.import_("lists");
     return {
         joinSequence: function(separator, sequence) {
             var jsString = lists.sequenceToList(sequence)

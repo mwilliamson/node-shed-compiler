@@ -25,7 +25,7 @@ $shed.modules = $shed.modules || {};
         };
     };
 
-    $shed.import = function(name) {
+    $shed.import_ = function(name) {
         var identifiers = name.$value.split(".");
         var moduleResult = findParentModule(identifiers);
         if (!moduleResult) {
@@ -60,8 +60,8 @@ $shed.modules = $shed.modules || {};
     };
     
     $shed.js = {
-        import: function(name) {
-            return $shed.import($shed.string(name));
+        import_: function(name) {
+            return $shed.import_($shed.string(name));
         }
     };
 })();
