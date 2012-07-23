@@ -4,7 +4,7 @@ var dummyType = {
 var matchClass = function(clazz, func) {
     return {
         matches: function(value) {
-            return $shed.boolean(classOf(value).equals(clazz));
+            return $shed.boolean_(classOf(value).equals(clazz));
         },
         apply: func
     };
@@ -13,7 +13,7 @@ var matchClass = function(clazz, func) {
 var matchDefault = function(func) {
     return {
         matches: function(value) {
-            return $shed.boolean(true);
+            return $shed.boolean_(true);
         },
         apply: func
     };
@@ -69,16 +69,16 @@ var match = function(value) {
         return {
             $value: value,
             equals: function(other) {
-                return boolean(value === other.$value);
+                return boolean_(value === other.$value);
             },
             lessThan: function(other) {
-                return boolean(value < other.$value);
+                return boolean_(value < other.$value);
             },
             lessThanOrEqual: function(other) {
-                return boolean(value <= other.$value);
+                return boolean_(value <= other.$value);
             },
             greaterThan: function(other) {
-                return boolean(value > other.$value);
+                return boolean_(value > other.$value);
             },
             subtract: function(other) {
                 return number(value - other.$value);
@@ -120,7 +120,7 @@ var match = function(value) {
         return self;
     }, "String");
     
-    var boolean = $shed.boolean = function(value) {
+    var boolean_ = $shed.boolean_ = function(value) {
         return value;
     };
     
