@@ -13,7 +13,7 @@ $shed.exportModule("regex", function() {
             var regex = new RegExp(shedRegexString.$value);
             return {
                 test: function(shedString) {
-                    return $shed.boolean(regex.test(shedString.$value));
+                    return $shed.boolean_(regex.test(shedString.$value));
                 },
                 exec: function(shedString) {
                     var result = regex.exec(shedString.$value);
