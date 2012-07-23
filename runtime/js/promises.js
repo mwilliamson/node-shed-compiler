@@ -39,7 +39,7 @@ $shed.exportModule("promises", function() {
         };
     }
     
-    var Promise = $shed.class(constructPromise, "Promise");
+    var Promise = $shed.class_(constructPromise, "Promise");
     var createPromise = Promise;
     function createFulfilledPromise() {
         var promise = createPromise();

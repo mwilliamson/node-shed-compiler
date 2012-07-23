@@ -37,14 +37,14 @@ var match = function(value) {
         return func;
     };
     
-    $shed.class = function(constructor, name) {
+    $shed.class_ = function(constructor, name) {
         var clazz = function() {
             var self = constructor.apply(this, arguments);
             self.$class = clazz;
             return self;
         };
         clazz.$define = function(name) {
-            return $shed.class(constructor, name);
+            return $shed.class_(constructor, name);
         };
         clazz.equals = function(other) {
             return clazz === other;
@@ -59,13 +59,13 @@ var match = function(value) {
         return clazz;
     };
     
-    $shed.Unit = $shed.class(function() { }, "Unit");
+    $shed.Unit = $shed.class_(function() { }, "Unit");
     $shed.unit = {$class: $shed.Unit};
-    $shed.Boolean = {$class: $shed.class(function() { }, "Boolean")};
+    $shed.Boolean = {$class: $shed.class_(function() { }, "Boolean")};
     
-    $shed.Function = $shed.class(function() { }, "Function");
+    $shed.Function = $shed.class_(function() { }, "Function");
     
-    var number = $shed.number = $shed.class(function(value) {
+    var number = $shed.number = $shed.class_(function(value) {
         return {
             $value: value,
             equals: function(other) {
@@ -92,7 +92,7 @@ var match = function(value) {
         };
     }, "Double");
     
-    var string = $shed.string = $shed.class(function(value) {
+    var string = $shed.string = $shed.class_(function(value) {
         var self = {
             $value: value,
             concat: function(other) {
@@ -275,7 +275,7 @@ var List = function() {
     return dummyType;
 };
 
-var Tuple = $shed.class(function() {
+var Tuple = $shed.class_(function() {
     var values = Array.prototype.slice.call(arguments, 0);
     return {
         $values: values,

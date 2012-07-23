@@ -89,7 +89,7 @@ exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmpt
     ]);
     var slabClass = slab.class(slabFormalArguments, [], [slabExpressionStatement]); 
     var jsClass = js.call(
-        js.ref("$shed.class"),
+        js.ref("$shed.class_"),
         [js.func(["name"], [
             jsExpressionStatement,
             js.return(js.object({}, slabClass), slabClass)
@@ -110,7 +110,7 @@ exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfMembers = funct
     expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabMemberRef);
     
     var jsClass = js.call(
-        js.ref("$shed.class"),
+        js.ref("$shed.class_"),
         [js.func([], [
             jsVal,
             js.return(js.object(expectedJsObject, slabClass), slabClass)
