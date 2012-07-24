@@ -35,7 +35,8 @@ $shed.exportModule("promises", function() {
             },
             fulfill: function() {
                 return fulfill.apply(this, arguments);
-            }
+            },
+            $class: Promise
         };
     }
     

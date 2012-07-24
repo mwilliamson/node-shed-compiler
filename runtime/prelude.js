@@ -50,24 +50,20 @@ var match = function(value) {
         },
         identifier: function() {
             return $shed.string(this._jsName());
+        },
+        $define: function(name) {
+            return $shed.class(this, name);
         }
     };
     shedClassPrototype.__proto__ = Function.prototype;
     
     $shed.class = function(constructor, name) {
-        var clazz = function() {
-            var self = constructor.apply(this, arguments);
-            self.$class = clazz;
-            return self;
-        };
-        clazz.$constructor = constructor;
-        clazz.$name = name;
+        constructor.$name = name;
+        constructor.__proto__ = shedClassPrototype;
         
-        clazz.__proto__ = shedClassPrototype;
-        
-        clazz.$define = function(name) {
-            return $shed.class(constructor, name);
-        };
+        //~ constructor.$define = function(name) {
+            //~ return $shed.class(constructor, name);
+        //~ };
         //~ clazz.equals = function(other) {
             //~ return clazz === other;
         //~ };
@@ -78,10 +74,11 @@ var match = function(value) {
         //~ clazz.identifier = function() {
             //~ return $shed.string(jsName)
         //~ };
-        return clazz;
+        return constructor;
     };
     
     $shed.Unit = $shed.class(function() { }, "Unit");
+    
     $shed.unit = {$class: $shed.Unit};
     $shed.Boolean = {$class: $shed.class(function() { }, "Boolean")};
     
@@ -110,7 +107,8 @@ var match = function(value) {
             },
             toString: function() {
                 return string(value.toString());
-            }
+            },
+            $class: $shed.number
         };
     }, "Double");
     
@@ -143,6 +141,7 @@ var match = function(value) {
     String.prototype.represent = function() {
         return string(JSON.stringify(this.$value));
     };
+    String.prototype.$class = $shed.string;
     
     //~ var string = $shed.string = $shed.class(function(value) {
         //~ var self = {
@@ -330,6 +329,7 @@ var List = function() {
 var Tuple = $shed.class(function() {
     var values = Array.prototype.slice.call(arguments, 0);
     return {
+        $class: Tuple,
         $values: values,
         equals: function(other) {
             if (classOf(other) !== Tuple) {
