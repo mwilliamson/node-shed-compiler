@@ -173,10 +173,23 @@ exports.slabFunctionCallIsConvertedToJavaScriptFunctionCall = function(test) {
     );
 };
 
-exports.slabMemberAccessIsConvertedToJavaScriptMemberAccess = function(test) {
+exports.slabMethodCallsAreConvertedToJavaScriptMethodCalls = function(test) {
+    assertStubbedTranslation(test,
+        slab.call(slab.memberAccess(slab.ref("book"), "title"), []),
+        js.call(js.memberAccess(stub(slab.ref("book")), "title"), [])
+    );
+};
+
+exports.slabMemberAccessWithoutImmediateCallIsConvertedToMemberAccessThroughBindingFunction = function(test) {
     assertStubbedTranslation(test,
         slab.memberAccess(slab.ref("book"), "title"),
-        js.memberAccess(stub(slab.ref("book")), "title")
+        js.call(
+            js.ref("$shed.memberAccess"),
+            [
+                stub(slab.ref("book")),
+                js.memberAccess(stub(slab.ref("book")), "title")
+            ]
+        )
     );
 };
 

@@ -1,0 +1,8 @@
+module shedTests;
+
+members {
+    main fun() => print(generateMessage())
+}
+
+val message = "Hello world";
+val generateMessage = message.represent;
