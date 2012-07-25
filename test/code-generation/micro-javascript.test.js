@@ -4,6 +4,7 @@ var slab = require("../../lib/slab-nodes");
 var js = require("../../lib/javascript/nodes");
 
 var codeGenerator = require("../../lib/code-generation/micro-javascript");
+var microJavaScript = codeGenerator;
 
 var slabTrue = slab.boolean(true);
 var jsTrue = js.boolean(true, slabTrue);
@@ -59,73 +60,124 @@ var slabVal = slab.val("coins", options.none, slabNumber);
 var jsVal = js.var("coins", jsNumber, slabVal);
 
 exports.slabBooleanLiteralIsConvertedToJavaScriptBooleanLiteral = function(test) {
-    assertTranslation(test, slabBoolean, jsBoolean);
+    var slabBoolean = slab.boolean(true);
+    assertStubbedTranslation(test, slabBoolean, js.boolean(true, slabBoolean));
 };
 
 exports.slabStringLiteralIsConvertedToJavaScriptStringLiteral = function(test) {
-    assertTranslation(test, slabString, jsString);
+    var slabString = slab.string("Blah");
+    assertStubbedTranslation(test,
+        slabString,
+        js.call(js.ref("$shed.string"), [js.string("Blah")])
+    );
 };
 
 exports.slabNumberLiteralIsConvertedToBoxedJavaScriptNumberLiteral = function(test) {
-    assertTranslation(test, slabNumber, jsNumber);
+    var slabNumber = slab.number("42");
+    assertStubbedTranslation(test,
+        slabNumber,
+        js.call(js.ref("$shed.number"), [js.number("42")])
+    );
 };
 
 exports.slabUnitLiteralIsConvertedToReferenceToShedUnitConstant = function(test) {
     var slabUnit = slab.unit();
-    assertTranslation(test, slabUnit, js.ref("$shed.unit", slabUnit));
+    assertTranslation(test, slabUnit, js.ref("$shed.unit"));
 };
 
 exports.slabReferenceIsConvertedToJavaScriptReference = function(test) {
-    assertTranslation(test, slabReference, jsReference);
+    var slabReference = slab.ref("print");
+    assertTranslation(test, slabReference, js.ref("print"));
+};
+
+exports.slabFormalArgumentsIsConvertedToNameOfFormalArgument = function(test) {
+    var slabFormalArgument = slab.formalArgument("name", slab.ref("String"));
+    assertStubbedTranslation(test, slabFormalArgument, "name");
+};
+
+exports.slabFormalArgumentsIsConvertedToListOfTranslatedFormalArguments = function(test) {
+    var slabFormalArgument = slab.formalArgument("name", slab.ref("String"));
+    var slabFormalArguments = slab.formalArguments([slabFormalArgument]);
+    assertStubbedTranslation(test,
+        slabFormalArguments,
+        [stub(slabFormalArgument)]
+    );
 };
 
 exports.slabLambdaIsConvertedToJavaScriptAnonymousFunction = function(test) {
-    assertTranslation(test, slabLambda, jsFunction);
+    var slabFormalArguments = slab.formalArguments([]);
+    var slabLambda = slab.lambda(
+        slabFormalArguments,
+        slab.ref("Boolean"),
+        slab.boolean(true)
+    );
+    assertStubbedTranslation(
+        test,
+        slabLambda,
+        js.call(
+            js.ref("$shed.function"),
+            [
+                js.func(
+                    stub(slabFormalArguments),
+                    [js.return(stub(slab.boolean(true)))],
+                    slabLambda
+                )
+            ],
+            slabLambda
+        )
+    );
 };
 
 exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmptyObject = function(test) {
-    var slabFormalArguments = slab.formalArguments([
-        slab.formalArgument("name", slab.ref("String"))
-    ]);
-    var slabClass = slab.class(slabFormalArguments, [], [slabExpressionStatement]); 
+    var slabFormalArguments = slab.formalArguments([]);
+    var slabStatement = slab.expressionStatement(slab.unit());
+    var slabClass = slab.class(slabFormalArguments, [], [slabStatement]); 
     var jsClass = js.call(
         js.ref("$shed.class"),
-        [js.func(["name"], [
-            jsExpressionStatement,
-            js.return(js.object({}, slabClass), slabClass)
-        ], slabClass)],
-        slabClass
+        [js.func(
+            stub(slabFormalArguments),
+            [
+                stub(slabStatement),
+                js.return(js.object({}))
+            ]
+        )]
     );
-    assertTranslation(test, slabClass, jsClass);
+    assertStubbedTranslation(test, slabClass, jsClass);
 };
 
 exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfMembers = function(test) {
-    var memberName = slabVal.identifier;
     var slabFormalArguments = slab.formalArguments([]);
-    var slabMemberRef = slab.ref(memberName);
-    var slabMember = slab.memberDeclaration(memberName, slabMemberRef);
-    var slabClass = slab.class(slabFormalArguments, [slabMember], [slabVal]); 
+    var slabMember = slab.memberDeclaration("value", slab.ref("blah"));
+    var slabStatement = slab.val("blah", options.none, slab.unit());
+    var slabClass = slab.class(slabFormalArguments, [slabMember], [slabStatement]); 
     
-    var expectedJsObject = {};
-    expectedJsObject[jsVal.identifier] = js.ref(jsVal.identifier, slabMemberRef);
+    var expectedJsObject = {"value": stub(slab.ref("blah"))};
     
     var jsClass = js.call(
         js.ref("$shed.class"),
-        [js.func([], [
-            jsVal,
-            js.return(js.object(expectedJsObject, slabClass), slabClass)
-        ], slabClass)],
-        slabClass
+        [js.func(
+            stub(slabFormalArguments),
+            [
+                stub(slabStatement),
+                js.return(js.object(expectedJsObject))
+            ]
+        )]
     );
-    assertTranslation(test, slabClass, jsClass);
+    assertStubbedTranslation(test, slabClass, jsClass);
 };
 
 exports.slabFunctionCallIsConvertedToJavaScriptFunctionCall = function(test) {
-    assertTranslation(test, slabFunctionCall, jsFunctionCall);
+    assertStubbedTranslation(test,
+        slab.call(slab.ref("func"), [slab.unit()]),
+        js.call(stub(slab.ref("func")), [stub(slab.unit())])
+    );
 };
 
 exports.slabMemberAccessIsConvertedToJavaScriptMemberAccess = function(test) {
-    assertTranslation(test, slabMemberAccess, jsMemberAccess);
+    assertStubbedTranslation(test,
+        slab.memberAccess(slab.ref("book"), "title"),
+        js.memberAccess(stub(slab.ref("book")), "title")
+    );
 };
 
 exports.slabBlockIsConvertedToImmediatelyCalledJavaScriptAnonymousFunction = function(test) {
@@ -236,3 +288,17 @@ var assertTranslation = function(test, slab, expectedJavaScript) {
     test.deepEqual(generatedJavaScript, expectedJavaScript);
     test.done();
 };
+
+var assertStubbedTranslation = function(test, slab, expectedJavaScript) {
+    var translator = new microJavaScript.Translator(stub);
+    var generatedJavaScript = translator.translate(slab);
+    test.deepEqual(generatedJavaScript, expectedJavaScript);
+    test.done();
+};
+
+function stub(slabNode) {
+    return {
+        nodeType: "stubTranslation",
+        slabNode: slabNode
+    };
+}
