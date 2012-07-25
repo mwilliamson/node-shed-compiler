@@ -128,41 +128,30 @@ exports.slabLambdaIsConvertedToJavaScriptAnonymousFunction = function(test) {
     );
 };
 
-exports.slabClassWithNoPublicMembersIsConvertedToJavaScriptFunctionReturningEmptyObject = function(test) {
-    var slabFormalArguments = slab.formalArguments([]);
-    var slabStatement = slab.expressionStatement(slab.unit());
-    var slabClass = slab.class(slabFormalArguments, [], [slabStatement]); 
-    var jsClass = js.call(
-        js.ref("$shed.class"),
-        [js.func(
-            stub(slabFormalArguments),
-            [
-                stub(slabStatement),
-                js.return(js.object({}))
-            ]
-        )]
-    );
-    assertStubbedTranslation(test, slabClass, jsClass);
-};
-
 exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfMembers = function(test) {
     var slabFormalArguments = slab.formalArguments([]);
     var slabMember = slab.memberDeclaration("value", slab.ref("blah"));
     var slabStatement = slab.val("blah", options.none, slab.unit());
     var slabClass = slab.class(slabFormalArguments, [slabMember], [slabStatement]); 
     
-    var expectedJsObject = {"value": stub(slab.ref("blah"))};
+    var expectedJsObject = {
+        "value": stub(slab.ref("blah")),
+        "$class": js.ref("$class")
+    };
     
-    var jsClass = js.call(
-        js.ref("$shed.class"),
-        [js.func(
-            stub(slabFormalArguments),
-            [
-                stub(slabStatement),
-                js.return(js.object(expectedJsObject))
-            ]
-        )]
-    );
+    var jsClass = js.block([
+        js.var("$class", js.call(
+            js.ref("$shed.class"),
+            [js.func(
+                stub(slabFormalArguments),
+                [
+                    stub(slabStatement),
+                    js.return(js.object(expectedJsObject))
+                ]
+            )]
+        )),
+        js.return(js.ref("$class"))
+    ]);
     assertStubbedTranslation(test, slabClass, jsClass);
 };
 
