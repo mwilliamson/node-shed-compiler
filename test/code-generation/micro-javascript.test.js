@@ -90,6 +90,14 @@ exports.slabReferenceIsConvertedToJavaScriptReference = function(test) {
     assertTranslation(test, slabReference, js.ref("print"));
 };
 
+exports.slabReferenceIsConvertedToJavaScriptReference = function(test) {
+    var slabReference = slab.ref("print");
+    var translator = new microJavaScript.Translator(stub);
+    var generatedJavaScript = translator.translate(slabReference, {"print": js.ref("$print")});
+    test.deepEqual(generatedJavaScript, js.ref("$print"));
+    test.done();
+};
+
 exports.slabFormalArgumentsIsConvertedToNameOfFormalArgument = function(test) {
     var slabFormalArgument = slab.formalArgument("name", slab.ref("String"));
     assertStubbedTranslation(test, slabFormalArgument, "name");
@@ -152,6 +160,61 @@ exports.slabClassIsConvertedToJavaScriptFunctionReturningObjectOfMembers = funct
         )),
         js.return(js.ref("$class"))
     ]);
+    assertStubbedTranslation(test, slabClass, jsClass);
+};
+
+exports.slabClassWithoutStatementsAndWithNonFunctionMembersIsConvertedToJavaScriptFunctionReturningObjectOfMembers = function(test) {
+    var slabFormalArguments = slab.formalArguments([]);
+    var slabMember = slab.memberDeclaration("value", slab.ref("blah"));
+    var slabClass = slab.class(slabFormalArguments, [slabMember], []); 
+    
+    var expectedJsObject = {
+        "value": stub(slab.ref("blah")),
+        "$class": js.ref("$class")
+    };
+    
+    var jsClass = js.block([
+        js.var("$class", js.call(
+            js.ref("$shed.class"),
+            [js.func(
+                stub(slabFormalArguments),
+                [
+                    js.return(js.object(expectedJsObject))
+                ]
+            )]
+        )),
+        js.return(js.ref("$class"))
+    ]);
+    assertStubbedTranslation(test, slabClass, jsClass);
+};
+
+exports.slabClassWithoutStatementsAndOnlyFunctionMembersIsConvertedToPrototypeStyleFunction = function(test) {
+    var slabFormalArgument = slab.formalArgument("name", slab.ref("String"));
+    var slabFormalArguments = slab.formalArguments([slabFormalArgument]);
+    var slabLambda = slab.lambda(slab.formalArguments([]), options.none, slab.ref("name"));
+    var slabMember = slab.memberDeclaration("toString", slabLambda);
+    var slabClass = slab.class(slabFormalArguments, [slabMember], []); 
+    
+    var jsClass = js.block([
+        js.var("$constructor", js.func(
+            ["name"],
+            [js.expressionStatement(js.assign(js.memberAccess(js.ref("this"), "$member$name"), js.ref("name")))]
+        )),
+        js.expressionStatement(js.assign(
+            js.ref("$constructor.prototype.toString"),
+            stub(slabLambda, {"name": js.memberAccess(js.ref("this"), "$member$name")})
+        )),
+        js.var("$class", js.call(
+            js.ref("$shed.class"),
+            [js.func(
+                ["name"],
+                [js.return(js.callNew(js.ref("$constructor"), [js.ref("name")]))]
+            )]
+        )),
+        js.expressionStatement(js.assign(js.ref("$constructor.prototype.$class"), js.ref("$class"))),
+        js.return(js.ref("$class"))
+    ]);
+    
     assertStubbedTranslation(test, slabClass, jsClass);
 };
 
@@ -298,9 +361,11 @@ var assertStubbedTranslation = function(test, slab, expectedJavaScript) {
     test.done();
 };
 
-function stub(slabNode) {
+function stub(slabNode, nameMap) {
+    nameMap = nameMap || {};
     return {
         nodeType: "stubTranslation",
-        slabNode: slabNode
+        slabNode: slabNode,
+        nameMap: nameMap
     };
 }
