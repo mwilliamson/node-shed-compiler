@@ -33,6 +33,14 @@ exports.writesFunctionCallWithArguments = function(test) {
     );
 };
 
+exports.writesCallNewWithArguments = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.callNew(js.ref("Person"), [js.ref("a"), js.ref("b")]),
+        'new Person(a, b)'
+    );
+};
+
 exports.functionInFunctionCallIsWrappedInParenthesesIfOfHigherPrecendence = function(test) {
     var conditional = js.conditionalOperator(js.ref("a"), js.ref("b"), js.ref("c"));
     assertJavaScriptWriter(
