@@ -98,6 +98,18 @@ exports.writesObject = function(test) {
     );
 };
 
+exports.valuesOfPropertiesInObjectsAreIndentedCorrectly = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.object({
+            value: js.object({
+                first: js.number("1")
+            })
+        }),
+        '{\n    "value": {\n        "first": 1\n    }\n}'
+    );
+};
+
 exports.writeReturns = function(test) {
     assertJavaScriptWriter(
         test,
