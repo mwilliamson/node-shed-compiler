@@ -312,6 +312,16 @@ exports.memberAccessAndFunctionCallHaveSamePrecendence = function(test) {
     test.done();
 };
 
+exports.canParseAndExpressions = function(test) {
+    var result = parse(parsing.expression, "isPenguin && isShort");
+    var expected = nodes.operatorAnd(
+        nodes.ref("isPenguin"),
+        nodes.ref("isShort")
+    );
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.canParseIfExpression = function(test) {
     var result = parse(parsing.expression, "if true then 1");
     assertIsSuccess(test, result, {
