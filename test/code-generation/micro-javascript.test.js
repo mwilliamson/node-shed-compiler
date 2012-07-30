@@ -245,6 +245,13 @@ exports.slabMemberAccessWithoutImmediateCallIsConvertedToMemberAccessThroughBind
     );
 };
 
+exports.slabAndOperatorIsConvertedToJavaScriptBinaryOperator = function(test) {
+    assertStubbedTranslation(test,
+        slab.operatorAnd(slab.ref("isPenguin"), slab.ref("isShort")),
+        js.binaryOperator("&&", stub(slab.ref("isPenguin")), stub(slab.ref("isShort")))
+    );
+};
+
 exports.slabBlockIsConvertedToImmediatelyCalledJavaScriptAnonymousFunction = function(test) {
     assertTranslation(test, slabBlock, jsBlock);
 };
