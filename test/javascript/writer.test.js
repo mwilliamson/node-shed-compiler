@@ -118,6 +118,14 @@ exports.valuesOfPropertiesInObjectsAreIndentedCorrectly = function(test) {
     );
 };
 
+exports.writesAndOperator = function(test) {
+    assertJavaScriptWriter(
+        test,
+        js.operatorAnd(js.ref("isPenguin"), js.ref("isShort")),
+        "isPenguin && isShort"
+    );
+};
+
 exports.writeReturns = function(test) {
     assertJavaScriptWriter(
         test,

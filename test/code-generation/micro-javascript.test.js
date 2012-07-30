@@ -245,10 +245,10 @@ exports.slabMemberAccessWithoutImmediateCallIsConvertedToMemberAccessThroughBind
     );
 };
 
-exports.slabAndOperatorIsConvertedToJavaScriptBinaryOperator = function(test) {
+exports.slabAndOperatorIsConvertedToJavaScriptAndOperator = function(test) {
     assertStubbedTranslation(test,
         slab.operatorAnd(slab.ref("isPenguin"), slab.ref("isShort")),
-        js.binaryOperator("&&", stub(slab.ref("isPenguin")), stub(slab.ref("isShort")))
+        js.operatorAnd(stub(slab.ref("isPenguin")), stub(slab.ref("isShort")))
     );
 };
 
