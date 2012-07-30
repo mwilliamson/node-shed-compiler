@@ -158,6 +158,15 @@ exports.shedMemberAccessIsConvertedToSlabMemberAccess = function(test) {
     test.done();
 };
 
+exports.shedAndOperatorIsConvertedToSlabAndOperator = function(test) {
+    var original = shed.operatorAnd(shedReference, shedBooleanValue);
+    test.deepEqual(
+        slab.operatorAnd(slabReference, slabBooleanValue, original),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
+
 exports.shedFormalArgumentIsConvertedToSlabFormalArgument = function(test) {
     test.deepEqual(
         slabFormalArgument,
