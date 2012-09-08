@@ -1,15 +1,13 @@
-package shedTests;
+module shedTests.fib;
 
 def fib fun(n: Double) : Double => 
     if n.equals(0) then
         0
     else if n.equals(1) then
         1
-    else
-        let
-            val a = fib(n.subtract(1)),
-            val b = fib(n.subtract(2))
-        in
-            a.add(b)
+    else let
+        val a = fib(n.subtract(1))
+        val b = fib(n.subtract(2))
+        in a.add(b)
 
 print(fib(8).toString());
