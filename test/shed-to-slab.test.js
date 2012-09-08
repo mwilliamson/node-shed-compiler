@@ -79,6 +79,9 @@ var slabLambda = slab.lambda(
     shedLambda
 );
 
+var shedVal = shed.val("x", options.none, shedReference);
+var slabVal = slab.val("x", options.none, slabReference, shedVal);
+
 exports.shedBooleansAreConvertedToSlabBooleans = function(test) {
     test.deepEqual(slabValue, shedToSlab.translate(shedValue));
     test.done();
@@ -206,6 +209,23 @@ exports.shedBlockIsConvertedToSlabBlock = function(test) {
     test.done();
 };
 
+exports.shedLetInIsConvertedToSlabBlock = function(test) {
+    var shedReference = shed.ref("blah");
+    var shedReturn = shed.return(shedReference);
+    var original = shed.letIn(
+        [shedVal],
+        shedValue
+    );
+    test.deepEqual(
+        slab.block([
+            slabVal,
+            slab.return(slabValue, original)
+        ], original),
+        shedToSlab.translate(original)
+    );
+    test.done();
+};
+
 exports.shedLambdaIsConvertedToSlabLambda = function(test) {
     test.deepEqual(slabLambda, shedToSlab.translate(shedLambda));
     test.done();
@@ -246,9 +266,7 @@ exports.shedMembersAreConvertedToSlabMembersInClasses = function(test) {
 };
 
 exports.shedPublicValuesInClassAreConvertedToSlabMembers = function(test) {
-    var shedVal = shed.val("x", options.none, shedReference);
     var shedPublicVal = shed.public(shedVal);
-    var slabVal = slab.val("x", options.none, slabReference, shedVal);
     var slabMember = slab.memberDeclaration("x", slab.ref("x", shedPublicVal), shedPublicVal);
     var slabPublicVal = slab.public(slabVal, shedPublicVal);
     
