@@ -384,13 +384,28 @@ exports.canParseBlockExpression = function(test) {
     test.done();
 };
 
-exports.canParseTypeApplication = function(test) {
-    var source = "Map[String, Boolean]";
-    var result = parse(expressions.typeExpression, source);
+exports.canParseBlockExpression = function(test) {
+    var source = "do { go(); return 1;}";
+    var result = parse(parsing.expression, source);
     assertIsSuccess(test, result, {
-        value: ignoringSources(nodes.typeApplication(
-            nodes.ref("Map"),
-            [nodes.ref("String"), nodes.ref("Boolean")]
+        value: ignoringSources(nodes.block([
+            nodes.expressionStatement(nodes.call(nodes.ref("go"), [])),
+            nodes.return(nodes.number("1"))
+        ]))
+    });
+    test.done();
+};
+
+exports.canParseLetInExpression = function(test) {
+    var source = "let val x = 1 val y = 2 in z";
+    var result = parse(expressions.expression, source);
+    assertIsSuccess(test, result, {
+        value: ignoringSources(nodes.letIn(
+            [
+                nodes.val("x", options.none, nodes.number("1")),
+                nodes.val("y", options.none, nodes.number("2"))
+            ],
+            nodes.ref("z")
         ))
     });
     test.done();
