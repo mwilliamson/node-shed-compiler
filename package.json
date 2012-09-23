@@ -5,7 +5,7 @@
         "async": "latest",
         "underscore": "latest",
         "lop": "git://github.com/mwilliamson/lop.git",
-        "options": "git://github.com/mwilliamson/node-options.git",
+        "option": "0.2.0",
         "shed-tokeniser": "git://github.com/mwilliamson/node-shed-tokeniser.git",
         "optimist": "0.3.x",
         "findit": "0.1.x"

@@ -1,4 +1,4 @@
-var options = require("options");
+var options = require("option");
 var some = options.some;
 
 var errors = require("lop").errors;
