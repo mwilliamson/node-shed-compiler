@@ -15,8 +15,15 @@ exports.membersCanBeEmpty = function(test) {
     test.done();
 };
 
+exports.membersCanFinishWithSignificantNewLine = function(test) {
+    var result = parseMembers("members {\n}");
+    var expected = [];
+    assertIsSuccessWithValue(test, result, ignoringSources(expected));
+    test.done();
+};
+
 exports.membersCanContainMultipleMembers = function(test) {
-    var result = parseMembers("members { one, two }");
+    var result = parseMembers("members {\n    one,\n    two\n}");
     var expected = [nodes.memberDeclaration("one", nodes.ref("one")), nodes.memberDeclaration("two", nodes.ref("two"))];
     assertIsSuccessWithValue(test, result, ignoringSources(expected));
     test.done();
