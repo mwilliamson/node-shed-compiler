@@ -1,5 +1,5 @@
 var _ = require("underscore");
-var options = require("options");
+var options = require("option");
 var some = options.some;
 var duck = require("duck");
 var hasProperties = duck.hasProperties;

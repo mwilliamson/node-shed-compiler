@@ -1,4 +1,4 @@
-var options = require("options");
+var options = require("option");
 
 var slab = require("../../lib/slab-nodes");
 var js = require("../../lib/javascript/nodes");

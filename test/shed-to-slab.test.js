@@ -1,4 +1,4 @@
-var options = require("options");
+var options = require("option");
 
 var shed = require("../lib/nodes");
 var slab = require("../lib/slab-nodes");

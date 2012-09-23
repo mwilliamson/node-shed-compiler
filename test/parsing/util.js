@@ -1,6 +1,6 @@
 var _ = require("underscore");
 var duck = require("duck");
-var options = require("options");
+var options = require("option");
 
 var nodes = require("../../lib/nodes");
 
